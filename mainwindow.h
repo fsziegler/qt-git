@@ -21,7 +21,8 @@ private slots:
 
 private:
     QFileInfo m_rootGitDir;
-    const QFileInfo m_appDir;
+    const QFileInfo mc_appDir;
+    const QString mc_cfgFileStr;
     Ui::MainWindow *ui;
 };
 
