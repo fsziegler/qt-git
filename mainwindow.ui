@@ -6,32 +6,19 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>962</width>
-    <height>529</height>
+    <width>1024</width>
+    <height>768</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <widget class="QPushButton" name="btn_choose_git_root">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>10</y>
-      <width>121</width>
-      <height>23</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Choose Git Root</string>
-    </property>
-   </widget>
    <widget class="QLabel" name="label_git_root">
     <property name="geometry">
      <rect>
-      <x>140</x>
-      <y>14</y>
+      <x>160</x>
+      <y>43</y>
       <width>811</width>
       <height>16</height>
      </rect>
@@ -40,13 +27,13 @@
      <string>TextLabel</string>
     </property>
    </widget>
-   <widget class="QGroupBox" name="groupBox">
+   <widget class="QGroupBox" name="grpBox_workspace">
     <property name="geometry">
      <rect>
-      <x>10</x>
-      <y>50</y>
-      <width>221</width>
-      <height>411</height>
+      <x>150</x>
+      <y>70</y>
+      <width>201</width>
+      <height>621</height>
      </rect>
     </property>
     <property name="title">
@@ -70,110 +57,309 @@
       <rect>
        <x>10</x>
        <y>50</y>
-       <width>201</width>
+       <width>181</width>
        <height>21</height>
       </rect>
      </property>
     </widget>
+    <widget class="QLabel" name="label_stashes">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>30</y>
+       <width>181</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Stashes:</string>
+     </property>
+    </widget>
+    <zorder>groupBox_2</zorder>
+    <zorder>comboBox_stash</zorder>
+    <zorder>btn_git_status</zorder>
+    <zorder>btn_git_diff</zorder>
+    <zorder>grpBox_information</zorder>
+    <zorder>label_stashes</zorder>
    </widget>
-   <widget class="QGroupBox" name="groupBox_3">
+   <widget class="QGroupBox" name="grpBox_index">
     <property name="geometry">
      <rect>
-      <x>250</x>
-      <y>50</y>
-      <width>221</width>
-      <height>411</height>
+      <x>370</x>
+      <y>70</y>
+      <width>201</width>
+      <height>621</height>
      </rect>
     </property>
     <property name="title">
      <string>Index</string>
     </property>
-    <widget class="QGroupBox" name="groupBox_4">
-     <property name="geometry">
-      <rect>
-       <x>250</x>
-       <y>0</y>
-       <width>221</width>
-       <height>411</height>
-      </rect>
-     </property>
-     <property name="title">
-      <string>Workspace</string>
-     </property>
-    </widget>
    </widget>
-   <widget class="QGroupBox" name="groupBox_5">
+   <widget class="QGroupBox" name="grpBox_local_repo">
     <property name="geometry">
      <rect>
-      <x>490</x>
-      <y>50</y>
-      <width>221</width>
-      <height>411</height>
+      <x>590</x>
+      <y>70</y>
+      <width>201</width>
+      <height>621</height>
      </rect>
     </property>
     <property name="title">
      <string>Local Repo</string>
     </property>
-    <widget class="QGroupBox" name="groupBox_6">
-     <property name="geometry">
-      <rect>
-       <x>250</x>
-       <y>0</y>
-       <width>221</width>
-       <height>411</height>
-      </rect>
-     </property>
-     <property name="title">
-      <string>Workspace</string>
-     </property>
-    </widget>
    </widget>
-   <widget class="QGroupBox" name="groupBox_7">
+   <widget class="QGroupBox" name="grpBox_remote_repo">
     <property name="geometry">
      <rect>
-      <x>730</x>
-      <y>50</y>
-      <width>221</width>
-      <height>411</height>
+      <x>810</x>
+      <y>70</y>
+      <width>201</width>
+      <height>621</height>
      </rect>
     </property>
     <property name="title">
      <string>Remote Repo</string>
     </property>
-    <widget class="QGroupBox" name="groupBox_8">
+   </widget>
+   <widget class="QGroupBox" name="grpBox_initialization">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>10</y>
+      <width>121</width>
+      <height>121</height>
+     </rect>
+    </property>
+    <property name="title">
+     <string>Initialization</string>
+    </property>
+    <widget class="QPushButton" name="btn_choose_git_root">
      <property name="geometry">
       <rect>
-       <x>250</x>
-       <y>0</y>
-       <width>221</width>
-       <height>411</height>
+       <x>10</x>
+       <y>30</y>
+       <width>101</width>
+       <height>23</height>
       </rect>
      </property>
-     <property name="title">
-      <string>Workspace</string>
+     <property name="text">
+      <string>Choose Git Root</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="btn_git_init">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>60</y>
+       <width>101</width>
+       <height>23</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>git init</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="btn_git_clone">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>90</y>
+       <width>101</width>
+       <height>23</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>git clone</string>
      </property>
     </widget>
    </widget>
-   <widget class="QLabel" name="label">
+   <widget class="QGroupBox" name="grpBox_manipulation">
     <property name="geometry">
      <rect>
-      <x>20</x>
-      <y>80</y>
-      <width>191</width>
-      <height>16</height>
+      <x>10</x>
+      <y>150</y>
+      <width>121</width>
+      <height>301</height>
      </rect>
     </property>
-    <property name="text">
-     <string>Stash</string>
+    <property name="title">
+     <string>Manipulation</string>
     </property>
+    <widget class="QPushButton" name="btn_git_add">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>30</y>
+       <width>101</width>
+       <height>23</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>git add</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="btn_git_stash">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>60</y>
+       <width>101</width>
+       <height>23</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>git stash</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="btn_git_commit">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>90</y>
+       <width>101</width>
+       <height>23</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>git commit</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="btn_git_checkout">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>120</y>
+       <width>101</width>
+       <height>23</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>git checkout</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="btn_git_push">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>150</y>
+       <width>101</width>
+       <height>23</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>git push</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="btn_git_pull">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>180</y>
+       <width>101</width>
+       <height>23</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>git pull</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="btn_git_fetch">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>210</y>
+       <width>101</width>
+       <height>23</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>git fetch</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="btn_git_merge">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>240</y>
+       <width>101</width>
+       <height>23</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>git merge</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="btn_git_rebase">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>270</y>
+       <width>101</width>
+       <height>23</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>git rebase</string>
+     </property>
+    </widget>
    </widget>
+   <widget class="QGroupBox" name="grpBox_information">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>470</y>
+      <width>121</width>
+      <height>91</height>
+     </rect>
+    </property>
+    <property name="title">
+     <string>Information</string>
+    </property>
+    <widget class="QPushButton" name="btn_git_diff">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>30</y>
+       <width>101</width>
+       <height>23</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>git diff</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="btn_git_status">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>60</y>
+       <width>101</width>
+       <height>23</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>git status</string>
+     </property>
+    </widget>
+    <zorder>grpBox_index</zorder>
+    <zorder>btn_git_diff</zorder>
+    <zorder>btn_git_status</zorder>
+   </widget>
+   <zorder>grpBox_initialization</zorder>
+   <zorder>grpBox_information</zorder>
+   <zorder>grpBox_manipulation</zorder>
+   <zorder>label_git_root</zorder>
+   <zorder>grpBox_workspace</zorder>
+   <zorder>grpBox_index</zorder>
+   <zorder>grpBox_local_repo</zorder>
+   <zorder>grpBox_remote_repo</zorder>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>962</width>
+     <width>1024</width>
      <height>20</height>
     </rect>
    </property>

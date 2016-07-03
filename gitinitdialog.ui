@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>GitInitDialog</class>
+ <widget class="QDialog" name="GitInitDialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>871</width>
+    <height>391</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Dialog</string>
+  </property>
+  <widget class="QDialogButtonBox" name="buttonBox">
+   <property name="geometry">
+    <rect>
+     <x>308</x>
+     <y>340</y>
+     <width>171</width>
+     <height>32</height>
+    </rect>
+   </property>
+   <property name="orientation">
+    <enum>Qt::Horizontal</enum>
+   </property>
+   <property name="standardButtons">
+    <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="lineEdit_directory">
+   <property name="geometry">
+    <rect>
+     <x>120</x>
+     <y>300</y>
+     <width>671</width>
+     <height>23</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QCheckBox" name="checkBox_quiet">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>10</y>
+     <width>831</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="focusPolicy">
+    <enum>Qt::StrongFocus</enum>
+   </property>
+   <property name="text">
+    <string>-q, --quiet
+  Only print error and warning messages, all other output will be suppressed.</string>
+   </property>
+  </widget>
+  <widget class="QCheckBox" name="checkBox_bare">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>60</y>
+     <width>831</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>--bare
+  Create a bare repository. If GIT_DIR environment is not set, it is set to the current working directory.</string>
+   </property>
+  </widget>
+  <widget class="QCheckBox" name="checkBox_template">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>100</y>
+     <width>831</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>--template=&lt;template_directory&gt;
+  Specify the directory from which templates will be used. (See the &quot;TEMPLATE DIRECTORY&quot; section below.)</string>
+   </property>
+  </widget>
+  <widget class="QCheckBox" name="checkBox_separate_git_dir">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>150</y>
+     <width>831</width>
+     <height>71</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>--separate-git-dir=&lt;git dir&gt;
+  Instead of initializing the repository where it is supposed to be, place a filesytem-agnostic Git symbolic link there, pointing to the
+  specified path, and initialize a Git repository at the path. The result is Git repository can be separated from working tree. If this
+  is reinitialization, the repository will be moved to the specified path.</string>
+   </property>
+  </widget>
+  <widget class="QCheckBox" name="checkBox_shared_permissions">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>220</y>
+     <width>831</width>
+     <height>71</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>--shared[=(false|true|umask|group|all|world|everybody|0xxx)]
+  Specify that the Git repository is to be shared amongst several users. This allows users belonging to the same group to push into that
+  repository. When specified, the config variable &quot;core.sharedRepository&quot; is set so that files and directories under $GIT_DIR are created
+  with the requested permissions. When not specified, Git will use permissions reported by umask(2).</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="pushButton">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>300</y>
+     <width>80</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>directory</string>
+   </property>
+  </widget>
+ </widget>
+ <tabstops>
+  <tabstop>checkBox_quiet</tabstop>
+  <tabstop>checkBox_bare</tabstop>
+  <tabstop>checkBox_template</tabstop>
+  <tabstop>checkBox_separate_git_dir</tabstop>
+  <tabstop>checkBox_shared_permissions</tabstop>
+  <tabstop>pushButton</tabstop>
+  <tabstop>lineEdit_directory</tabstop>
+ </tabstops>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>accepted()</signal>
+   <receiver>GitInitDialog</receiver>
+   <slot>accept()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>248</x>
+     <y>254</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>157</x>
+     <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>rejected()</signal>
+   <receiver>GitInitDialog</receiver>
+   <slot>reject()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>316</x>
+     <y>260</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>286</x>
+     <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>

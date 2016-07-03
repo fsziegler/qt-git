@@ -14,8 +14,11 @@ TEMPLATE = app
 QMAKE_CXXFLAGS += -std=c++11
 
 SOURCES += main.cpp\
-        mainwindow.cpp
+        mainwindow.cpp \
+    gitinitdialog.cpp
 
-HEADERS  += mainwindow.h
+HEADERS  += mainwindow.h \
+    gitinitdialog.h
 
-FORMS    += mainwindow.ui
+FORMS    += mainwindow.ui \
+    gitinitdialog.ui
