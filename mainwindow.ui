@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>820</width>
+    <width>962</width>
     <height>529</height>
    </rect>
   </property>
@@ -14,7 +14,7 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <widget class="QPushButton" name="pushButton">
+   <widget class="QPushButton" name="btn_choose_git_root">
     <property name="geometry">
      <rect>
       <x>10</x>
@@ -32,12 +32,139 @@
      <rect>
       <x>140</x>
       <y>14</y>
-      <width>671</width>
+      <width>811</width>
       <height>16</height>
      </rect>
     </property>
     <property name="text">
      <string>TextLabel</string>
+    </property>
+   </widget>
+   <widget class="QGroupBox" name="groupBox">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>50</y>
+      <width>221</width>
+      <height>411</height>
+     </rect>
+    </property>
+    <property name="title">
+     <string>Workspace</string>
+    </property>
+    <widget class="QGroupBox" name="groupBox_2">
+     <property name="geometry">
+      <rect>
+       <x>250</x>
+       <y>0</y>
+       <width>221</width>
+       <height>411</height>
+      </rect>
+     </property>
+     <property name="title">
+      <string>Workspace</string>
+     </property>
+    </widget>
+    <widget class="QComboBox" name="comboBox_stash">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>50</y>
+       <width>201</width>
+       <height>21</height>
+      </rect>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QGroupBox" name="groupBox_3">
+    <property name="geometry">
+     <rect>
+      <x>250</x>
+      <y>50</y>
+      <width>221</width>
+      <height>411</height>
+     </rect>
+    </property>
+    <property name="title">
+     <string>Index</string>
+    </property>
+    <widget class="QGroupBox" name="groupBox_4">
+     <property name="geometry">
+      <rect>
+       <x>250</x>
+       <y>0</y>
+       <width>221</width>
+       <height>411</height>
+      </rect>
+     </property>
+     <property name="title">
+      <string>Workspace</string>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QGroupBox" name="groupBox_5">
+    <property name="geometry">
+     <rect>
+      <x>490</x>
+      <y>50</y>
+      <width>221</width>
+      <height>411</height>
+     </rect>
+    </property>
+    <property name="title">
+     <string>Local Repo</string>
+    </property>
+    <widget class="QGroupBox" name="groupBox_6">
+     <property name="geometry">
+      <rect>
+       <x>250</x>
+       <y>0</y>
+       <width>221</width>
+       <height>411</height>
+      </rect>
+     </property>
+     <property name="title">
+      <string>Workspace</string>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QGroupBox" name="groupBox_7">
+    <property name="geometry">
+     <rect>
+      <x>730</x>
+      <y>50</y>
+      <width>221</width>
+      <height>411</height>
+     </rect>
+    </property>
+    <property name="title">
+     <string>Remote Repo</string>
+    </property>
+    <widget class="QGroupBox" name="groupBox_8">
+     <property name="geometry">
+      <rect>
+       <x>250</x>
+       <y>0</y>
+       <width>221</width>
+       <height>411</height>
+      </rect>
+     </property>
+     <property name="title">
+      <string>Workspace</string>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QLabel" name="label">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>80</y>
+      <width>191</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Stash</string>
     </property>
    </widget>
   </widget>
@@ -46,7 +173,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>820</width>
+     <width>962</width>
      <height>20</height>
     </rect>
    </property>
