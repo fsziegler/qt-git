@@ -54,7 +54,8 @@ MainWindow::MainWindow(const QString& cmdStr, QWidget *parent) :
    OnGitStatus();
 
    SetButtonFormattedToolTip(ui->btn_git_add,
-        QString("This command updates the index using the current content found"
+        QString("git-add - Add file contents to the index\n"
+                "This command updates the index using the current content found"
                 " in the working tree, to prepare the content staged for the ne"
                 "xt commit. It typically adds the current content of existing p"
                 "aths as a whole, but with some options it can also be used to "
@@ -63,64 +64,101 @@ MainWindow::MainWindow(const QString& cmdStr, QWidget *parent) :
                 "orking tree anymore."));
    SetButtonFormattedToolTip(ui->btn_choose_git_root,
         QString("Choose the root directory for all git operations"));
+//   ""
+   SetButtonFormattedToolTip(ui->btn_git_branch,
+        QString("git-branch - List, create, or delete branches\n"
+                "If --list is given, or if there are no non-option arguments, e"
+                "xisting branches are listed; the current branch will be highli"
+                "ghted with an asterisk. Option -r causes the remote-tracking b"
+                "ranches to be listed, and option -a shows both local and remot"
+                "e branches. If a <pattern> is given, it is used as a shell wil"
+                "dcard to restrict the output to matching branches. If multiple"
+                " patterns are given, a branch is shown if it matches any of th"
+                "e patterns. Note that when providing a <pattern>, you must use"
+                " --list; otherwise the command is interpreted as branch creati"
+                "on.\n\nWith --contains, shows only the branches that contain t"
+                "he named commit (in other words, the branches whose tip commit"
+                "s are descendants of the named commit). With --merged, only br"
+                "anches merged into the named commit (i.e. the branches whose t"
+                "ip commits are reachable from the named commit) will be listed"
+                ". With --no-merged only branches not merged into the named com"
+                "mit will be listed. If the <commit> argument is missing it def"
+                "aults to HEAD (i.e. the tip of the current branch)."));
    SetButtonFormattedToolTip(ui->btn_git_checkout,
-        QString("Updates files in the working tree to match the version in the "
+        QString("git-checkout - Switch branches or restore working tree files\n"
+                "Updates files in the working tree to match the version in the "
                 "index or the specified tree. If no paths are given, git checko"
                 "ut will also update HEAD to set the specified branch as the cu"
                 "rrent branch."));
    SetButtonFormattedToolTip(ui->btn_git_clone,
-        QString("Clones a repository into a newly created directory, creates re"
+        QString("git-clone - Clone a repository into a new directory\n"
+                "Clones a repository into a newly created directory, creates re"
                 "mote-tracking branches for each branch in the cloned repositor"
                 "y (visible using git branch -r), and creates and checks out an"
                 " initial branch that is forked from the cloned repository’s cu"
                 "rrently active branch."));
    SetButtonFormattedToolTip(ui->btn_git_commit,
-        QString("Stores the current contents of the index in a new commit along"
+        QString("git-commit - Record changes to the repository\n"
+                "Stores the current contents of the index in a new commit along"
                 " with a log message from the user describing the changes."));
    SetButtonFormattedToolTip(ui->btn_git_diff,
-        QString("Show changes between the working tree and the index or a tree,"
+        QString("git-diff - Show changes between commits, commit and working "
+                "tree, etc\n"
+                "Show changes between the working tree and the index or a tree,"
                 " changes between the index and a tree, changes between two tre"
                 "es, changes between two blob objects, or changes between two f"
                 "iles on disk."));
    SetButtonFormattedToolTip(ui->btn_git_fetch,
-        QString("Fetch branches and/or tags (collectively, \"refs\") from one o"
+        QString("git-fetch - Download objects and refs from another repository"
+                "\n"
+                "Fetch branches and/or tags (collectively, \"refs\") from one o"
                 "r more other repositories, along with the objects necessary to"
                 " complete their histories. Remote-tracking branches are update"
                 "d (see the description of <refspec> below for ways to control "
                 "this behavior)."));
    SetButtonFormattedToolTip(ui->btn_git_init,
-        QString("This command creates an empty Git repository - basically a .gi"
+        QString("git-init - Create an empty Git repository or reinitialize an "
+                "existing one\n"
+                "This command creates an empty Git repository - basically a .gi"
                 "t directory with subdirectories for objects, refs/heads, refs/"
                 "tags, and template files. An initial HEAD file that references"
                 " the HEAD of the master branch is also created."));
    SetButtonFormattedToolTip(ui->btn_git_merge,
-        QString("Incorporates changes from the named commits (since the time th"
+        QString("git-merge - Join two or more development histories together\n"
+                "Incorporates changes from the named commits (since the time th"
                 "eir histories diverged from the current branch) into the curre"
                 "nt branch. This command is used by git pull to incorporate cha"
                 "nges from another repository and can be used by hand to merge "
                 "changes from one branch into another."));
    SetButtonFormattedToolTip(ui->btn_git_pull,
-        QString("Incorporates changes from a remote repository into the current"
+        QString("git-pull - Fetch from and integrate with another repository or"
+                " a local branch\n"
+                "Incorporates changes from a remote repository into the current"
                 " branch. In its default mode, git pull is shorthand for git fe"
                 "tch followed by git merge FETCH_HEAD.\n\nMore precisely, git p"
                 "ull runs git fetch with the given parameters and calls git mer"
                 "ge to merge the retrieved branch heads into the current branch"
                 ". With --rebase, it runs git rebase instead of git merge."));
    SetButtonFormattedToolTip(ui->btn_git_push,
-        QString("Updates remote refs using local refs, while sending objects ne"
+        QString("git-push - Update remote refs along with associated objects\n"
+                "Updates remote refs using local refs, while sending objects ne"
                 "cessary to complete the given refs."));
    SetButtonFormattedToolTip(ui->btn_git_rebase,
-        QString("If <branch> is specified, git rebase will perform an automatic"
+        QString("git-rebase - Reapply commits on top of another base tip\n"
+                "If <branch> is specified, git rebase will perform an automatic"
                 " git checkout <branch> before doing anything else. Otherwise i"
                 "t remains on the current branch."));
    SetButtonFormattedToolTip(ui->btn_git_stash,
-        QString("Use git stash when you want to record the current state of the"
+        QString("git-stash - Stash the changes in a dirty working directory "
+                "away\n"
+                "Use git stash when you want to record the current state of the"
                 " working directory and the index, but want to go back to a cle"
                 "an working directory. The command saves your local modificatio"
                 "ns away and reverts the working directory to match the HEAD co"
                 "mmit."));
    SetButtonFormattedToolTip(ui->btn_git_status,
-        QString("Displays paths that have differences between the index file an"
+        QString("git-status - Show the working tree status\n"
+                "Displays paths that have differences between the index file an"
                 "d the current HEAD commit, paths that have differences between"
                 " the working tree and the index file, and paths in the working"
                 " tree that are not tracked by Git (and are not ignored by giti"
@@ -262,16 +300,23 @@ void MainWindow::SetButtonFormattedToolTip(QAbstractButton *pCB,
         while((!modToolTip.at(index).isSpace()) && (floor < index))
         {
             --index;
+            if('\n' == modToolTip.at(index))
+            {
+                break;
+            }
         }
-        if(floor < index)
+        if('\n' != modToolTip.at(index))
         {
-            modToolTip[index] = '\n';
-        }
-        else
-        {
-            modToolTip.insert(ceiling, '\n');
-            ++len;
-            index = ceiling;
+            if(floor < index)
+            {
+                modToolTip[index] = '\n';
+            }
+            else
+            {
+                modToolTip.insert(ceiling, '\n');
+                ++len;
+                index = ceiling;
+            }
         }
         floor = ++index;
         ceiling = index + width;
