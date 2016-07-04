@@ -297,25 +297,35 @@ void MainWindow::SetButtonFormattedToolTip(QAbstractButton *pCB,
     int ceiling(index);
     while(index < len)
     {
-        while((!modToolTip.at(index).isSpace()) && (floor < index))
+        bool hasCR(false);
+        for(int i = index; floor < i; --i)
         {
-            --index;
-            if('\n' == modToolTip.at(index))
+//            if(QChar('\n') == modToolTip.at(i))
+            if('\n' == modToolTip.at(i))
             {
+                hasCR = true;
+                index = i;
                 break;
             }
         }
-        if('\n' != modToolTip.at(index))
+        if(!hasCR)
         {
-            if(floor < index)
+            while((!modToolTip.at(index).isSpace()) && (floor < index))
             {
-                modToolTip[index] = QChar('\n');
+                --index;
             }
-            else
+            if('\n' != modToolTip.at(index))
             {
-                modToolTip.insert(ceiling, QChar('\n'));
-                ++len;
-                index = ceiling;
+                if(floor < index)
+                {
+                    modToolTip[index] = QChar('\n');
+                }
+                else
+                {
+                    modToolTip.insert(ceiling, QChar('\n'));
+                    ++len;
+                    index = ceiling;
+                }
             }
         }
         floor = ++index;
