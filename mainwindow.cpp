@@ -265,16 +265,17 @@ void MainWindow::SetButtonFormattedToolTip(QAbstractButton *pCB,
         }
         if(floor < index)
         {
-            modToolTip[index] = '\n';
+            modToolTip[index] = QChar('\n');
         }
         else
         {
-            modToolTip.insert(ceiling, '\n');
+            modToolTip.insert(ceiling, QChar('\n'));
             ++len;
             index = ceiling;
         }
         floor = ++index;
-        ceiling = index + width;
+        index += width;
+        ceiling = index;
     }
     pCB->setToolTip(modToolTip);
 //    cout << modToolTip.toStdString() << endl << endl;
