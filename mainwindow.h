@@ -36,7 +36,7 @@ public:
                                             const QString& tooltip,
                                             int width=120);
     static const QString& ReadSettingFromFile(const QString& settingFileStr,
-                                              QString& altTextStr,
+                                              const QString& altTextStr,
                                               QLabel* settingLabel);
 
 private slots:

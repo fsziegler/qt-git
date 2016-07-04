@@ -281,7 +281,8 @@ void MainWindow::SetButtonFormattedToolTip(QAbstractButton *pCB,
 }
 
 const QString& MainWindow::ReadSettingFromFile(const QString& settingFileStr,
-                                     QString& altTextStr, QLabel* settingLabel)
+                                     const QString& altTextStr,
+                                               QLabel* settingLabel)
 {
     QString retStr(altTextStr);
     QFile cfgFile(settingFileStr);
