@@ -166,7 +166,7 @@
       <string>git clone</string>
      </property>
     </widget>
-    <widget class="QPushButton" name="btn_remot_repo">
+    <widget class="QPushButton" name="btn_remote_repo">
      <property name="geometry">
       <rect>
        <x>10</x>
@@ -428,7 +428,7 @@
  <layoutdefault spacing="6" margin="11"/>
  <tabstops>
   <tabstop>btn_choose_git_root</tabstop>
-  <tabstop>btn_remot_repo</tabstop>
+  <tabstop>btn_remote_repo</tabstop>
   <tabstop>btn_git_init</tabstop>
   <tabstop>btn_git_clone</tabstop>
   <tabstop>btn_git_branch</tabstop>

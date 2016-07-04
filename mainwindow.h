@@ -48,7 +48,7 @@ private slots:
 
     void on_btn_git_clone_clicked();
 
-    void on_btn_remot_repo_clicked();
+    void on_btn_remote_repo_clicked();
 
 private:
     static QFileInfo ms_rootGitDir;

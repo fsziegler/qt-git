@@ -53,6 +53,12 @@ MainWindow::MainWindow(const QString& cmdStr, QWidget *parent) :
 //   ui->comboBox_stash->addItem("echo");
    OnGitStatus();
 
+   SetButtonFormattedToolTip(ui->btn_choose_git_root,
+        QString("Choose the root directory for all git operations"));
+//   ""
+   SetButtonFormattedToolTip(ui->btn_remote_repo,
+        QString("Choose the remote repository for all git operations"));
+
    SetButtonFormattedToolTip(ui->btn_git_add,
         QString("git-add - Add file contents to the index\n"
                 "This command updates the index using the current content found"
@@ -62,9 +68,6 @@ MainWindow::MainWindow(const QString& cmdStr, QWidget *parent) :
                 "add content with only part of the changes made to the working "
                 "tree files applied, or remove paths that do not exist in the w"
                 "orking tree anymore."));
-   SetButtonFormattedToolTip(ui->btn_choose_git_root,
-        QString("Choose the root directory for all git operations"));
-//   ""
    SetButtonFormattedToolTip(ui->btn_git_branch,
         QString("git-branch - List, create, or delete branches\n"
                 "If --list is given, or if there are no non-option arguments, e"
@@ -399,7 +402,7 @@ void MainWindow::on_btn_git_clone_clicked()
     cloneDlg.exec();
 }
 
-void MainWindow::on_btn_remot_repo_clicked()
+void MainWindow::on_btn_remote_repo_clicked()
 {
     bool ok;
     QString text =
