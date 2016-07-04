@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>871</width>
-    <height>391</height>
+    <width>462</width>
+    <height>311</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -16,9 +16,9 @@
   <widget class="QDialogButtonBox" name="buttonBox">
    <property name="geometry">
     <rect>
-     <x>308</x>
-     <y>340</y>
-     <width>171</width>
+     <x>145</x>
+     <y>260</y>
+     <width>172</width>
      <height>32</height>
     </rect>
    </property>
@@ -33,8 +33,8 @@
    <property name="geometry">
     <rect>
      <x>120</x>
-     <y>300</y>
-     <width>671</width>
+     <y>220</y>
+     <width>321</width>
      <height>23</height>
     </rect>
    </property>
@@ -44,30 +44,28 @@
     <rect>
      <x>20</x>
      <y>10</y>
-     <width>831</width>
-     <height>41</height>
+     <width>411</width>
+     <height>20</height>
     </rect>
    </property>
    <property name="focusPolicy">
     <enum>Qt::StrongFocus</enum>
    </property>
    <property name="text">
-    <string>-q, --quiet
-  Only print error and warning messages, all other output will be suppressed.</string>
+    <string>-q, --quiet</string>
    </property>
   </widget>
   <widget class="QCheckBox" name="checkBox_bare">
    <property name="geometry">
     <rect>
      <x>20</x>
-     <y>60</y>
-     <width>831</width>
-     <height>41</height>
+     <y>50</y>
+     <width>411</width>
+     <height>20</height>
     </rect>
    </property>
    <property name="text">
-    <string>--bare
-  Create a bare repository. If GIT_DIR environment is not set, it is set to the current working directory.</string>
+    <string>--bare</string>
    </property>
   </widget>
   <widget class="QCheckBox" name="checkBox_template">
@@ -77,14 +75,13 @@
    <property name="geometry">
     <rect>
      <x>20</x>
-     <y>100</y>
-     <width>831</width>
-     <height>41</height>
+     <y>90</y>
+     <width>411</width>
+     <height>20</height>
     </rect>
    </property>
    <property name="text">
-    <string>--template=&lt;template_directory&gt;
-  Specify the directory from which templates will be used. (See the &quot;TEMPLATE DIRECTORY&quot; section below.)</string>
+    <string>--template=&lt;template_directory&gt;</string>
    </property>
   </widget>
   <widget class="QCheckBox" name="checkBox_separate_git_dir">
@@ -94,16 +91,13 @@
    <property name="geometry">
     <rect>
      <x>20</x>
-     <y>150</y>
-     <width>831</width>
-     <height>71</height>
+     <y>130</y>
+     <width>411</width>
+     <height>20</height>
     </rect>
    </property>
    <property name="text">
-    <string>--separate-git-dir=&lt;git dir&gt;
-  Instead of initializing the repository where it is supposed to be, place a filesytem-agnostic Git symbolic link there, pointing to the
-  specified path, and initialize a Git repository at the path. The result is Git repository can be separated from working tree. If this
-  is reinitialization, the repository will be moved to the specified path.</string>
+    <string>--separate-git-dir=&lt;git dir&gt;</string>
    </property>
   </widget>
   <widget class="QCheckBox" name="checkBox_shared_permissions">
@@ -113,23 +107,20 @@
    <property name="geometry">
     <rect>
      <x>20</x>
-     <y>220</y>
-     <width>831</width>
-     <height>71</height>
+     <y>170</y>
+     <width>411</width>
+     <height>20</height>
     </rect>
    </property>
    <property name="text">
-    <string>--shared[=(false|true|umask|group|all|world|everybody|0xxx)]
-  Specify that the Git repository is to be shared amongst several users. This allows users belonging to the same group to push into that
-  repository. When specified, the config variable &quot;core.sharedRepository&quot; is set so that files and directories under $GIT_DIR are created
-  with the requested permissions. When not specified, Git will use permissions reported by umask(2).</string>
+    <string>--shared[=(false|true|umask|group|all|world|everybody|0xxx)]</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="pushButton">
+  <widget class="QPushButton" name="btn_directory">
    <property name="geometry">
     <rect>
      <x>20</x>
-     <y>300</y>
+     <y>220</y>
      <width>80</width>
      <height>23</height>
     </rect>
@@ -145,7 +136,7 @@
   <tabstop>checkBox_template</tabstop>
   <tabstop>checkBox_separate_git_dir</tabstop>
   <tabstop>checkBox_shared_permissions</tabstop>
-  <tabstop>pushButton</tabstop>
+  <tabstop>btn_directory</tabstop>
   <tabstop>lineEdit_directory</tabstop>
  </tabstops>
  <resources/>

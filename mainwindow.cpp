@@ -1,11 +1,15 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+
 #include <QFileDialog>
 #include <QProcess>
 #include <QDebug>
 #include <QRegularExpression>
 #include <QDesktopWidget>
+#include <QInputDialog>
+
 #include "gitinitdialog.h"
+#include "gitclonedialog.h"
 
 #include <iostream>
 #include <sstream>
@@ -18,6 +22,7 @@ MainWindow::MainWindow(const QString& cmdStr, QWidget *parent) :
    QMainWindow(parent),
    mc_appDir(QFileInfo(cmdStr).path()),
    mc_cfgFileStr(mc_appDir.filePath() + "/rootGitDir.txt"),
+   mc_remoteRepoFileStr(mc_appDir.filePath() + "/remoteRepoUrl.txt"),
    ui(new Ui::MainWindow)
 {
    ms_rootGitDir = cmdStr;
@@ -34,28 +39,94 @@ MainWindow::MainWindow(const QString& cmdStr, QWidget *parent) :
             QApplication::desktop()->availableGeometry()));
    }
    setWindowTitle("Fred's qt-git");
-   {
-      QFile cfgFile(mc_cfgFileStr);
-      if(cfgFile.exists())
-      {
-         if(cfgFile.open(QIODevice::ReadOnly | QIODevice::Text))
-         {
-            QByteArray line = cfgFile.readLine();
-            ms_rootGitDir = QFileInfo(QString(line));
-            ui->label_git_root->setText(ms_rootGitDir.filePath());
-         }
-      }
-      else
-      {
-         ui->label_git_root->setText("[Git root unknown]");
-      }
-   }
+   ms_rootGitDir =
+           QFileInfo(ReadSettingFromFile(mc_cfgFileStr,
+                                         QString("[Git root unknown]"),
+                                         ui->label_git_root));
+   ReadSettingFromFile(mc_remoteRepoFileStr,
+                       QString("[Remote repo unknown]"),
+                       ui->label_remote_repo);
 
-   ui->comboBox_stash->addItem("foo");
-   ui->comboBox_stash->addItem("bar");
-   ui->comboBox_stash->addItem("doo");
-   ui->comboBox_stash->addItem("echo");
+//   ui->comboBox_stash->addItem("foo");
+//   ui->comboBox_stash->addItem("bar");
+//   ui->comboBox_stash->addItem("doo");
+//   ui->comboBox_stash->addItem("echo");
    OnGitStatus();
+
+   SetButtonFormattedToolTip(ui->btn_git_add,
+        QString("This command updates the index using the current content found"
+                " in the working tree, to prepare the content staged for the ne"
+                "xt commit. It typically adds the current content of existing p"
+                "aths as a whole, but with some options it can also be used to "
+                "add content with only part of the changes made to the working "
+                "tree files applied, or remove paths that do not exist in the w"
+                "orking tree anymore."));
+   SetButtonFormattedToolTip(ui->btn_choose_git_root,
+        QString("Choose the root directory for all git operations"));
+   SetButtonFormattedToolTip(ui->btn_git_checkout,
+        QString("Updates files in the working tree to match the version in the "
+                "index or the specified tree. If no paths are given, git checko"
+                "ut will also update HEAD to set the specified branch as the cu"
+                "rrent branch."));
+   SetButtonFormattedToolTip(ui->btn_git_clone,
+        QString("Clones a repository into a newly created directory, creates re"
+                "mote-tracking branches for each branch in the cloned repositor"
+                "y (visible using git branch -r), and creates and checks out an"
+                " initial branch that is forked from the cloned repository’s cu"
+                "rrently active branch."));
+   SetButtonFormattedToolTip(ui->btn_git_commit,
+        QString("Stores the current contents of the index in a new commit along"
+                " with a log message from the user describing the changes."));
+   SetButtonFormattedToolTip(ui->btn_git_diff,
+        QString("Show changes between the working tree and the index or a tree,"
+                " changes between the index and a tree, changes between two tre"
+                "es, changes between two blob objects, or changes between two f"
+                "iles on disk."));
+   SetButtonFormattedToolTip(ui->btn_git_fetch,
+        QString("Fetch branches and/or tags (collectively, \"refs\") from one o"
+                "r more other repositories, along with the objects necessary to"
+                " complete their histories. Remote-tracking branches are update"
+                "d (see the description of <refspec> below for ways to control "
+                "this behavior)."));
+   SetButtonFormattedToolTip(ui->btn_git_init,
+        QString("This command creates an empty Git repository - basically a .gi"
+                "t directory with subdirectories for objects, refs/heads, refs/"
+                "tags, and template files. An initial HEAD file that references"
+                " the HEAD of the master branch is also created."));
+   SetButtonFormattedToolTip(ui->btn_git_merge,
+        QString("Incorporates changes from the named commits (since the time th"
+                "eir histories diverged from the current branch) into the curre"
+                "nt branch. This command is used by git pull to incorporate cha"
+                "nges from another repository and can be used by hand to merge "
+                "changes from one branch into another."));
+   SetButtonFormattedToolTip(ui->btn_git_pull,
+        QString("Incorporates changes from a remote repository into the current"
+                " branch. In its default mode, git pull is shorthand for git fe"
+                "tch followed by git merge FETCH_HEAD.\n\nMore precisely, git p"
+                "ull runs git fetch with the given parameters and calls git mer"
+                "ge to merge the retrieved branch heads into the current branch"
+                ". With --rebase, it runs git rebase instead of git merge."));
+   SetButtonFormattedToolTip(ui->btn_git_push,
+        QString("Updates remote refs using local refs, while sending objects ne"
+                "cessary to complete the given refs."));
+   SetButtonFormattedToolTip(ui->btn_git_rebase,
+        QString("If <branch> is specified, git rebase will perform an automatic"
+                " git checkout <branch> before doing anything else. Otherwise i"
+                "t remains on the current branch."));
+   SetButtonFormattedToolTip(ui->btn_git_stash,
+        QString("Use git stash when you want to record the current state of the"
+                " working directory and the index, but want to go back to a cle"
+                "an working directory. The command saves your local modificatio"
+                "ns away and reverts the working directory to match the HEAD co"
+                "mmit."));
+   SetButtonFormattedToolTip(ui->btn_git_status,
+        QString("Displays paths that have differences between the index file an"
+                "d the current HEAD commit, paths that have differences between"
+                " the working tree and the index file, and paths in the working"
+                " tree that are not tracked by Git (and are not ignored by giti"
+                "gnore(5)). The first are what you would commit by running git "
+                "commit; the second and third are what you could commit by runn"
+                "ing git add before running git commit."));
 }
 
 MainWindow::~MainWindow()
@@ -174,12 +245,65 @@ const QFileInfo& MainWindow::getRootGitDir()
     return ms_rootGitDir;
 }
 
+void MainWindow::SetButtonFormattedToolTip(QAbstractButton *pCB,
+                                        const QString& tooltip, int width)
+{
+    int len = tooltip.size();
+    if(len <= width)
+    {
+        pCB->setToolTip(tooltip);
+    }
+    QString modToolTip(tooltip);
+    int index(width);
+    int floor(0);
+    int ceiling(index);
+    while(index < len)
+    {
+        while((!modToolTip.at(index).isSpace()) && (floor < index))
+        {
+            --index;
+        }
+        if(floor < index)
+        {
+            modToolTip[index] = '\n';
+        }
+        else
+        {
+            modToolTip.insert(ceiling, '\n');
+            ++len;
+            index = ceiling;
+        }
+        floor = ++index;
+        ceiling = index + width;
+    }
+    pCB->setToolTip(modToolTip);
+//    cout << modToolTip.toStdString() << endl << endl;
+}
+
+const QString& MainWindow::ReadSettingFromFile(const QString& settingFileStr,
+                                     QString& altTextStr, QLabel* settingLabel)
+{
+    QString retStr(altTextStr);
+    QFile cfgFile(settingFileStr);
+    if(cfgFile.exists())
+    {
+       if(cfgFile.open(QIODevice::ReadOnly | QIODevice::Text))
+       {
+          QByteArray line = cfgFile.readLine();
+          retStr = line;
+//          ms_rootGitDir = QFileInfo(QString(line));
+          settingLabel->setText(ms_rootGitDir.filePath());
+       }
+    }
+    settingLabel->setText(retStr);
+    return retStr;
+}
+
 void MainWindow::on_btn_choose_git_root_clicked()
 {
    QString dir = QFileDialog::getExistingDirectory(this, tr("Open Directory"),
                  ms_rootGitDir.filePath(),
-                 QFileDialog::ShowDirsOnly
-                 | QFileDialog::DontResolveSymlinks);
+                 QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
    if(!dir.isNull())
    {
       ClearAll();
@@ -210,4 +334,46 @@ void MainWindow::on_btn_git_init_clicked()
 {
    GitInitDialog initDlg;
    initDlg.exec();
+}
+
+void MainWindow::on_btn_git_clone_clicked()
+{
+    GitCloneDialog cloneDlg;
+    cloneDlg.exec();
+}
+
+void MainWindow::on_btn_remot_repo_clicked()
+{
+    bool ok;
+    QString text =
+            QInputDialog::getText(this, tr("QInputDialog::getText()"),
+                                  tr("Remote repo URL:"), QLineEdit::Normal,
+                                  ui->label_remote_repo->text(), &ok);
+    if (ok && !text.isEmpty())
+    {
+        ui->label_remote_repo->setText(text);
+        QFile cfgFile(mc_remoteRepoFileStr);
+        if(cfgFile.open(QIODevice::WriteOnly | QIODevice::Text))
+        {
+           QTextStream out(&cfgFile);
+           out << text;
+           cfgFile.close();
+        }
+    }
+
+
+//    if(!dir.isNull())
+//    {
+//       ClearAll();
+//       ms_rootGitDir = dir;
+//       ui->label_git_root->setText(dir);
+//       QFile cfgFile(mc_cfgFileStr);
+//       if(cfgFile.open(QIODevice::WriteOnly | QIODevice::Text))
+//       {
+//          QTextStream out(&cfgFile);
+//          out << ms_rootGitDir.filePath();
+//          cfgFile.close();
+//       }
+//    }
+
 }

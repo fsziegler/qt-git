@@ -3,6 +3,8 @@
 
 #include <QMainWindow>
 #include <QFileInfo>
+#include <QCheckBox>
+#include <QLabel>
 
 #include <string>
 #include <vector>
@@ -30,6 +32,12 @@ public:
 
     void OnGitStatus();
     static const QFileInfo& getRootGitDir();
+    static void SetButtonFormattedToolTip(QAbstractButton *pCB,
+                                            const QString& tooltip,
+                                            int width=120);
+    static const QString& ReadSettingFromFile(const QString& settingFileStr,
+                                              QString& altTextStr,
+                                              QLabel* settingLabel);
 
 private slots:
     void on_btn_choose_git_root_clicked();
@@ -38,10 +46,15 @@ private slots:
 
     void on_btn_git_init_clicked();
 
+    void on_btn_git_clone_clicked();
+
+    void on_btn_remot_repo_clicked();
+
 private:
     static QFileInfo ms_rootGitDir;
     const QFileInfo mc_appDir;
     const QString mc_cfgFileStr;
+    const QString mc_remoteRepoFileStr;
     Ui::MainWindow *ui;
 };
 

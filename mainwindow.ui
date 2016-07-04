@@ -17,23 +17,23 @@
    <widget class="QLabel" name="label_git_root">
     <property name="geometry">
      <rect>
-      <x>160</x>
+      <x>140</x>
       <y>43</y>
       <width>811</width>
       <height>16</height>
      </rect>
     </property>
     <property name="text">
-     <string>TextLabel</string>
+     <string>[local repo root]</string>
     </property>
    </widget>
    <widget class="QGroupBox" name="grpBox_workspace">
     <property name="geometry">
      <rect>
       <x>150</x>
-      <y>70</y>
+      <y>100</y>
       <width>201</width>
-      <height>621</height>
+      <height>591</height>
      </rect>
     </property>
     <property name="title">
@@ -75,20 +75,14 @@
       <string>Stashes:</string>
      </property>
     </widget>
-    <zorder>groupBox_2</zorder>
-    <zorder>comboBox_stash</zorder>
-    <zorder>btn_git_status</zorder>
-    <zorder>btn_git_diff</zorder>
-    <zorder>grpBox_information</zorder>
-    <zorder>label_stashes</zorder>
    </widget>
    <widget class="QGroupBox" name="grpBox_index">
     <property name="geometry">
      <rect>
       <x>370</x>
-      <y>70</y>
+      <y>100</y>
       <width>201</width>
-      <height>621</height>
+      <height>591</height>
      </rect>
     </property>
     <property name="title">
@@ -99,9 +93,9 @@
     <property name="geometry">
      <rect>
       <x>590</x>
-      <y>70</y>
+      <y>100</y>
       <width>201</width>
-      <height>621</height>
+      <height>591</height>
      </rect>
     </property>
     <property name="title">
@@ -112,9 +106,9 @@
     <property name="geometry">
      <rect>
       <x>810</x>
-      <y>70</y>
+      <y>100</y>
       <width>201</width>
-      <height>621</height>
+      <height>591</height>
      </rect>
     </property>
     <property name="title">
@@ -127,7 +121,7 @@
       <x>10</x>
       <y>10</y>
       <width>121</width>
-      <height>121</height>
+      <height>151</height>
      </rect>
     </property>
     <property name="title">
@@ -143,14 +137,14 @@
       </rect>
      </property>
      <property name="text">
-      <string>Choose Git Root</string>
+      <string>local repo root</string>
      </property>
     </widget>
     <widget class="QPushButton" name="btn_git_init">
      <property name="geometry">
       <rect>
        <x>10</x>
-       <y>60</y>
+       <y>90</y>
        <width>101</width>
        <height>23</height>
       </rect>
@@ -163,7 +157,7 @@
      <property name="geometry">
       <rect>
        <x>10</x>
-       <y>90</y>
+       <y>120</y>
        <width>101</width>
        <height>23</height>
       </rect>
@@ -172,12 +166,25 @@
       <string>git clone</string>
      </property>
     </widget>
+    <widget class="QPushButton" name="btn_remot_repo">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>60</y>
+       <width>101</width>
+       <height>23</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>remote repo</string>
+     </property>
+    </widget>
    </widget>
    <widget class="QGroupBox" name="grpBox_manipulation">
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>150</y>
+      <y>180</y>
       <width>121</width>
       <height>301</height>
      </rect>
@@ -307,7 +314,7 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>470</y>
+      <y>500</y>
       <width>121</width>
       <height>91</height>
      </rect>
@@ -341,9 +348,19 @@
       <string>git status</string>
      </property>
     </widget>
-    <zorder>grpBox_index</zorder>
-    <zorder>btn_git_diff</zorder>
-    <zorder>btn_git_status</zorder>
+   </widget>
+   <widget class="QLabel" name="label_remote_repo">
+    <property name="geometry">
+     <rect>
+      <x>140</x>
+      <y>70</y>
+      <width>811</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>[remote repo]</string>
+    </property>
    </widget>
    <zorder>grpBox_initialization</zorder>
    <zorder>grpBox_information</zorder>
@@ -353,6 +370,7 @@
    <zorder>grpBox_index</zorder>
    <zorder>grpBox_local_repo</zorder>
    <zorder>grpBox_remote_repo</zorder>
+   <zorder>label_remote_repo</zorder>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
@@ -360,7 +378,7 @@
      <x>0</x>
      <y>0</y>
      <width>1024</width>
-     <height>20</height>
+     <height>26</height>
     </rect>
    </property>
   </widget>
@@ -375,6 +393,24 @@
   <widget class="QStatusBar" name="statusBar"/>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
+ <tabstops>
+  <tabstop>btn_choose_git_root</tabstop>
+  <tabstop>btn_remot_repo</tabstop>
+  <tabstop>btn_git_init</tabstop>
+  <tabstop>btn_git_clone</tabstop>
+  <tabstop>btn_git_add</tabstop>
+  <tabstop>btn_git_stash</tabstop>
+  <tabstop>btn_git_commit</tabstop>
+  <tabstop>btn_git_checkout</tabstop>
+  <tabstop>btn_git_push</tabstop>
+  <tabstop>btn_git_pull</tabstop>
+  <tabstop>btn_git_fetch</tabstop>
+  <tabstop>btn_git_merge</tabstop>
+  <tabstop>btn_git_rebase</tabstop>
+  <tabstop>btn_git_diff</tabstop>
+  <tabstop>btn_git_status</tabstop>
+  <tabstop>comboBox_stash</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>
