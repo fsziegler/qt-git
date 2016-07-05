@@ -10,6 +10,7 @@
 
 #include "gitinitdialog.h"
 #include "gitclonedialog.h"
+#include "testdialog.h"
 
 #include <iostream>
 #include <sstream>
@@ -436,4 +437,165 @@ void MainWindow::on_btn_remote_repo_clicked()
 //       }
 //    }
 
+}
+
+void MainWindow::on_btn_git_branch_clicked()
+{
+    TestDialog dlg;
+    dlg.SetCommand("git", "branch");
+    dlg.SetTitle("git-branch");
+    dlg.AddCheckbox("--color[=<when>]", "Color branches to highlight current, "
+                                        "local, and remote-tracking branches. T"
+                                        "he value must be always (the default),"
+                                        " never, or auto.",
+                             0, 0, true);
+    dlg.AddCheckbox("--no-color", "Turn off branch colors, even when the config"
+                                  "uration file gives the default to color outp"
+                                  "ut. Same as --color=never.", 0, 1);
+    dlg.AddCheckbox("-r | --remotes",
+                    "List or delete (if used with -d) the remote-tracking branc"
+                    "hes.", 1, 0);
+    dlg.AddCheckbox("-a | --all",
+                    "List both remote-tracking branches and local branches.",
+                    1, 1);
+    dlg.AddCheckbox("--list", "Activate the list mode. git branch <pattern> wou"
+                              "ld try to create a branch, use git branch --list"
+                              " <pattern> to list matching branches.",
+                    2, 0);
+    dlg.AddCheckbox("-v | --verbose", "When in list mode, show sha1 and commit "
+                                      "subject line for each head, along with r"
+                                      "elationship to upstream branch (if "
+                                      "any).", 3, 0);
+    dlg.AddCheckbox("-vv", "When in list mode, show sha1 and commit subject lin"
+                           "e for each head, along with relationship to upstrea"
+                           "m branch (if any). If given twice, print the name o"
+                           "f the upstream branch, as well (see also git remote"
+                           " show <remote>).", 3, 1);
+    dlg.AddCheckbox("--column[=<options>]",
+                    "Display branch listing in columns. See configuration varia"
+                    "ble column.branch for option syntax.--column and --no-colu"
+                    "mn without options are equivalent to always and never resp"
+                    "ectively. This option is only applicable in non-verbose mo"
+                    "de.", 4, 0, true);
+    dlg.AddCheckbox("--no-column",
+                    "Display branch listing in columns. See configuration varia"
+                    "ble column.branch for option syntax.--column and --no-colu"
+                    "mn without options are equivalent to always and never resp"
+                    "ectively. This option is only applicable in non-verbose mo"
+                    "de.", 4, 1);
+    dlg.AddCheckbox("--contains [<commit>]",
+                    "Only list branches which contain the specified commit (HEA"
+                    "D if not specified). Implies --list.", 5, 0, true);
+    dlg.AddCheckbox("--merged [<commit>]",
+                    "Only list branches whose tips are reachable from the speci"
+                    "fied commit (HEAD if not specified). Implies --list.",
+                    5, 1, true);
+    dlg.AddCheckbox("--no-merged [<commit>]",
+                    "Only list branches whose tips are not reachable from the s"
+                    "pecified commit (HEAD if not specified). Implies --list.",
+                    6, 0, true);
+    dlg.AddCheckbox("--sort=<key>",
+                    "Sort based on the key given. Prefix - to sort in descendin"
+                    "g order of the value. You may use the --sort=<key> option "
+                    "multiple times, in which case the last key becomes the pri"
+                    "mary key. The keys supported are the same as those in git "
+                    "for-each-ref. Sort order defaults to sorting based on the "
+                    "full refname (including refs/... prefix). This lists detac"
+                    "hed HEAD (if present) first, then local branches and final"
+                    "ly remote-tracking branches.", 7, 0, true);
+    dlg.AddCheckbox("--points-at <object>",
+                    "Only list branches of the given object.", 7, 1, true);
+    dlg.AddCheckbox("<pattern> ...",
+                    "If a <pattern> is given, it is used as a shell wildcard to"
+                    " restrict the output to matching branches. If multiple pat"
+                    "terns are given, a branch is shown if it matches any of th"
+                    "e patterns. Note that when providing a <pattern>, you must"
+                    " use --list; otherwise the command is interpreted as branc"
+                    "h creation.", 8, 0, true);
+    dlg.AddCheckbox("-d | --delete",
+                    "Delete a branch. The branch must be fully merged in its up"
+                    "stream branch, or in HEAD if no upstream was set with --tr"
+                    "ack or --set-upstream.", 9, 0);
+    dlg.AddCheckbox("-D", "Shortcut for --delete --force.", 9, 1);
+    dlg.AddCheckbox("-l | --create-reflog",
+                    "Create the branch’s reflog. This activates recording of al"
+                    "l changes made to the branch ref, enabling use of date bas"
+                    "ed sha1 expressions such as \"<branchname>@{yesterday}\". "
+                    "Note that in non-bare repositories, reflogs are usually en"
+                    "abled by default by the core.logallrefupdates config optio"
+                    "n.", 10, 0);
+    dlg.AddCheckbox("-f | --force",
+                    "Reset <branchname> to <startpoint> if <branchname> exists "
+                    "already. Without -f git branch refuses to change an existi"
+                    "ng branch. In combination with -d (or --delete), allow del"
+                    "eting the branch irrespective of its merged status. In com"
+                    "bination with -m (or --move), allow renaming the branch ev"
+                    "en if the new branch name already exists.", 10, 1);
+    dlg.AddCheckbox("-m | --move",
+                    "Move/rename a branch and the corresponding reflog.",
+                    11, 0);
+    dlg.AddCheckbox("-M", "Shortcut for --move --force.", 11, 1);
+    dlg.AddCheckbox("-q | --quiet",
+                    "Be more quiet when creating or deleting a branch, suppress"
+                    "ing non-error messages.", 12, 0);
+    dlg.AddCheckbox("--abbrev=<length>",
+                    "Alter the sha1’s minimum display length in the output list"
+                    "ing. The default value is 7 and can be overridden by the c"
+                    "ore.abbrev config option.", 13, 0, true);
+    dlg.AddCheckbox("--no-abbrev",
+                    "Display the full sha1s in the output listing rather than a"
+                    "bbreviating them.", 13, 1);
+    dlg.AddCheckbox("-t | --track",
+                    "When creating a new branch, set up branch.<name>.remote an"
+                    "d branch.<name>.merge configuration entries to mark the st"
+                    "art-point branch as \"upstream\" from the new branch. This"
+                    " configuration will tell git to show the relationship betw"
+                    "een the two branches in git status and git branch -v. Furt"
+                    "hermore, it directs git pull without arguments to pull fro"
+                    "m the upstream when the new branch is checked out.\n\nThis"
+                    " behavior is the default when the start point is a remote-"
+                    "tracking branch. Set the branch.autoSetupMerge configurati"
+                    "on variable to false if you want git checkout and git bran"
+                    "ch to always behave as if --no-track were given. Set it to"
+                    " always if you want this behavior when the start-point is "
+                    "either a local or remote-tracking branch.", 14, 0);
+    dlg.AddCheckbox("--no-track",
+                    "Do not set up \"upstream\" configuration, even if the bran"
+                    "ch.autoSetupMerge configuration variable is true.", 14, 1);
+    dlg.AddCheckbox("--set-upstream",
+                    "If specified branch does not exist yet or if --force has b"
+                    "een given, acts exactly like --track. Otherwise sets up co"
+                    "nfiguration like --track would when creating the branch, e"
+                    "xcept that where branch points to is not changed.", 15, 0);
+    dlg.AddCheckbox("-u <upstream> | --set-upstream-to=<upstream>",
+                    "Set up <branchname>'s tracking information so <upstream> i"
+                    "s considered <branchname>'s upstream branch. If no <branch"
+                    "name> is specified, then it defaults to the current branch"
+                    ".", 15, 1, true);
+    dlg.AddCheckbox("--unset-upstream",
+                    "Remove the upstream information for <branchname>. If no br"
+                    "anch is specified it defaults to the current branch.",
+                    16, 0);
+    dlg.AddCheckbox("--edit-description",
+                    "Open an editor and edit the text to explain what the branc"
+                    "h is for, to be used by various other commands (e.g. forma"
+                    "t-patch, request-pull, and merge (if enabled)). Multi-line"
+                    " explanations may be used.", 17, 0);
+    dlg.AddCheckbox("<branchname>",
+                    "The name of the branch to create or delete. The new branch"
+                    " name must pass all checks defined by git-check-ref-format"
+                    "(1). Some of these checks may restrict the characters allo"
+                    "wed in a branch name.", 18, 0, true);
+    dlg.AddCheckbox("<start-point>",
+                    "The new branch head will point to this commit. It may be g"
+                    "iven as a branch name, a commit-id, or a tag. If this opti"
+                    "on is omitted, the current HEAD will be used instead.",
+                    18, 1);
+    dlg.AddCheckbox("<oldbranch>",
+                    "The name of an existing branch to rename.", 19, 0);
+    dlg.AddCheckbox("<newbranch>",
+                    "The new name for an existing branch. The same restrictions"
+                    " as for <branchname> apply.", 19, 1);
+    dlg.ExecuteLayout();
+    dlg.exec();
 }

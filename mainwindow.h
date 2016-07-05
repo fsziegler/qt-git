@@ -50,6 +50,8 @@ private slots:
 
     void on_btn_remote_repo_clicked();
 
+    void on_btn_git_branch_clicked();
+
 private:
     static QFileInfo ms_rootGitDir;
     const QFileInfo mc_appDir;
