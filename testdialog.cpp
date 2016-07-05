@@ -181,36 +181,41 @@ void TestDialog::CBStateChanged(int i)
                             QRegularExpression(itr).match(QString(title));
                     if(match.hasMatch())
                     {
-                        QMessageBox msgBox;
                         QString newText(match.captured(1));
                         if(optionalEqualsParamSpec == itr)
                         {
                             newText.append("=");
                         }
+                        else if (paramSpec == itr)
                         {
-                            bool ok;
-                            QString userValue("[USER VALUES]");
-                            QString text =
-                                    QInputDialog::getText(this, tr("QInputDialog::getText()"),
-                                                          newText, QLineEdit::Normal,
-                                                          userValue, &ok);
-                            if (ok && !text.isEmpty())
-                            {
-                                newText.append(text);
-                            }
-                            else
-                            {
-                                newText.append("[USER VALUES]");
-                            }
+                            newText = match.captured(2);
+                        }
+                        bool ok;
+                        const QString userValue("[USER VALUES]");
+                        QString text =
+                                QInputDialog::getText(this,
+                                                      tr("Input:"),
+                                                      newText,
+                                                      QLineEdit::Normal,
+                                                      userValue, &ok);
+                        if (paramSpec == itr)
+                        {
+                            newText.clear();
+                        }
+
+                        if (ok && !text.isEmpty())
+                        {
+                            newText.append(text);
+                        }
+                        else
+                        {
+                            newText.append("[USER VALUES]");
                         }
                         cb->setText(newText);
                         break;
                     }
                 }
             }
-//            QString newTitle(cb->text());
-//            newTitle.append("***");
-//            cb->setText(newTitle);
         }
     }
     else    // Case of unchecked
