@@ -37,7 +37,8 @@ public:
                                             int width=120);
     static const QString& ReadSettingFromFile(const QString& settingFileStr,
                                               const QString& altTextStr,
-                                              QLabel* settingLabel);
+                                              QLabel* settingLabel,
+                                              QString& settingStr);
 
 private slots:
     void on_btn_choose_git_root_clicked();

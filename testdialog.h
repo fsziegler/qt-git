@@ -9,8 +9,9 @@
 
 using namespace std;
 
-typedef pair<string, QCheckBox*> TStrCBPair;
-typedef map<string, QCheckBox*> TStrCBMap;
+class GitCheckBox;
+typedef pair<string, GitCheckBox*> TStrCBPair;
+typedef map<string, GitCheckBox*> TStrCBMap;
 typedef TStrCBMap::const_iterator TStrCBMapCItr;
 
 namespace Ui {
@@ -34,6 +35,7 @@ public:
 
 private slots:
     void accept();
+    void CBStateChanged(int i);
 
 private:
     Ui::TestDialog *ui;

@@ -40,13 +40,16 @@ MainWindow::MainWindow(const QString& cmdStr, QWidget *parent) :
             QApplication::desktop()->availableGeometry()));
    }
    setWindowTitle("Fred's qt-git");
+   QString settingStr;
    ms_rootGitDir =
            QFileInfo(ReadSettingFromFile(mc_cfgFileStr,
                                          QString("[Git root unknown]"),
-                                         ui->label_git_root));
+                                         ui->label_git_root,
+                                         settingStr));
    ReadSettingFromFile(mc_remoteRepoFileStr,
                        QString("[Remote repo unknown]"),
-                       ui->label_remote_repo);
+                       ui->label_remote_repo,
+                       settingStr);
 
 //   ui->comboBox_stash->addItem("foo");
 //   ui->comboBox_stash->addItem("bar");
@@ -342,22 +345,23 @@ void MainWindow::SetButtonFormattedToolTip(QAbstractButton *pCB,
 
 const QString& MainWindow::ReadSettingFromFile(const QString& settingFileStr,
                                      const QString& altTextStr,
-                                               QLabel* settingLabel)
+                                               QLabel* settingLabel,
+                                               QString& settingStr)
 {
-    QString retStr(altTextStr);
+    settingStr = altTextStr;
     QFile cfgFile(settingFileStr);
     if(cfgFile.exists())
     {
        if(cfgFile.open(QIODevice::ReadOnly | QIODevice::Text))
        {
           QByteArray line = cfgFile.readLine();
-          retStr = line;
+          settingStr = line;
 //          ms_rootGitDir = QFileInfo(QString(line));
           settingLabel->setText(ms_rootGitDir.filePath());
        }
     }
-    settingLabel->setText(retStr);
-    return retStr;
+    settingLabel->setText(settingStr);
+    return settingStr;
 }
 
 void MainWindow::on_btn_choose_git_root_clicked()
