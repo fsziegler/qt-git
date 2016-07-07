@@ -29,16 +29,33 @@ void TestDialog::SetDirectory(const QString& dir)
     m_execDir = dir;
 }
 
-void TestDialog::SetCommand(const QString& cmd, const QString& arg0)
+int stripLeadingWS(string& str)
 {
-    m_cmd = cmd;
-    m_arg0 = arg0;
+    int cnt(0);
+    while(' ' == str[0])
+    {
+        str.erase(0, 1);
+        ++cnt;
+    }
+    return cnt;
 }
 
-void TestDialog::SetTitle(const QString& title)
+void stripTrailingLF(string& str)
 {
-    setWindowTitle(title);
+    while('\n' == str[str.length() - 1])
+    {
+        const size_t len(str.length());
+        str.erase(len - 2, len - 1);
+    }
 }
+
+enum ToolTipLineType
+{
+    HelpTextLine,
+    BlankLine,
+    OptionLine,
+    NextSectionLine,
+};
 
 //            short command: ^(-[a-zA-Z]+)
 //             long command: (--[a-zA-Z-]+)
@@ -63,6 +80,111 @@ vector<QString> paramSpecs =
     paramSpec,
     onlyparamSpec,
 };
+
+const QRegularExpression reIsSection("^[A-Z ]+$");
+ToolTipLineType GetToolTipLineType(string& lineStr)
+{
+    if(0 == lineStr.length())
+    {
+        return BlankLine;
+    }
+    QRegularExpressionMatch match = reIsSection.match(lineStr.c_str());
+    if(match.hasMatch())
+    {
+        return NextSectionLine;
+    }
+//    "       "
+    if(7 == stripLeadingWS(lineStr))
+    {
+        return OptionLine;
+    }
+    return HelpTextLine;
+}
+
+void TestDialog::SetCommand(const QString& cmd, const QString& arg0)
+{
+    m_cmd = cmd;
+    m_arg0 = arg0;
+
+    const string cmdStr("git");
+    const string execDir(".");
+    TStrVect args;
+    args.push_back(arg0.toStdString());
+    args.push_back("--help");
+    TStrVect resultVect;
+    MainWindow::GetProcessResults(cmdStr, execDir, args, resultVect);
+
+    SetTitle("git-checkout");
+    bool optionsSection(false);
+    for(TStrVectCItr itr = resultVect.begin(); resultVect.end() != itr; ++itr)
+    {
+       string lineStr(*itr);
+       QRegularExpressionMatch match = reIsSection.match(lineStr.c_str());
+       if(match.hasMatch())
+       {
+           if(0 == lineStr.compare("OPTIONS"))
+           {
+               int row(0), col(0);
+               string optionStr;
+               string tooltipStr;
+               do
+               {
+                   ++itr;
+                   try
+                   {
+                       lineStr = *itr;
+                       switch(GetToolTipLineType(lineStr))
+                       {
+                           case HelpTextLine:
+                               if((0 < tooltipStr.length()) &&
+                                       ('\n' != tooltipStr[
+                                        tooltipStr.length() - 1]))
+                               {
+                                   tooltipStr.append(" ");
+                               }
+                               tooltipStr.append(lineStr);
+//                               cout << tooltipStr << endl;
+                               break;
+                           case BlankLine:
+                               tooltipStr.append("\n\n");
+                               break;
+                           case OptionLine:
+                               if(0 < tooltipStr.length())
+                               {
+                                   stripTrailingLF(tooltipStr);
+                                   AddCheckbox(optionStr.c_str(),
+                                                   tooltipStr.c_str(), row,
+                                                   col);
+                                   row = (1 == col ? ++row : row);
+                                   col = (0 == col ? 1 : 0);
+                                   optionStr.clear();
+                                   tooltipStr.clear();
+                               }
+                               optionStr.append(
+                                           0 < optionStr.length() ? " | " : "");
+                               optionStr.append(lineStr);
+                               break;
+                           case NextSectionLine:
+                               break;
+                           default:
+                               throw;
+                       }
+                   }
+                   catch(...)
+                   {
+                       int j;
+                   }
+               } while(NextSectionLine != GetToolTipLineType(lineStr));
+           }
+       }
+    }
+
+}
+
+void TestDialog::SetTitle(const QString& title)
+{
+    setWindowTitle(title);
+}
 
 void TestDialog::AddCheckbox(const QString& cbTitle, const QString& cbTooltip,
                              int row, int column, bool disabled)

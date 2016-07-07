@@ -448,6 +448,7 @@ void MainWindow::on_btn_git_branch_clicked()
 {
     TestDialog dlg;
     dlg.SetCommand("git", "branch");
+/*
     dlg.SetTitle("git-branch");
     dlg.AddCheckbox("--color[=<when>]", "Color branches to highlight current, "
                                         "local, and remote-tracking branches. T"
@@ -601,131 +602,15 @@ void MainWindow::on_btn_git_branch_clicked()
     dlg.AddCheckbox("<newbranch>",
                     "The new name for an existing branch. The same restrictions"
                     " as for <branchname> apply.", 19, 1);
+*/
     dlg.ExecuteLayout();
     dlg.exec();
 }
 
-void stripLeadingWS(string& str)
-{
-    while(' ' == str[0])
-    {
-        str.erase(0, 1);
-    }
-}
-
-void stripTrailingLF(string& str)
-{
-    while('\n' == str[str.length() - 1])
-    {
-        const size_t len(str.length());
-        str.erase(len - 2, len - 1);
-    }
-}
-
-enum ToolTipLineType
-{
-    HelpTextLine,
-    BlankLine,
-    OptionLine,
-    NextSectionLine,
-};
-
-const QRegularExpression reIsSection("^[A-Z]+$");
-ToolTipLineType GetToolTipLineType(string& lineStr)
-{
-    if(0 == lineStr.length())
-    {
-        return BlankLine;
-    }
-    QRegularExpressionMatch match = reIsSection.match(lineStr.c_str());
-    if(match.hasMatch())
-    {
-        return NextSectionLine;
-    }
-    stripLeadingWS(lineStr);
-    if('-' == lineStr[0])
-    {
-        return OptionLine;
-    }
-    return HelpTextLine;
-}
-
 void MainWindow::on_btn_git_checkout_clicked()
 {
-    const string cmd("git");
-    const string execDir(".");
-    TStrVect args;
-    args.push_back("checkout");
-    args.push_back("--help");
-    TStrVect resultVect;
-    GetProcessResults(cmd, execDir, args, resultVect);
-
     TestDialog dlg;
     dlg.SetCommand("git", "checkout");
-    dlg.SetTitle("git-checkout");
-    bool optionsSection(false);
-    for(TStrVectCItr itr = resultVect.begin(); resultVect.end() != itr; ++itr)
-    {
-        string lineStr(*itr);
-       QRegularExpressionMatch match = reIsSection.match(lineStr.c_str());
-       if(match.hasMatch())
-       {
-           if(0 == lineStr.compare("OPTIONS"))
-           {
-               int row(0), col(0);
-               string optionStr;
-               string tooltipStr;
-               do
-               {
-                   ++itr;
-                   try
-                   {
-                       lineStr = *itr;
-                       switch(GetToolTipLineType(lineStr))
-                       {
-                           case HelpTextLine:
-                               if((0 < tooltipStr.length()) &&
-                                       ('\n' != tooltipStr[
-                                        tooltipStr.length() - 1]))
-                               {
-                                   tooltipStr.append(" ");
-                               }
-                               tooltipStr.append(lineStr);
-                               cout << tooltipStr << endl;
-                               break;
-                           case BlankLine:
-                               tooltipStr.append("\n\n");
-                               break;
-                           case OptionLine:
-                               if(0 < tooltipStr.length())
-                               {
-                                   stripTrailingLF(tooltipStr);
-                                   dlg.AddCheckbox(optionStr.c_str(),
-                                                   tooltipStr.c_str(), row,
-                                                   col);
-                                   row = (1 == col ? ++row : row);
-                                   col = (0 == col ? 1 : 0);
-                                   optionStr.clear();
-                                   tooltipStr.clear();
-                               }
-                               optionStr.append(
-                                           0 < optionStr.length() ? " | " : "");
-                               optionStr.append(lineStr);
-                               break;
-                           case NextSectionLine:
-                               break;
-                           default:
-                               throw;
-                       }
-                   }
-                   catch(...)
-                   {
-                       int j;
-                   }
-               } while(NextSectionLine != GetToolTipLineType(lineStr));
-           }
-       }
-    }
     dlg.ExecuteLayout();
     dlg.exec();
 }
