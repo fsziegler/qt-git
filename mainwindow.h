@@ -53,6 +53,8 @@ private slots:
 
     void on_btn_git_branch_clicked();
 
+    void on_btn_git_checkout_clicked();
+
 private:
     static QFileInfo ms_rootGitDir;
     const QFileInfo mc_appDir;

@@ -49,7 +49,8 @@ void TestDialog::SetTitle(const QString& title)
 const QString longCmdSpec("(--[a-zA-Z-]+)");
 const QString shortCmdSpec("^(-[a-zA-Z]+)");
 
-const QString paramSpec("(.*)<(.+)>");
+const QString onlyparamSpec("^<(.+)>$");
+const QString paramSpec("(.+)<(.+)>");
 const QString equalsParamSpec("(.+=)<(.+)>");
 const QString optionalParamSpec("(.+)\\[<(.+)>\\]");
 const QString optionalEqualsParamSpec("(.+)\\[=<(.+)>\\]");
@@ -60,6 +61,7 @@ vector<QString> paramSpecs =
     optionalParamSpec,
     equalsParamSpec,
     paramSpec,
+    onlyparamSpec,
 };
 
 void TestDialog::AddCheckbox(const QString& cbTitle, const QString& cbTooltip,
@@ -186,10 +188,6 @@ void TestDialog::CBStateChanged(int i)
                         {
                             newText.append("=");
                         }
-                        else if (paramSpec == itr)
-                        {
-                            newText = match.captured(2);
-                        }
                         bool ok;
                         const QString userValue("[USER VALUES]");
                         QString text =
@@ -198,7 +196,7 @@ void TestDialog::CBStateChanged(int i)
                                                       newText,
                                                       QLineEdit::Normal,
                                                       userValue, &ok);
-                        if (paramSpec == itr)
+                        if (onlyparamSpec == itr)
                         {
                             newText.clear();
                         }
