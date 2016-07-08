@@ -18,13 +18,15 @@ SOURCES += main.cpp\
     gitinitdialog.cpp \
     gitclonedialog.cpp \
     testdialog.cpp \
-    gitcheckbox.cpp
+    gitcheckbox.cpp \
+    optionparser.cpp
 
 HEADERS  += mainwindow.h \
     gitinitdialog.h \
     gitclonedialog.h \
     testdialog.h \
-    gitcheckbox.h
+    gitcheckbox.h \
+    optionparser.h
 
 FORMS    += mainwindow.ui \
     gitinitdialog.ui \

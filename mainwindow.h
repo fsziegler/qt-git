@@ -55,6 +55,28 @@ private slots:
 
     void on_btn_git_checkout_clicked();
 
+    void on_btn_git_merge_clicked();
+
+    void on_btn_git_fetch_clicked();
+
+    void on_btn_git_rebase_clicked();
+
+    void on_btn_git_add_clicked();
+
+    void on_btn_git_stash_clicked();
+
+    void on_btn_git_commit_clicked();
+
+    void on_btn_git_push_clicked();
+
+    void on_btn_git_pull_clicked();
+
+    void on_btn_git_diff_clicked();
+
+    void on_btn_git_status_clicked();
+
+    void on_btn_git_log_clicked();
+
 private:
     static QFileInfo ms_rootGitDir;
     const QFileInfo mc_appDir;

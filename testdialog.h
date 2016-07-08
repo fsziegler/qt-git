@@ -27,6 +27,10 @@ public:
     ~TestDialog();
 
     void SetDirectory(const QString& dir);
+    void HandleSubOptionLine(string& optionStr, string& tooltipStr,
+                             int& row, int &col);
+    void HandleOptionLine(const string& lineStr, string& optionStr,
+                          string& tooltipStr, int& row, int &col);
     void SetCommand(const QString& cmd, const QString& arg0);
     void SetTitle(const QString& title);
     void AddCheckbox(const QString& cbTitle, const QString& cbTooltip,
