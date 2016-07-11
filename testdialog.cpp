@@ -8,6 +8,8 @@
 #include <QMessageBox>
 #include <QRegularExpression>
 #include <QInputDialog>
+#include <QPalette>
+#include <QCryptographicHash>
 
 #include <iostream>
 
@@ -54,12 +56,6 @@ void stripTrailingLF(string& str)
     }
 }
 
-//            short command: ^(-[a-zA-Z]+)
-//             long command: (--[a-zA-Z-]+)
-//                parameter: <(.+)>
-//         equals parameter: =<(.+)>
-//       optional parameter: \[<(.+)>\]
-//optional equals parameter: \[=<(.+)>\]
 const QString longCmdSpec("(--[a-zA-Z-]+)");
 const QString shortCmdSpec("^(-[a-zA-Z]+)");
 
@@ -425,24 +421,33 @@ void TestDialog::SetTitle(const QString& title)
 void TestDialog::AddCheckbox(const QString& cbTitle, const QString& cbTooltip,
                              int& row, int& col, bool disabled)
 {
+    static QString prevTooltip;
+    bool changeColor = (cbTooltip != prevTooltip);
+    static Qt::GlobalColor cbColor;
+    if((0 == row) && (0 == col))
+    {
+        cbColor = Qt::blue;
+    }
+    else if(changeColor)
+    {
+        cbColor = (Qt::blue == cbColor ? Qt::darkMagenta : Qt::blue);
+    }
+    prevTooltip = cbTooltip;
+
     GitCheckBox* cb = new GitCheckBox(cbTitle, this);
+    cb->SetHashText(cbTooltip);
+
+    QPalette p = cb->palette();
+    p.setColor(QPalette::Active, QPalette::WindowText, cbColor);
+    cb->setPalette(p);
+
     m_strCBMap.insert(TStrCBPair(cbTitle.toStdString(), cb));
     m_strBoolMap.insert(TStrBoolPair(cbTitle.toStdString(), false));
     cb->setDisabled(disabled);
     MainWindow::SetButtonFormattedToolTip(cb, cbTooltip);
     m_gridLayout.addWidget(cb, row, col);
 
-    for(auto itr: paramSpecs)
-    {
-        const QRegularExpressionMatch match =
-                QRegularExpression(itr).match(
-                    QString(cbTitle.toStdString().c_str()));
-        if(match.hasMatch())
-        {
-            cb->Connect(this);
-            break;
-        }
-    }
+    cb->Connect(this);
 
     m_lastRow = (row > m_lastRow ? row : m_lastRow);
     row = (1 == col ? ++row : row);
@@ -560,6 +565,7 @@ void TestDialog::CBStateChanged(int i)
 
         if(match)
         {
+            ChangeEnabledState(cb);
             if(cb->isChecked())
             {
                 for(auto itr: paramSpecs)
@@ -631,4 +637,18 @@ void TestDialog::CBStateChanged(int i)
             }
         }   // if(match)
     }   //  for(TStrCBMapCItr itr ...
+}
+
+void TestDialog::ChangeEnabledState(const GitCheckBox* cb)
+{
+    const QByteArray hash = cb->getHash();
+    const QString text = cb->text();
+    for(TStrCBMapCItr itr = m_strCBMap.begin(); m_strCBMap.end() != itr; ++itr)
+    {
+        GitCheckBox* currCb = (*itr).second;
+        if((text != currCb->text()) && (hash == currCb->getHash()))
+        {
+            currCb->setEnabled(!cb->isChecked());
+        }
+    }
 }

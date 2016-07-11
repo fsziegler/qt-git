@@ -1,5 +1,6 @@
 #include "gitcheckbox.h"
 #include <QMessageBox>
+#include <QCryptographicHash>
 
 GitCheckBox::GitCheckBox(const QString &text, TestDialog* pTestDialog,
                          QWidget *parent)
@@ -24,4 +25,16 @@ const QString& GitCheckBox::getOrigText() const
 void GitCheckBox::clearParamText()
 {
     m_paramText.clear();
+}
+
+void GitCheckBox::SetHashText(const QString& hashText)
+{
+    QCryptographicHash crypto(QCryptographicHash::Algorithm::Sha1);
+    crypto.addData(hashText.toStdString().c_str(), hashText.length());
+    m_hash = crypto.result();
+}
+
+QByteArray GitCheckBox::getHash() const
+{
+    return m_hash;
 }

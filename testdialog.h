@@ -71,6 +71,7 @@ private slots:
     void accept();
     void CBStateChanged(int i);
 
+    void ChangeEnabledState(const GitCheckBox* cb);
 private:
     Ui::TestDialog*     ui;
     TStrCBMap           m_strCBMap;
