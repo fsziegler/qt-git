@@ -23,6 +23,7 @@ public:
     const TStrVect& getOptnVect() const;
 
 private:
+    bool RemoveChar(char c, string& str) const;
     void ParseNextOption(string& optionStr, string& nextOptionStr);
     void ParseNextDelimOption(char delimL, char delimR, const string& prefix,
                               string& optionStr, string& nextOptionStr);

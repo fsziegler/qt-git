@@ -218,8 +218,11 @@ bool TestDialog::HandleSpecialOptionLine(string& optionStr, string& tooltipStr,
                     ++itr2)
                 {
                     string chkBoxStr(itr);
-                    chkBoxStr.append(' ' != chkBoxStr[chkBoxStr.length() - 1] \
-                                     ? " " : "");
+                    if(' ' == optionStr[chkBoxStr.length()])
+                    {
+                        chkBoxStr.append(' ' != chkBoxStr[chkBoxStr.length() - 1] \
+                                         ? " " : "");
+                    }
                     chkBoxStr.append(*itr2);
                     AddCheckbox(chkBoxStr.c_str(), tooltipStr.c_str(), row,
                                 col);
@@ -353,6 +356,7 @@ void TestDialog::SetCommand(const QString& cmd, const QString& arg0)
        QRegularExpressionMatch match = reIsSection.match(lineStr.c_str());
        if(match.hasMatch())
        {
+           bool firstOpt(true);
            if(0 == lineStr.compare("OPTIONS"))
            {
                int row(0), col(0);
@@ -378,7 +382,15 @@ void TestDialog::SetCommand(const QString& cmd, const QString& arg0)
                                tooltipStr.append(lineStr);
                                break;
                            case BlankLine:
-                               tooltipStr.append("\n\n");
+                               if(firstOpt && (tooltipStr.empty()))
+                               {
+                                   optionStr.clear();
+                                   firstOpt = false;
+                               }
+                               else
+                               {
+                                   tooltipStr.append("\n\n");
+                               }
                                break;
                            // Parse the command line option
                            case OptionLine:

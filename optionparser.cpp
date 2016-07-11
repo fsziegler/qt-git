@@ -16,6 +16,21 @@ const TStrVect& OptionParser::getOptnVect() const
     return m_optnVect;
 }
 
+bool OptionParser::RemoveChar(char c, string& str) const
+{
+    if(str.find_first_of(c) != str.find_last_of(c))
+    {
+        throw;
+    }
+    size_t pos = str.find(c);
+    if(string::npos != pos)
+    {
+        str.erase(pos, 1);
+        return true;
+    }
+    return false;
+}
+
 void OptionParser::ParseNextOption(string& optionStr,
                                    string& nextOptionStr)
 {
@@ -33,6 +48,21 @@ void OptionParser::ParseNextOption(string& optionStr,
         prefix = "=";
         optionStr.erase(0, 1);
         ParseNextDelimOption('<', '>', prefix, optionStr, nextOptionStr);
+    }
+    else if(string::npos != optionStr.find('|'))
+    {
+        RemoveChar('{', optionStr);
+        RemoveChar('}', optionStr);
+        size_t pos0(0);
+        size_t pos1(optionStr.find('|'));
+        while(string::npos != pos1)
+        {
+            m_optnVect.push_back(optionStr.substr(pos0, pos1-pos0));
+            pos0 = ++pos1;
+            pos1 = optionStr.find('|', pos1);
+        }
+        m_optnVect.push_back(optionStr.substr(pos0, optionStr.length()-pos0));
+        optionStr.clear();
     }
     else
     {
