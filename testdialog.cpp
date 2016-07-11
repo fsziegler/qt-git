@@ -641,14 +641,17 @@ void TestDialog::CBStateChanged(int i)
 
 void TestDialog::ChangeEnabledState(const GitCheckBox* cb)
 {
-    const QByteArray hash = cb->getHash();
-    const QString text = cb->text();
-    for(TStrCBMapCItr itr = m_strCBMap.begin(); m_strCBMap.end() != itr; ++itr)
+    if('-' == cb->text().toStdString()[0])
     {
-        GitCheckBox* currCb = (*itr).second;
-        if((text != currCb->text()) && (hash == currCb->getHash()))
+        const QByteArray hash = cb->getHash();
+        const QString text = cb->text();
+        for(TStrCBMapCItr itr = m_strCBMap.begin(); m_strCBMap.end() != itr; ++itr)
         {
-            currCb->setEnabled(!cb->isChecked());
+            GitCheckBox* currCb = (*itr).second;
+            if((text != currCb->text()) && (hash == currCb->getHash()))
+            {
+                currCb->setEnabled(!cb->isChecked());
+            }
         }
     }
 }
