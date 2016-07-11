@@ -68,6 +68,7 @@ const QString paramSpec("(.+)<(.+)>");
 const QString equalsParamSpec("(.+=)<(.+)>");
 const QString optionalParamSpec("(.+)\\[<(.+)>\\]");
 const QString optionalEqualsParamSpec("(.+)\\[=<(.+)>\\]");
+const QString multipleParamSpec("<(.+)>\.\.\.");
 
 vector<QString> paramSpecs =
 {
@@ -76,6 +77,7 @@ vector<QString> paramSpecs =
     equalsParamSpec,
     paramSpec,
     onlyparamSpec,
+    multipleParamSpec,
 };
 
 const QRegularExpression reIsSection("^[A-Z][A-Z \-]+$");
@@ -147,9 +149,9 @@ void ParseSingleOption(const string& option, TStrVect& parsedOpts)
     }
 }
 
-//const QRegularExpression reSubOption("^([a-zA-Z\-<>]+[\.\.\.]?)(.*)|(\\\[--\\\])(.*)");
-const QRegularExpression reSubOption("^([a-zA-Z\-<>]+[\.{3}]?)(.*)|(\\\[--\\\])(.*)");
-//const QRegularExpression reSubOptionParam("\\\[([^\\\]]+)"); //[
+const QString reSubOptionStr(
+        "(^[a-zA-Z\-<>_]+(?:[\.]{3})?)(.*)|(\\\[--\\\])(.*)");
+const QRegularExpression reSubOption(reSubOptionStr);
 const QRegularExpression reWithNoOptParam("^(--)\\\[no-\\\](.+)");  // --[no-].+
 bool TestDialog::HandleSpecialOptionLine(string& optionStr, string& tooltipStr,
                                      int& row, int &col)
@@ -566,7 +568,8 @@ void TestDialog::CBStateChanged(int i)
                                                       newText,
                                                       QLineEdit::Normal,
                                                       userValue, &ok);
-                        if (onlyparamSpec == itr)
+                        if ((onlyparamSpec == itr)
+                                || (multipleParamSpec == itr))
                         {
                             newText.clear();
                         }
