@@ -1,0 +1,539 @@
+
+***** git-branch
+-d
+--delete
+-D
+-l
+--create-reflog
+-f
+--force
+-m
+--move
+-M
+--color[=<when>]
+--no-color
+--column[=<options>]
+--no-column
+-r
+--remotes
+-a
+--all
+--list
+-v
+-vv
+--verbose
+-q
+--quiet
+--abbrev=<length>
+--no-abbrev
+-t
+--track
+--no-track
+--set-upstream
+-u <upstream>
+--set-upstream-to=<upstream>
+--unset-upstream
+--edit-description
+--contains [<commit>]
+--merged [<commit>]
+--no-merged [<commit>]
+<branchname>
+<start-point>
+<oldbranch>
+<newbranch>
+
+***** git-checkout
+-q
+--quiet
+-f
+--force
+--ours
+--theirs
+-b <new_branch>
+-B <new_branch>
+-t
+--track
+--no-track
+-l
+--detach
+--orphan <new_branch>
+--ignore-skip-worktree-bits
+-m
+--merge
+--conflict=<style>
+-p
+--patch
+<branch>
+<new_branch>
+<start_point>
+<tree-ish>
+
+***** git-merge
+--commit
+--no-commit
+--edit
+-e
+--no-edit
+--ff
+--no-ff
+--ff-only
+--log[=<n>]
+--no-log
+--stat
+-n
+--no-stat
+--squash
+--no-squash
+-s <strategy>
+--strategy=<strategy>
+-X <option>
+--strategy-option=<option>
+--verify-signatures
+--no-verify-signatures
+--summary
+--no-summary
+-q
+--quiet
+-v
+--verbose
+--progress
+--no-progress
+-S[<keyid>]
+--gpg-sign[=<keyid>]
+-m <msg>
+--rerere-autoupdate
+--no-rerere-autoupdate
+--abort
+<commit>...
+
+***** git-fetch
+--all
+-a
+--append
+--depth=<depth>
+--unshallow
+--update-shallow
+--dry-run
+-f
+--force
+-k
+--keep
+--multiple
+-p
+--prune
+-n
+--no-tags
+-t
+--tags
+--recurse-submodules[=yes|on-demand|no]
+--no-recurse-submodules
+--submodule-prefix=<path>
+--recurse-submodules-default=[yes|on-demand]
+-u
+--update-head-ok
+--upload-pack <upload-pack>
+-q
+--quiet
+-v
+--verbose
+--progress
+<repository>
+<group>
+<refspec>
+
+***** git-rebase
+--onto <newbase>
+<upstream>
+<branch>
+--continue
+--abort
+--keep-empty
+--skip
+--edit-todo
+-m
+--merge
+-s <strategy>
+--strategy=<strategy>
+-X <strategy-option>
+--strategy-option=<strategy-option>
+-q
+--quiet
+-v
+--verbose
+--stat
+-n
+--no-stat
+--no-verify
+--verify
+-C<n>
+-f
+--force-rebase
+--fork-point
+--no-fork-point
+--ignore-whitespace
+--whitespace=<option>
+--committer-date-is-author-date
+--ignore-date
+-i
+--interactive
+-p
+--preserve-merges
+-x <cmd>
+--exec <cmd>
+--root
+--autosquash
+--no-autosquash
+--autostash
+--no-autostash
+--no-ff
+
+***** git-add
+<pathspec>...
+-n
+--dry-run
+-v
+--verbose
+-f
+--force
+-i
+--interactive
+-p
+--patch
+-e
+--edit
+-u
+--update
+-A
+--all
+--no-ignore-removal
+--no-all
+--ignore-removal
+-N
+--intent-to-add
+--refresh
+--ignore-errors
+--ignore-missing
+--
+
+***** git-stash
+save [-p|--patch]
+save --no-keep-index
+save [--keep-index]
+save [-u|--include-untracked]
+save [-a|--all]
+save [-q|--quiet]
+save [<message>]
+list [<options>]
+show [<stash>]
+pop [--index]
+pop [-q|--quiet]
+pop [<stash>]
+apply [--index]
+apply [-q|--quiet]
+apply [<stash>]
+branch <branchname>
+branch [<stash>]
+clear
+drop [-q|--quiet]
+drop [<stash>]
+create
+store
+
+***** git-commit
+-a
+--all
+-p
+--patch
+-C <commit>
+--reuse-message=<commit>
+-c <commit>
+--reedit-message=<commit>
+--fixup=<commit>
+--squash=<commit>
+--reset-author
+--short
+--branch
+--porcelain
+--long
+-z
+--null
+-F <file>
+--file=<file>
+--author=<author>
+--date=<date>
+-m <msg>
+--message=<msg>
+-t <file>
+--template=<file>
+-s
+--signoff
+-n
+--no-verify
+--allow-empty
+--allow-empty-message
+--cleanup=<mode>
+-e
+--edit
+--no-edit
+--amend
+--no-post-rewrite
+-i
+--include
+-o
+--only
+-u[<mode>]
+--untracked-files[=<mode>]
+-v
+--verbose
+-q
+--quiet
+--dry-run
+--status
+--no-status
+-S[<keyid>]
+--gpg-sign[=<keyid>]
+--
+<file>...
+
+***** git-push
+<repository>
+<refspec>...
+--all
+--prune
+--mirror
+-n
+--dry-run
+--porcelain
+--delete
+--tags
+--follow-tags
+--receive-pack=<git-receive-pack>
+--exec=<git-receive-pack>
+--force-with-lease
+--no-force-with-lease
+--force-with-lease=<refname>
+--force-with-lease=<refname>
+-f
+--force
+--repo=<repository>
+-u
+--set-upstream
+--thin
+--no-thin
+-q
+--quiet
+-v
+--verbose
+--progress
+--recurse-submodules=check
+--recurse-submodules=on-demand
+--verify
+--no-verify
+
+***** git-pull
+-q
+--quiet
+-v
+--verbose
+--recurse-submodules[=yes|on-demand|no]
+--no-recurse-submodules[=yes|on-demand|no]
+--commit
+--no-commit
+--edit
+-e
+--no-edit
+--ff
+--no-ff
+--ff-only
+--log[=<n>]
+--no-log
+--stat
+-n
+--no-stat
+--squash
+--no-squash
+-s <strategy>
+--strategy=<strategy>
+-X <option>
+--strategy-option=<option>
+--verify-signatures
+--no-verify-signatures
+--summary
+--no-summary
+-r
+--rebase[=false|true|preserve]
+--no-rebase
+--all
+-a
+--append
+--depth=<depth>
+--unshallow
+--update-shallow
+-f
+--force
+-k
+--keep
+--no-tags
+-u
+--update-head-ok
+--upload-pack <upload-pack>
+--progress
+<repository>
+<refspec>
+
+***** git-diff
+-p
+-u
+--patch
+-s
+--no-patch
+-U<n>
+--unified=<n>
+--raw
+--patch-with-raw
+--minimal
+--patience
+--histogram
+--diff-algorithm=patience
+--diff-algorithm=minimal
+--diff-algorithm=histogram
+--diff-algorithm=myers
+--numstat
+--shortstat
+--dirstat[=<param1,param2,...>]
+--summary
+--patch-with-stat
+-z
+--name-only
+--name-status
+--submodule[=<format>]
+--color[=<when>]
+--no-color
+--word-diff[=<mode>]
+--word-diff-regex=<regex>
+--color-words[=<regex>]
+--no-renames
+--check
+--full-index
+--binary
+--abbrev[=<n>]
+-B[<n>]
+-B[/<m>]
+--break-rewrites=<n>[/<m>]
+--break-rewrites[=[/<m>]]
+-M[<n>]
+--find-renames[=<n>]
+-C[<n>]
+--find-copies[=<n>]
+--find-copies-harder
+-D
+--irreversible-delete
+-l<num>
+--diff-filter=(A|C|D|M|R|T|U|X|B)...*
+--diff-filter=[(A|C|D|M|R|T|U|X|B)...]
+-S<string>
+-G<regex>
+--pickaxe-all
+--pickaxe-regex
+-O<orderfile>
+-R
+--relative[=<path>]
+-a
+--text
+--ignore-space-at-eol
+-b
+--ignore-space-change
+-w
+--ignore-all-space
+--ignore-blank-lines
+--inter-hunk-context=<lines>
+-W
+--function-context
+--exit-code
+--quiet
+--ext-diff
+--no-ext-diff
+--textconv
+--no-textconv
+--ignore-submodules[=<when>]
+--src-prefix=<prefix>
+--dst-prefix=<prefix>
+--no-prefix
+<path>...
+
+***** git-status
+-s
+--short
+-b
+--branch
+--porcelain
+--long
+-u[<mode>]
+--untracked-files[=<mode>]
+--ignore-submodules[=<when>]
+--ignored
+-z
+--column[=<options>]
+--no-column
+
+***** git-log
+--follow
+--no-decorate
+--decorate[=short|full|no]
+--source
+--use-mailmap
+--full-diff
+--log-size
+-L <start>
+
+--skip=<number>
+--since=<date>
+--after=<date>
+--until=<date>
+--before=<date>
+--author=<pattern>
+--committer=<pattern>
+--grep-reflog=<pattern>
+--grep=<pattern>
+--all-match
+-i
+--regexp-ignore-case
+--basic-regexp
+-E
+--extended-regexp
+-F
+--fixed-strings
+--perl-regexp
+--remove-empty
+--merges
+--no-merges
+--min-parents=<number>
+--max-parents=<number>
+--no-min-parents
+--no-max-parents
+--first-parent
+--not
+--all
+--branches[=<pattern>]
+--tags[=<pattern>]
+--remotes[=<pattern>]
+--glob=<glob-pattern>
+--exclude=<glob-pattern>
+--ignore-missing
+--bisect
+--stdin
+--cherry-mark
+--cherry-pick
+--left-only
+--right-only
+--cherry
+-g
+--walk-reflogs
+--merge
+--boundary
+--simplify-by-decoration
+--full-history
+--dense
+--sparse
+--simplify-merges
+--ancestry-path

@@ -67,12 +67,14 @@ const QString onlyparamSpec("^<(.+)>$");
 const QString paramSpec("(.+)<(.+)>");
 const QString equalsParamSpec("(.+=)<(.+)>");
 const QString optionalParamSpec("(.+)\\[<(.+)>\\]");
+const QString optionalSlashParamSpec("(.+)\\[/<(.+)>\\]");
 const QString optionalEqualsParamSpec("(.+)\\[=<(.+)>\\]");
 const QString multipleParamSpec("<(.+)>\.\.\.");
 
 vector<QString> paramSpecs =
 {
     optionalEqualsParamSpec,
+    optionalSlashParamSpec,
     optionalParamSpec,
     equalsParamSpec,
     paramSpec,
@@ -348,6 +350,7 @@ void TestDialog::SetCommand(const QString& cmd, const QString& arg0)
     string title("git-");
     title.append(arg0.toStdString());
     SetTitle(title.c_str());
+    cout << endl << "***** " << title << endl;
 
     // Parse all the OPTIONs
     for(TStrVectCItr itr = resultVect.begin(); resultVect.end() != itr; ++itr)
@@ -566,10 +569,6 @@ void TestDialog::CBStateChanged(int i)
                     if(match.hasMatch())
                     {
                         QString newText(match.captured(1));
-                        if(equalsParamSpec == itr)
-                        {
-                            newText.append("=");
-                        }
                         bool eqPrmSpc(optionalEqualsParamSpec == itr);
                         const QString userValue(eqPrmSpc ? "=[USER VALUES]"
                                                          : "[USER VALUES]");
@@ -601,7 +600,16 @@ void TestDialog::CBStateChanged(int i)
                             }
                             else
                             {
-                                newText.append(userValue);
+                                if((optionalParamSpec != itr)
+                                        && (optionalSlashParamSpec != itr)
+                                        && (optionalEqualsParamSpec != itr))
+                                {
+                                    cb->setCheckState(Qt::Unchecked);
+                                    (*boolItr).second = false;
+                                    cb->clearParamText();
+                                    cb->setText(cb->getOrigText());
+                                    break;
+                                }
                             }
                             cb->setText(newText);
                         }
@@ -609,6 +617,8 @@ void TestDialog::CBStateChanged(int i)
                         {
                             cb->setCheckState(Qt::Unchecked);
                             (*boolItr).second = false;
+                            cb->clearParamText();
+                            cb->setText(cb->getOrigText());
                         }
                         break;
                     }
