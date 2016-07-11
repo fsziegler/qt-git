@@ -54,14 +54,6 @@ void stripTrailingLF(string& str)
     }
 }
 
-enum ToolTipLineType
-{
-    HelpTextLine,
-    BlankLine,
-    OptionLine,
-    NextSectionLine,
-};
-
 //            short command: ^(-[a-zA-Z]+)
 //             long command: (--[a-zA-Z-]+)
 //                parameter: <(.+)>
@@ -87,7 +79,7 @@ vector<QString> paramSpecs =
 };
 
 const QRegularExpression reIsSection("^[A-Z][A-Z \-]+$");
-ToolTipLineType GetToolTipLineType(string& lineStr)
+ToolTipLineType TestDialog::GetToolTipLineType(string& lineStr)
 {
     if(0 == lineStr.length())
     {
@@ -155,75 +147,191 @@ void ParseSingleOption(const string& option, TStrVect& parsedOpts)
     }
 }
 
-//const QRegularExpression reSubOption("^([^\\\[]+)(.*)");
-//const QRegularExpression reSubOption("^([^\\\[]+)(.*)|^([a-z\-]+) (.*)");
-const QRegularExpression reSubOption("^([a-z\-]+)(.*)");
-const QRegularExpression reSubOptionParam("\\\[([^\\\]]+)");
-void TestDialog::HandleSubOptionLine(string& optionStr, string& tooltipStr,
+//const QRegularExpression reSubOption("^([a-zA-Z\-<>]+[\.\.\.]?)(.*)|(\\\[--\\\])(.*)");
+const QRegularExpression reSubOption("^([a-zA-Z\-<>]+[\.{3}]?)(.*)|(\\\[--\\\])(.*)");
+//const QRegularExpression reSubOptionParam("\\\[([^\\\]]+)"); //[
+const QRegularExpression reWithNoOptParam("^(--)\\\[no-\\\](.+)");  // --[no-].+
+bool TestDialog::HandleSpecialOptionLine(string& optionStr, string& tooltipStr,
                                      int& row, int &col)
 {
-    QRegularExpressionMatch optionMatch = reSubOption.match(optionStr.c_str());
-    if(optionMatch.hasMatch())
+    QRegularExpressionMatch subOptMatch = reSubOption.match(optionStr.c_str());
+    const string som0 = subOptMatch.captured(0).toStdString();
+    const string som1 = subOptMatch.captured(1).toStdString();
+    const string som2 = subOptMatch.captured(2).toStdString();
+    const string som3 = subOptMatch.captured(3).toStdString();
+    const string som4 = subOptMatch.captured(4).toStdString();
+
+    if(subOptMatch.hasMatch())
     {
         stripTrailingLF(tooltipStr);
-        string option = optionMatch.captured(1).toStdString();
-        string subOptions = optionMatch.captured(2).toStdString();
-        QRegularExpressionMatch optionParamMatch =
-                reSubOptionParam.match(subOptions.c_str());
-        if(!optionParamMatch.hasMatch())
+        string option = subOptMatch.captured(1).toStdString();
+        string parameters = subOptMatch.captured(2).toStdString();
+        if('=' == parameters[0])
         {
-            AddCheckbox(option.c_str(), tooltipStr.c_str(), row, col);
+            option.append("=");
+            parameters.erase(0, 1);
+        }
+
+        TStrVect optnStrVect;
+        QRegularExpressionMatch noOptParamMatch =
+                reWithNoOptParam.match(optionStr.c_str());
+        if(noOptParamMatch.hasMatch())
+        {
+            const string s1(noOptParamMatch.captured(1).toStdString());
+            const string s2(noOptParamMatch.captured(2).toStdString());
+            optnStrVect.push_back(string(s1 + s2));
+            optnStrVect.push_back(string(s1 + "no-" + s2));
             row = (1 == col ? ++row : row);
-            col = (0 == col ? 1 : 0);
+            col = 0;
         }
         else
         {
-            OptionParser op(subOptions);
-            const TStrVect& optnVect = op.getOptnVect();
-            for(TStrVectCItr itr = optnVect.begin(); optnVect.end() != itr;
-                ++itr)
+            optnStrVect.push_back(option);
+        }
+
+        for(auto itr: optnStrVect)
+        {
+            itr.c_str();
+            bool b = noOptParamMatch.hasMatch();
+            if((0 == parameters.length()) || noOptParamMatch.hasMatch())
             {
-                string chkBoxStr(option);
-                chkBoxStr.append(*itr);
-                AddCheckbox(chkBoxStr.c_str(), tooltipStr.c_str(), row, col);
-                row = (1 == col ? ++row : row);
-                col = (0 == col ? 1 : 0);
+                if(('-' == itr[0])
+                    || ('<' == itr[0])
+                    || (0 == itr.compare(0, 4, "[--]")))
+                {
+                    AddCheckbox(itr.c_str(), tooltipStr.c_str(), row, col);
+                    cout << itr << endl;
+                }
+                else
+                {
+                    AddCheckbox(itr.c_str(), tooltipStr.c_str(), row, col);
+                    cout << itr << endl;
+                }
+            }
+            else
+            {
+                OptionParser op(parameters);
+                const TStrVect& optnVect = op.getOptnVect();
+                for(TStrVectCItr itr2 = optnVect.begin(); optnVect.end() != itr2;
+                    ++itr2)
+                {
+                    string chkBoxStr(itr);
+                    chkBoxStr.append(' ' != chkBoxStr[chkBoxStr.length() - 1] \
+                                     ? " " : "");
+                    chkBoxStr.append(*itr2);
+                    AddCheckbox(chkBoxStr.c_str(), tooltipStr.c_str(), row,
+                                col);
+                    cout << chkBoxStr << endl;
+                }
             }
         }
+        return true;
     }
+    return false;
 }
 
-void TestDialog::HandleOptionLine(const string& lineStr, string& optionStr,
+typedef pair<char, char> TCharPair;
+typedef vector<TCharPair> TCharPairVect;
+TCharPairVect::const_iterator TChrPairVectCItr;
+TCharPairVect groupDelim =
+{
+    {'[',']'},
+    {'<','>'},
+    {'(',')'},
+    {'{','}'},
+};
+
+size_t TestDialog::FindNextOptionDelim(size_t startPos, string& optionStr) const
+{
+//    01234567890123456789
+//    abc,defg,hijkl
+    int net(0);
+    size_t pos(startPos);
+    while(optionStr.length() > pos + 1)
+    {
+        TCharPairVect::const_iterator itr2;
+        for(TCharPairVect::const_iterator itr = groupDelim.begin();
+            groupDelim.end() != itr; ++itr)
+        {
+            char c = (*itr).first;
+            c = (*itr).second;
+            net += ((*itr).first == optionStr[pos] ? 1 : 0);
+            net -= ((*itr).second == optionStr[pos] ? 1 : 0);
+        }
+        if(0 == net)
+        {
+            if(',' == optionStr[pos])
+            {
+                return pos;
+            }
+        }
+        ++pos;
+    }
+    return string::npos;
+}
+
+void TestDialog::HandleOptionLine(const string& nextLineStr, string& optionStr,
                                   string& tooltipStr, int& row, int &col)
 {
-    if((0 < tooltipStr.length())
-            && (('-' == optionStr[0])
-                || ('<' == optionStr[0])
-                || (0 == optionStr.compare(0, 4, "[--]"))))
+    if(0 < tooltipStr.length())
     {
         stripTrailingLF(tooltipStr);
-        AddCheckbox(optionStr.c_str(), tooltipStr.c_str(), row, col);
-        row = (1 == col ? ++row : row);
-        col = (0 == col ? 1 : 0);
+
+        size_t pos0(0);
+        size_t pos1(FindNextOptionDelim(0, optionStr));
+        TStrVect optionStrVect;
+        if(string::npos == pos1 )
+        {
+            optionStrVect.push_back(optionStr);
+        }
+        else
+        {
+            string parsedOptionStr;
+            do
+            {
+                string parsedOptionStr = optionStr.substr(pos0, pos1 - pos0);
+                stripLeadingWS(parsedOptionStr);
+                optionStrVect.push_back(parsedOptionStr);
+                pos0 = pos1;
+                pos1 = FindNextOptionDelim(++pos0, optionStr);
+            }
+            while(string::npos != pos1);
+            parsedOptionStr = optionStr.substr(pos0);
+            stripLeadingWS(parsedOptionStr);
+            optionStrVect.push_back(parsedOptionStr);
+            row = (1 == col ? ++row : row);
+            col = 0;
+        }
+        for(auto itr: optionStrVect)
+        {
+            itr.c_str();
+            const char* str = itr.c_str();
+//            const string& optStr = *itr;
+            if(!HandleSpecialOptionLine(itr, tooltipStr, row, col))
+            {
+                AddCheckbox(itr.c_str(), tooltipStr.c_str(), row, col);
+            }
+        }
+        if((1 < optionStrVect.size()) && (1 == optionStrVect.size() % 2))
+        {
+            row = (1 == col ? ++row : row);
+            col = 0;
+        }
+
         optionStr.clear();
         tooltipStr.clear();
-    }
-    else if(0 < tooltipStr.length())
-    {
-        HandleSubOptionLine(optionStr, tooltipStr, row, col);
-        optionStr.clear();
-        tooltipStr.clear();
-        cout << "No '-'?: " << optionStr << endl;
     }
     optionStr.append(0 < optionStr.length() ? " " : "");
-    optionStr.append(lineStr);
+    optionStr.append(nextLineStr);
 }
 
 void TestDialog::SetCommand(const QString& cmd, const QString& arg0)
 {
+    m_gridLayout.invalidate();
     m_cmd = cmd;
     m_arg0 = arg0;
 
+    // Get the help text for this git command
     const string cmdStr("git");
     const string execDir(".");
     TStrVect args;
@@ -235,6 +343,8 @@ void TestDialog::SetCommand(const QString& cmd, const QString& arg0)
     string title("git-");
     title.append(arg0.toStdString());
     SetTitle(title.c_str());
+
+    // Parse all the OPTIONs
     for(TStrVectCItr itr = resultVect.begin(); resultVect.end() != itr; ++itr)
     {
        string lineStr(*itr);
@@ -254,6 +364,8 @@ void TestDialog::SetCommand(const QString& cmd, const QString& arg0)
                        lineStr = *itr;
                        switch(GetToolTipLineType(lineStr))
                        {
+                           // Append the help text for each option in its tool
+                           // tip
                            case HelpTextLine:
                                if((0 < tooltipStr.length()) &&
                                        ('\n' != tooltipStr[
@@ -266,6 +378,7 @@ void TestDialog::SetCommand(const QString& cmd, const QString& arg0)
                            case BlankLine:
                                tooltipStr.append("\n\n");
                                break;
+                           // Parse the command line option
                            case OptionLine:
                                HandleOptionLine(lineStr, optionStr, tooltipStr,
                                                 row, col);
@@ -285,7 +398,6 @@ void TestDialog::SetCommand(const QString& cmd, const QString& arg0)
            }
        }
     }
-
 }
 
 void TestDialog::SetTitle(const QString& title)
@@ -294,18 +406,20 @@ void TestDialog::SetTitle(const QString& title)
 }
 
 void TestDialog::AddCheckbox(const QString& cbTitle, const QString& cbTooltip,
-                             int row, int column, bool disabled)
+                             int& row, int& col, bool disabled)
 {
     GitCheckBox* cb = new GitCheckBox(cbTitle, this);
     m_strCBMap.insert(TStrCBPair(cbTitle.toStdString(), cb));
+    m_strBoolMap.insert(TStrBoolPair(cbTitle.toStdString(), false));
     cb->setDisabled(disabled);
     MainWindow::SetButtonFormattedToolTip(cb, cbTooltip);
-    m_gridLayout.addWidget(cb, row, column);
+    m_gridLayout.addWidget(cb, row, col);
 
     for(auto itr: paramSpecs)
     {
         const QRegularExpressionMatch match =
-                QRegularExpression(itr).match(QString(cbTitle.toStdString().c_str()));
+                QRegularExpression(itr).match(
+                    QString(cbTitle.toStdString().c_str()));
         if(match.hasMatch())
         {
             cb->Connect(this);
@@ -314,6 +428,8 @@ void TestDialog::AddCheckbox(const QString& cbTitle, const QString& cbTooltip,
     }
 
     m_lastRow = (row > m_lastRow ? row : m_lastRow);
+    row = (1 == col ? ++row : row);
+    col = (0 == col ? 1 : 0);
 }
 
 void TestDialog::ExecuteLayout()
@@ -321,6 +437,25 @@ void TestDialog::ExecuteLayout()
     m_gridLayout.addWidget(&m_okCancelBtns, m_lastRow + 1, 0, m_lastRow + 1, 1);
     setLayout(&m_gridLayout);
     show();
+}
+
+bool TestDialog::HasPrefix(char prefix, const string& text) const
+{
+    size_t pos(0);
+    while(text.length() > pos + 1)
+    {
+        const char c = text[pos];
+        if((' ' != c) && ('=' != c))
+        {
+            return false;
+        }
+        if('=' == c)
+        {
+            return true;
+        }
+        ++pos;
+    }
+    return false;
 }
 
 void TestDialog::accept()
@@ -395,15 +530,20 @@ void TestDialog::accept()
 
 void TestDialog::CBStateChanged(int i)
 {
-    if(2 == i)  // Case of checked
+    for(TStrCBMapCItr itr = m_strCBMap.begin(); m_strCBMap.end() != itr; ++itr)
     {
-        for(TStrCBMapCItr itr = m_strCBMap.begin(); m_strCBMap.end() != itr;
-            ++itr)
+        GitCheckBox* cb = (*itr).second;
+        auto boolItr = m_strBoolMap.find((*itr).first);
+        const bool isChecked = (*boolItr).second;
+        const bool match((cb->isChecked() && !isChecked)
+                         || (!cb->isChecked() && isChecked));
+        (*boolItr).second = cb->isChecked();
+
+        const char* title = (*itr).first.c_str();
+
+        if(match)
         {
-            GitCheckBox* cb = (*itr).second;
-            const char* title = (*itr).first.c_str();
-            // Find the check box who just got checked
-            if(cb->isChecked() && (cb->getOrigText() == cb->text()))
+            if(cb->isChecked())
             {
                 for(auto itr: paramSpecs)
                 {
@@ -412,12 +552,14 @@ void TestDialog::CBStateChanged(int i)
                     if(match.hasMatch())
                     {
                         QString newText(match.captured(1));
-                        if(optionalEqualsParamSpec == itr)
+                        if(equalsParamSpec == itr)
                         {
                             newText.append("=");
                         }
+                        bool eqPrmSpc(optionalEqualsParamSpec == itr);
+                        const QString userValue(eqPrmSpc ? "=[USER VALUES]"
+                                                         : "[USER VALUES]");
                         bool ok;
-                        const QString userValue("[USER VALUES]");
                         QString text =
                                 QInputDialog::getText(this,
                                                       tr("Input:"),
@@ -429,32 +571,39 @@ void TestDialog::CBStateChanged(int i)
                             newText.clear();
                         }
 
-                        if (ok && !text.isEmpty())
+                        if(ok && (0 != text.compare(userValue)))
                         {
-                            newText.append(text);
+                            if (!text.isEmpty())
+                            {
+                                if(eqPrmSpc)
+                                {
+                                    if(!HasPrefix('=', text.toStdString()))
+                                    {
+                                        newText.append("=");
+                                    }
+                                }
+                                newText.append(text);
+                            }
+                            else
+                            {
+                                newText.append(userValue);
+                            }
+                            cb->setText(newText);
                         }
                         else
                         {
-                            newText.append("[USER VALUES]");
+                            cb->setCheckState(Qt::Unchecked);
+                            (*boolItr).second = false;
                         }
-                        cb->setText(newText);
                         break;
                     }
                 }
             }
-        }
-    }
-    else    // Case of unchecked
-    {
-        for(TStrCBMapCItr itr = m_strCBMap.begin(); m_strCBMap.end() != itr;
-            ++itr)
-        {
-            GitCheckBox* cb = (*itr).second;
-            if(!cb->isChecked() && (cb->text() != cb->getOrigText()))
+            else
             {
                 cb->clearParamText();
                 cb->setText(cb->getOrigText());
             }
-        }
-    }
+        }   // if(match)
+    }   //  for(TStrCBMapCItr itr ...
 }

@@ -1,15 +1,13 @@
 #include "optionparser.h"
 
-OptionParser::OptionParser(const string& optionStr)
+OptionParser::OptionParser(const string& paramStr)
 {
-    string optionStrCpy(optionStr);
-    StripWS(optionStrCpy);
-    TVarOptionVect varOptnVect;
-    while(0 < optionStrCpy.length())
+    string paramStrCpy(paramStr);
+    StripWS(paramStrCpy);
+    while(0 < paramStrCpy.length())
     {
-        string nextOptionStr;
-        ParseNextOption(optionStrCpy, nextOptionStr);
-//        m_optnVect.push_back(nextOptionStr);
+        string nextParamStr;
+        ParseNextOption(paramStrCpy, nextParamStr);
     }
 }
 
@@ -21,26 +19,38 @@ const TStrVect& OptionParser::getOptnVect() const
 void OptionParser::ParseNextOption(string& optionStr,
                                    string& nextOptionStr)
 {
+    string prefix;
     if('[' == optionStr[0])
     {
-        ParseNextDelimOption('[', ']', optionStr, nextOptionStr);
+        ParseNextDelimOption('[', ']', prefix, optionStr, nextOptionStr);
     }
     else if('<' == optionStr[0])
     {
-        ParseNextDelimOption('<', '>', optionStr, nextOptionStr);
+        ParseNextDelimOption('<', '>', prefix, optionStr, nextOptionStr);
+    }
+    else if(('=' == optionStr[0]) && ('<' == optionStr[1]))
+    {
+        prefix = "=";
+        optionStr.erase(0, 1);
+        ParseNextDelimOption('<', '>', prefix, optionStr, nextOptionStr);
     }
     else
     {
-        throw;
+//        throw; //Add this back in
+        optionStr.clear();  // Remove this
     }
 }
 
 void OptionParser::ParseNextDelimOption(char delimL, char delimR,
+                                        const string& prefix,
                                         string& optionStr,
                                         string& nextOptionStr)
 {
+    nextOptionStr.clear();
     size_t endR(0);
-    if(delimL != optionStr[endR])
+    if((delimL != optionStr[endR])
+            && ((prefix[0] != optionStr[endR])
+                || (delimL != optionStr[endR + 1])))
     {
         throw;
     }
@@ -59,7 +69,7 @@ void OptionParser::ParseNextDelimOption(char delimL, char delimR,
     optionStr.erase(0, nextOptionStr.length() + 2);
     if(1 == layers)
     {
-        m_optnVect.push_back(nextOptionStr);
+        m_optnVect.push_back(string(prefix + delimL + nextOptionStr + delimR));
     }
     else if(2 == layers)
     {
@@ -74,15 +84,17 @@ void OptionParser::ParseNextDelimOption(char delimL, char delimR,
         string withStr(nextOptionStr);
         withStr.erase(midR, 1);
         withStr.erase(midL, 1);
-        m_optnVect.push_back(withStr);
+        m_optnVect.push_back(string(prefix + withStr));
 
         string withoutStr(nextOptionStr);
         withoutStr.erase(midL, midR - midL + 1);
-        m_optnVect.push_back(withoutStr);
+//        m_optnVect.push_back(withoutStr);
+        m_optnVect.push_back(string(prefix + delimL + withoutStr + delimR));
     }
     else
     {
-        throw;
+//        throw; //Add this back in
+        optionStr.clear();  // Remove this
     }
 }
 

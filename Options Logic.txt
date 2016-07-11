@@ -1,0 +1,615 @@
+Options Logic
+
+Rules:
+Single Elements:
+1) "-"               Dashes prefix option names                                                                                        (e.g., "--commit")
+1a) "-a"
+1b) "-A"
+1c) "-A1"            A dash and single capital letter with a numeric parameter have no spaces or delimiters                            (e.g., "-S[<keyid>]")
+1d) "-a1"            A dash and single lowercase letter with a numeric parameter may have no spaces or delimiters                      (e.g., "-l<num>")
+1e) "-A parameter"   A dash and single capital letter with a non-numeric parameter may/may not have a space or delimiter               (e.g., "-F <file>", "-O<orderfile>")
+1f) "--option_name"  Two dashes and an option name are followed by at least one space or delimiter                                     (e.g., "--abbrev=<length>")
+1g) "--"             Two dashes without an option name mean that the parameters that follow are not options                            (e.g., "--")
+2) ","               Commas separate individual options (either-or)                                                                    (e.g., "-d, --delete")
+3) "="               Equals separates an option from a value                                                                           (e.g., "--color[=<when>]")
+4) "|"               Logical OR separates specific, mutually exclusive, parameters, one of which must be chosen                        (e.g., "--decorate[=short|full|no]", "--recurse-submodules=check|on-demand")
+5) "[]"              Square braces show optional parameters                                                                            (e.g., "--contains [<commit>]")
+6) "()"              Parentheses show optional parameters                                                                              (e.g., "--diff-filter=[(A|C|D|M|R|T|U|X|B)...[*]]")
+7) "{}"              Curly braces show mutually exclusive parameters                                                                   (e.g., "--diff-algorithm={patience|minimal|histogram|myers}")
+8) "<>"              Angle brackets mean that the parameter needs to be replaced with user text                                        (e.g., "--column[=<options>]")
+8a) "<stand-alone>"  Angle brackets may stand alone                                                                                    (e.g., "<branchname>")
+8b) "<when>"         The parameter needs to be replaced with "always", "never", or "auto"                                              (e.g., "--color[=<when>]")
+8c) "<length>"       The parameter needs to be replaced with an integer                                                                (e.g., "--abbrev=<length>")
+8d) "<n>"            The parameter needs to be replaced with an integer                                                                (e.g., "-C<n>")
+8e) "<path>"         The parameter needs to be replaced with an path (file open dialog)                                                (e.g., "--submodule-prefix=<path>")
+8f) "<file>"         The parameter needs to be replaced with a file name (file open dialog)                                            (e.g., "<file>")
+8g) "<orderfile>"    The parameter needs to be replaced with a file name (file open dialog)                                            (e.g., "<orderfile>")
+8h) "<regex>"        The parameter needs to be replaced with a regular expression                                                      (e.g., "--word-diff-regex=<regex>")
+8i) "<lines>"        The parameter needs to be replaced with the number of lines                                                       (e.g., "--inter-hunk-context=<lines>")
+8j) "<start>"        The parameter needs to be replaced with the starting line                                                         (e.g., "-L <start>,<end>:<file>")
+8k) "<end>"          The parameter needs to be replaced with the ending line                                                           (e.g., "-L <start>,<end>:<file>")
+8l) "<revision range>"
+                     The parameter needs to be a revision range (see "git revisions  --help")                                          (e.g., "<revision range>")
+9) "option"          A leading option without a dash or bracket is handled like an option with a single/double dash                    (e.g., "list [<options>]")
+10) "no-"            The term "no-" in an option name means refutation                                                                 (e.g., "--[no-]autostash")
+10a) "--xy, --no-xy" If "no-" is with other options AND is followed by the same option text, then it is a distinct option on its own   (e.g., "--commit, --no-commit")
+10b) "--[no-]xyz"    Offer both "--xyz" and "--no-xyz" options                                                                         (e.g., "--[no-]autostash")
+10c) "-n, --no-abc"
+11) "ignore-"        The term "ignore-" in an option name means ignore                                                                 (e.g., "--ignore-whitespace")
+11a) "--xy, --ignore-xy"
+                     If "ignore-" is with other options AND followed by the same option text, then it is a distinct option             (e.g., "--ignore-whitespace, --whitespace=<option>")
+11b) "--ab, --ignore-xy"    
+                     If "ignore-" is with other options, then it is a distinct option                                                  (e.g., "--committer-date-is-author-date, --ignore-date")
+12) "--no-ignore-xyz" 
+                     Neither "no-" nor "ignore-"                                                                                       (e.g., "-A, --all, --no-ignore-removal")
+12a) "--no-all, --ignore-removal" 
+                     Neither "no-" nor "ignore-"                                                                                       (e.g., "---no-all, --ignore-removal")
+12b) "--left-only, --right-only"
+                     Split these                                                                                                       (e.g., "--left-only, --right-only")
+13) "-v"             means "verbose"                                                                                                   (e.g., "-v, --verbose")
+13a) "-vv"           means "extra verbose", and is a distinct option                                                                   (e.g., "-vv")
+14) "Besides ..."    "An option starting with a capitalized letter means a comment to be ignored"                                      (e.g., "Besides specifying a range of commits ...")
+
+Combined Elements:
+15) "[<parameter>]"  An optional parameter containing user text                                                                        (e.g., "--contains [<commit>]")
+16) "[=<parameter>]" An optional parameter containing user text                                                                        (e.g., "--color[=<when>]")
+17) "<parameter>..." Zero or more parameters                                                                                           (e.g., "<commit>...")
+18) "-x, --xyz"      A single dash and letter, comma, and double dash and word signify the same option                                 (e.g., "-d, --delete")
+19) "-x<v>, --xy<v>" A single dash. letter, and value, comma, and double dash, word, and value signify the same option                 (e.g., "-u <upstream>, --set-upstream-to=<upstream>")
+20) "--ours, --theirs"  These are distinct options                                                                                     (e.g., "--ours, --theirs")
+21) "[param1] [param2]"
+                     Multiple parameters in brackets means that these should be broken out                                             (e.g, "save [-p|--patch] [--[no-]keep-index] [-u|--include-untracked] [-a|--all] [-q|--quiet] [<message>]")
+22) "<parameter>:<value>"
+                     The parameter and value must bother be supplied, and issued together in this format                               (e.g., "--force-with-lease=<refname>:<expect>")
+23) "[=<param1>[,<param2>[,<param3>]]]"
+                     Nested parameters (param2 optional if param1 exists, param3 optional if param2 exists)                            (e.g., "--stat[=<width>[,<name-width>[,<count>]]]")
+24) "-a <parm>"
+24a) "-A<n>"
+24b) "-a[=<parm>]"
+24c) "--opt=<parm>"
+24d) "--opt <parm>"
+24e) "--opt[=<parm>]"
+24f) "--option[=<param1,param2,...>]"
+                     Zero or more parameters for an option                                                                             (e.g., "--dirstat[=<param1,param2,...>]")
+25) "--option[<val1>][/<val2>]"
+                     Optional parameter with forward slash - use forward slash in output as well                                       (e.g., "-B[<n>][/<m>], --break-rewrites[=[<n>][/<m>]]")
+26) "--option=[(A|C|D|M|R|T|U|X|B)...[*]]"
+                     Single letter options can be mixed and matched, * is an option as well
+26a) "--option=a|b|c"
+27) "-L <start>,<end>:<file>"
+                     The start, end, and file must all be specified                                                                    (e.g., "-L <start>,<end>:<file>")
+28) "-L :<regex>:<file>"
+                     The regex and file must both be specified                                                                         (e.g., "-L :<regex>:<file>")
+
+
+Possible Combinations:
+Defined Formats
+-d, --delete
+-D
+--no-color
+-v, -vv, --verbose
+--commit, --no-commit
+--edit, -e, --no-edit
+-n, --no-tags
+--color[=<when>]
+--column[=<options>], --no-column
+--abbrev=<length>
+-u <upstream>, --set-upstream-to=<upstream>
+--contains [<commit>]
+<branchname>
+--ours, --theirs
+-b <new_branch>
+--orphan <new_branch>
+--log[=<n>], --no-log
+-S[<keyid>], --gpg-sign[=<keyid>]
+--[no-]rerere-autoupdate
+<commit>...
+--recurse-submodules[=yes|on-demand|no]
+--submodule-prefix=<path>
+-C<n>
+--ignore-whitespace, --whitespace=<option>
+--committer-date-is-author-date, --ignore-date
+--[no-]autostash
+<pathspec>...
+-n, --dry-run
+-A, --all, --no-ignore-removal
+--no-all, --ignore-removal
+--
+**git stash**:
+list [<options>]
+branch <branchname> [<stash>]
+clear (git stash clear)
+-F <file>, --file=<file>
+--date=<date>
+--cleanup=<mode>
+<file>...
+<repository>
+save [-p|--patch] [--[no-]keep-index] [-u|--include-untracked] [-a|--all] [-q|--quiet] [<message>]
+--[no-]force-with-lease, --force-with-lease=<refname>, --force-with-lease=<refname>:<expect>
+--recurse-submodules=check|on-demand
+--[no-]recurse-submodules[=yes|on-demand|no]
+-r, --rebase[=false|true|preserve]
+--depth=<depth>
+Options meant for git pull itself and the underlying git merge must be given before the options mean
+--[no-]recurse-submodules[=yes|on-demand|no]
+-p, -u, --patch
+-s, --no-patch-U<n>, --unified=<n>
+--diff-algorithm={patience|minimal|histogram|myers}
+--stat[=<width>[,<name-width>[,<count>]]]
+--dirstat[=<param1,param2,...>]
+--word-diff-regex=<regex>
+-B[<n>][/<m>], --break-rewrites[=[<n>][/<m>]]
+-l<num>
+--diff-filter=[(A|C|D|M|R|T|U|X|B)...[*]]
+-O<orderfile>
+--inter-hunk-context=<lines>
+--no-decorate, --decorate[=short|full|no]
+-L <start>,<end>:<file>, -L :<regex>:<file>
+<revision range>
+[--] <path>...
+Besides specifying a range of commits that should be listed using the special notations explained in
+
+
+
+1) "-"
+1a) "-a"
+   -l
+   -z
+   -z
+1b) "-A"
+   -D
+   -M
+   -R
+1c) "-A1"
+1d) "-a1"
+1e) "-A parameter"
+1f) "--option_name"
+   --no-color
+   --list
+   --no-abbrev
+   --no-track
+   --set-upstream
+   --unset-upstream
+   --edit-description
+   --no-track
+   --detach
+   --ff
+   --no-ff
+   --ff-only
+   --abort
+   --all
+   --unshallow
+   --update-shallow
+   --dry-run
+   --multiple
+   --no-recurse-submodules
+   --progress
+   --continue
+   --abort
+   --keep-empty
+   --skip
+   --edit-todo
+   --stat
+   --no-verify
+   --verify
+   --root
+   --no-ff
+   --refresh
+   --ignore-errors
+   --ignore-missing
+   --reset-author
+   --short
+   --branch
+   --porcelain
+   --long
+   --allow-empty
+   --allow-empty-message
+   --no-edit
+   --amend
+   --no-post-rewrite
+   --dry-run
+   --status
+   --no-status
+   --all
+   --prune
+   --mirror
+   --porcelain
+   --delete
+   --tags
+   --follow-tags
+   --all-match
+   --basic-regexp
+   --perl-regexp
+   --remove-empty
+   --merges
+   --no-merges
+   --first-parent
+   --not
+   --all
+   --ignore-missing
+   --bisect
+   --stdin
+   --cherry-mark
+   --cherry-pick
+   --cherry
+   --merge
+   --boundary
+   --simplify-by-decoration
+   --full-history
+   --dense
+   --sparse
+   --simplify-merges
+   --ancestry-path
+   --progress
+   --ff
+   --no-ff
+   --ff-only
+   --no-rebase
+   --all
+   --unshallow
+   --update-shallow
+   --no-tags
+   --upload-pack <upload-pack>
+   --progress
+   --raw
+   --patch-with-raw
+   --minimal
+   --patience
+   --histogram
+   --numstat
+   --shortstat
+   --summary
+   --patch-with-stat
+   --name-only
+   --name-status
+   --no-color
+   --no-renames
+   --check
+   --full-index
+   --binary
+   --pickaxe-all
+   --pickaxe-regex
+   --ignore-space-at-eol
+   --ignore-blank-lines
+   --exit-code
+   --quiet
+   --ext-diff
+   --no-ext-diff
+   --find-copies-harder
+   --no-prefix
+   --porcelain
+   --long
+   --ignored
+   --follow
+   --source
+   --use-mailmap
+   --full-diff
+   --log-size
+   --ignore-skip-worktree-bits
+1g) "--"
+2) ","
+3) "="               
+4) "|"               
+5) "[]"              
+6) "()"              
+7) "{}"              
+8) "<>"              
+   <branchname>
+   <start-point>
+   <oldbranch>
+   <newbranch>
+   <branch>
+   <new_branch>
+   <start_point>
+   <tree-ish>
+   <repository>
+   <group>
+   <refspec>
+   <upstream>
+   <branch>
+   <repository>
+   <refspec>
+8a) "<stand-alone>"  
+8b) "<when>"         
+8c) "<length>"       
+8d) "<n>"            
+8e) "<path>"         
+8f) "<file>"         
+8g) "<orderfile>"    
+8h) "<regex>"        
+8i) "<lines>"        
+8j) "<start>"        
+8k) "<end>"          
+8l) "<revision range>"
+   <revision range>
+9) "option"          
+10) "no-"            
+10a) "--xy, --no-xy" 
+   --commit, --no-commit
+   --edit, -e, --no-edit
+   --stat, -n, --no-stat
+   --squash, --no-squash
+   --verify-signatures, --no-verify-signatures
+   --summary, --no-summary
+   --progress, --no-progress
+   --autosquash, --no-autosquash
+   -A, --all, --no-ignore-removal
+   --commit, --no-commit
+   --edit, -e, --no-edit
+   --stat, -n, --no-stat
+   --squash, --no-squash
+   --summary, --no-summary
+   --textconv, --no-textconv
+   --fork-point, --no-fork-point
+10b) "--[no-]xyz"    
+10c) "-n, --no-abc"
+   -n, --no-tags
+   -n, --no-stat
+   -n, --no-verify
+11) "ignore-"        
+11a) "--xy, --ignore-xy"
+11b) "--ab, --ignore-xy"    
+12) "--no-ignore-xyz" 
+12a) "--no-all, --ignore-removal" 
+13) "-v"             
+13a) "-vv"           
+   -v, -vv, --verbose
+14) "Besides ..."    
+
+Combined Elements:
+15) "[<parameter>]"  
+16) "[=<parameter>]" 
+17) "<parameter>..." 
+   <commit>...
+   <pathspec>...
+   <file>...
+   <refspec>...
+   [--] <path>...
+18) "-x, --xyz"      
+   -d, --delete
+   -l, --create-reflog
+   -f, --force
+   -m, --move
+   -r, --remotes
+   -a, --all
+   -q, --quiet
+   -t, --track
+   -q, --quiet
+   -f, --force
+   -t, --track
+   -m, --merge
+   -p, --patch
+   -v, --verbose
+   -q, --quiet
+   -a, --append
+   -f, --force
+   -k, --keep
+   -p, --prune
+   -t, --tags
+   -u, --update-head-ok
+   -q, --quiet
+   -v, --verbose
+   -m, --merge
+   -q, --quiet
+   -v, --verbose
+   -f, --force-rebase
+   -i, --interactive
+   -p, --preserve-merges
+   -n, --dry-run
+   -v, --verbose
+   -f, --force
+   -i, --interactive
+   -p, --patch
+   -e, --edit
+   -u, --update
+   -N, --intent-to-add
+   -a, --all
+   -p, --patch
+   -z, --null
+   -s, --signoff
+   -e, --edit
+   -i, --include
+   -o, --only
+   -v, --verbose
+   -q, --quiet
+   -n, --dry-run
+   -f, --force
+   -u, --set-upstream
+   -q, --quiet
+   -v, --verbose
+   -v, --verbose
+   -a, --append
+   -f, --force
+   -k, --keep
+   -u, --update-head-ok
+   -s, --no-patch
+   -D, --irreversible-delete
+   -a, --text
+   -b, --ignore-space-change
+   -w, --ignore-all-space
+   -W, --function-context
+   -s, --short
+   -b, --branch
+   -i, --regexp-ignore-case
+   -E, --extended-regexp
+   -F, --fixed-strings
+   -p, -u, --patch
+   -g, --walk-reflogs
+19) "-x<v>, --xy<v>" 
+   -u <upstream>, --set-upstream-to=<upstream>
+20) "--ours, --theirs"
+   --ours, --theirs
+21) "[param1] [param2]"
+22) "<parameter>:<value>"
+23) "[=<param1>[,<param2>[,<param3>]]]"
+24) "-a <parm>"
+   -s <strategy>
+   -X <strategy-option>
+   -C <commit>, 
+   -c <commit>, 
+   -F <file>, 
+   -m <msg>, 
+   -t <file>, 
+   -X <option>, 
+   -s <strategy>, 
+   -s <strategy>, 
+   -X <option>, 
+   -m <msg>
+   -x <cmd>
+   -u <mode>
+   -u <mode>
+   -b <new_branch>
+   -B <new_branch>
+24a) "-A<n>"
+   -U<n>, 
+24b) "-a[=<parm>]"
+24c) "--opt=<parm>"
+   --color =<when>
+   --column =<options>
+   --abbrev=<length>
+   --conflict=<style>
+   --log =<n>
+   --depth=<depth>
+   --submodule-prefix=<path>
+   --fixup=<commit>
+   --squash=<commit>
+   --author=<author>
+   --date=<date>
+   --cleanup=<mode>
+   --repo=<repository>
+   --log =<n>
+   --depth=<depth>
+   --submodule =<format>
+   --color =<when>
+   --word-diff =<mode>
+   --word-diff-regex=<regex>
+   --color-words =<regex>
+   --abbrev =<n>
+   --relative =<path>
+   --src-prefix=<prefix>
+   --dst-prefix=<prefix>
+   --ignore-submodules =<when>
+   --column =<options>
+   --grep-reflog=<pattern>
+   --grep=<pattern>
+   --branches =<pattern>
+   --tags =<pattern>
+   --remotes =<pattern>
+   --glob=<glob-pattern>
+   --exclude=<glob-pattern>
+   --inter-hunk-context=<lines>
+   --ignore-submodules =<when>
+   --skip=<number>
+   --strategy=<strategy>
+   --strategy-option=<strategy-option>
+   --ignore-whitespace 
+   --whitespace=<option>
+   --reuse-message=<commit>
+   --reedit-message=<commit>
+   --file=<file>
+   --message=<msg>
+   --template=<file>
+   --receive-pack=<git-receive-pack> 
+   --exec=<git-receive-pack>
+   --strategy-option=<option>
+   --verify-signatures 
+   --no-verify-signatures
+   --strategy=<strategy>
+   --unified=<n>
+   --since=<date> 
+   --after=<date>
+   --until=<date> 
+   --before=<date>
+   --author=<pattern> 
+   --committer=<pattern>
+   --min-parents=<number> 
+   --max-parents=<number> 
+   --no-min-parents 
+   --no-max-parents
+   --strategy=<strategy>
+   --strategy-option=<option>
+24d) "--opt <parm>"
+   --contains <commit>
+   --merged <commit>
+   --no-merged <commit>
+   --orphan <new_branch>
+24e) "--opt[=<parm>]"
+24f) "--option[=<param1,param2,...>]"
+25) "--option[<val1>][/<val2>]"
+26) "--option=[(A|C|D|M|R|T|U|X|B)...[*]]"
+26a) "--option=a|b|c"
+   --recurse-submodules =yes|on-demand|no
+27) "-L <start>,<end>:<file>"
+28) "-L :<regex>:<file>"
+
+   --show-notes[=<ref>], --[no-]standard-notes
+   --[no-]rerere-autoupdate
+   --[no-]recurse-submodules[=yes|on-demand|no]
+   --[no-]force-with-lease, --force-with-lease=<refname>, --force-with-lease=<refname>:<expect>
+   --[no-]thin
+   --[no-]verify
+
+[--edit | -e] [--[no-]all | --[no-]ignore-removal | [--update | -u]]
+[no-]single-branch]
+--[no-]single-branch
+[no-]status]
+git-log.txt:522:       --show-notes[=<ref>], --[no-]standard-notes
+--[no-]rerere-autoupdate
+--[no-]recurse-submodules[=yes|on-demand|no]
+--[no-]force-with-lease, --force-with-lease=<refname>, --force-with-lease=<refname>:<expect>
+--[no-]thin
+--[no-]verify
+--[no-]autostash
+
+
+   -- no-
+   --upload-pack <upload-pack>
+   --onto <newbase>
+
+   -C<n>
+   --committer-date-is-author-date, --ignore-date
+   --exec <cmd>
+   -- no-
+   --no-all, --ignore-removal
+   --
+   save -p|--patch
+   save --no-keep-index
+   save --keep-index
+   save -u|--include-untracked
+   save -a|--all
+   save -q|--quiet
+   save <message>
+   list <options>
+   show <stash>
+   pop --index
+   pop -q|--quiet
+   pop <stash>
+   apply --index
+   apply -q|--quiet
+   apply <stash>
+   branch branchname
+   branch <stash>
+   clear
+   drop -q|--quiet
+   drop <stash>
+   create
+   store
+
+   --dirstat =<param1,param2,...>
+
+   --
+   <repository>
+   -- no-
+   -- no-
+   --recurse-submodules=check|on-demand
+   -- no-
+   -- no-
+
+   --diff-algorithm={patience|minimal|histogram|myers}
+   -l<num>
+   -S<string>
+   -G<regex>
+   -O<orderfile>
+   -L <start>,<end>:<file>, -L :<regex>:<file>
+   --left-only, --right-only
+   

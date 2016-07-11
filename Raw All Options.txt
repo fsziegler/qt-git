@@ -1,0 +1,439 @@
+   --
+   -A, --all, --no-ignore-removal
+   -e, --edit
+   -f, --force
+   --ignore-errors
+   --ignore-missing
+   -i, --interactive
+   -n, --dry-run
+   -N, --intent-to-add
+   --no-all, --ignore-removal
+   <pathspec>...
+   -p, --patch
+   --refresh
+   -u, --update
+   -v, --verbose
+   -a, --all
+   --abbrev=<length>
+   <branchname>
+   --color[=<when>]
+   --column[=<options>], --no-column
+   --contains [<commit>]
+   -D
+   -d, --delete
+   --edit-description
+   -f, --force
+   -l, --create-reflog
+   --list
+   -M
+   --merged [<commit>]
+   -m, --move
+   <newbranch>
+   --no-abbrev
+   --no-color
+   --no-merged [<commit>]
+   --no-track
+   <oldbranch>
+   -q, --quiet
+   -r, --remotes
+   --set-upstream
+   --set-upstream.
+   <start-point>
+   --track would when creating the branch, except that where branch points to is not changed.
+   -t, --track
+   --unset-upstream
+   -u <upstream>, --set-upstream-to=<upstream>
+   -v, -vv, --verbose
+   -b in such a case.
+   -b <new_branch>
+   -B <new_branch>
+   <branch>
+   --conflict=<style>
+   --detach
+   -f, --force
+   --ignore-skip-worktree-bits
+   -l
+   -m, --merge
+   <new_branch>
+   --no-track
+   --orphan <new_branch>
+   --ours, --theirs
+   -p, --patch
+   -q, --quiet
+   <start_point>
+   <tree-ish>
+   -t, --track
+   --bare
+   --branch <name>, -b <name>
+   --config <key>=<value>, -c <key>=<value>
+   --depth <depth>
+   <directory>
+   --local, -l
+   --mirror
+   --no-checkout, -n
+   --no-hardlinks
+   --[no-]single-branch
+   --origin <name>, -o <name>
+   --progress
+   --quiet, -q
+   --recursive, --recurse-submodules
+   --reference <repository>
+   <repository>
+   --separate-git-dir=<git dir>
+   --shared, -s
+   --template=<template_directory>
+   --upload-pack <upload-pack>, -u <upload-pack>
+   --verbose, -v
+   --
+   -a, --all
+   --allow-empty
+   --allow-empty-message
+   --amend
+   --author=<author>
+   --branch
+   -c <commit>, --reedit-message=<commit>
+   -C <commit>, --reuse-message=<commit>
+   --cleanup=<mode>
+   --date=<date>
+   --dry-run
+   -e, --edit
+   -F <file>, --file=<file>
+   <file>...
+   --fixup=<commit>
+   -i, --include
+   --long
+   -m <msg>, --message=<msg>
+   -n, --no-verify
+   --no-edit
+   --no-post-rewrite
+   --no-status
+   -o, --only
+   --porcelain
+   -p, --patch
+   -q, --quiet
+   --reset-author
+   --short
+   -S[<keyid>], --gpg-sign[=<keyid>]
+   --squash=<commit>
+   -s, --signoff
+   --status
+   -t <file>, --template=<file>
+   -u[<mode>], --untracked-files[=<mode>]
+   -v, --verbose
+   -z, --null
+   --abbrev[=<n>]
+   -a, --text
+   -b, --ignore-space-change
+   --binary
+   -B[<n>][/<m>], --break-rewrites[=[<n>][/<m>]]
+   --check
+   -C[<n>], --find-copies[=<n>]
+   --color[=<when>]
+   --color-words[=<regex>]
+   --diff-algorithm=default option.
+   --diff-algorithm={patience|minimal|histogram|myers}
+   --diff-filter=[(A|C|D|M|R|T|U|X|B)...[*]]
+   -D, --irreversible-delete
+   --dirstat[=<param1,param2,...>]
+   --dst-prefix=<prefix>
+   --exit-code
+   --ext-diff
+   --find-copies-harder
+   --full-index
+   -G<regex>
+   --histogram
+   --ignore-blank-lines
+   --ignore-space-at-eol
+   --ignore-submodules[=<when>]
+   --inter-hunk-context=<lines>
+   <limit>
+   -l<num>
+   --minimal
+   -M[<n>], --find-renames[=<n>]
+   --name-only
+   --name-status
+   --no-color
+   --no-ext-diff
+   --no-prefix
+   --no-renames
+   --numstat
+   -O<orderfile>
+   --patch-with-raw
+   --patch-with-stat
+   <path>...
+   patience
+   --patience
+   --pickaxe-all
+   --pickaxe-regex
+   -p, -u, --patch
+   --quiet
+   -R
+   --raw
+   --relative[=<path>]
+   --shortstat
+   -s, --no-patch
+   --src-prefix=<prefix>
+   -S<string>
+   --stat[=<width>[,<name-width>[,<count>]]]
+   --submodule[=<format>]
+   --summary
+   --textconv, --no-textconv
+   -U<n>, --unified=<n>
+   -W, --function-context
+   -w, --ignore-all-space
+   --word-diff[=<mode>]
+   --word-diff-regex=<regex>
+   -z
+   -a, --append
+   --all
+   --depth=<depth>
+   --dry-run
+   -f, --force
+   <group>
+   -k, --keep
+   --multiple
+   -n, --no-tags
+   --no-recurse-submodules
+   -p, --prune
+   --progress
+   -q, --quiet
+   <rbranch> it fetches is a descendant of <lbranch>. This option overrides that check.
+   --recurse-submodules-default=[yes|on-demand]
+   --recurse-submodules[=yes|on-demand|no]
+   <refspec>
+   <repository>
+   --submodule-prefix=<path>
+   -t, --tags
+   --unshallow
+   --update-shallow
+   --upload-pack <upload-pack>
+   -u, --update-head-ok
+   -v, --verbose
+   --bare
+   -q, --quiet
+   --separate-git-dir=<git dir>
+   --shared[=(false|true|umask|group|all|world|everybody|0xxx)]
+   --template=<template_directory>
+   --all
+   --all-match
+   --ancestry-path
+   --ancestry-path
+   --author-date-order
+   --author=<pattern>, --committer=<pattern>
+   --basic-regexp
+   --bisect
+   --boundary
+   --branches[=<pattern>]
+   -c
+   --cc
+   --cherry
+   --cherry-mark
+   --cherry-pick
+   --children
+   --committer=<pattern>).
+   --date=default shows timestamps in the original time zone (either committer’s or author’s).
+   --date=iso (or --date=iso8601) shows timestamps in ISO 8601 format.
+   --date=local shows timestamps in user’s local time zone.
+   --date-order
+   --date=raw shows the date in the internal raw Git format %s %z format.
+   --date=(relative|local|default|iso|rfc|short|raw)
+   --date=relative shows dates relative to the current time, e.g. “2 hours ago”.
+   --date=rfc (or --date=rfc2822) shows timestamps in RFC 2822 format, often found in email messages.
+   --date=short shows only the date, but not the time, in YYYY-MM-DD format.
+   --dense
+   --dense
+   --do-walk
+   -E, --extended-regexp
+   --encoding=<encoding>
+   --exclude=<glob-pattern>
+   -F, --fixed-strings
+   --first-parent
+   --follow
+   --full-diff
+   --full-history
+   --full-history without parent rewriting
+   --full-history with parent rewriting
+   --glob=<glob-pattern>
+   --graph
+   --grep=<pattern>
+   --grep=<pattern>, commits whose message matches any of the given patterns are chosen (but see --all-match).
+   --grep=<pattern> further limits to commits whose log message has a line that matches <pattern>), unless otherwise noted.
+   --grep-reflog, commits whose reflog message matches any of the given patterns are chosen. It is an error to use this option unless
+   --grep-reflog=<pattern>
+   -g, --walk-reflogs
+   --ignore-missing
+   -i, --regexp-ignore-case
+   --left-only, --right-only
+   --left-right
+   --log-size
+   -L <start>,<end>:<file>, -L :<regex>:<file>
+   -m
+   --merge
+   --merges
+   --min-parents=2 is the same as --merges.  --max-parents=0 gives all root commits and --min-parents=3 all octopus merges.
+   --min-parents=<number>, --max-parents=<number>, --no-min-parents, --no-max-parents
+   --no-abbrev-commit
+   --no-decorate, --decorate[=short|full|no]
+   --no-merges
+   --no-min-parents and --no-max-parents reset these limits (to no limit) again. Equivalent forms are --min-parents=0 (any commit has 0 or
+   --no-notes
+   --not
+   --notes[=<ref>]
+   --no-walk[=(sorted|unsorted)]
+   -<number>, -n <number>, --max-count=<number>
+   --objects
+   --objects-edge
+   --oneline
+   --parents
+   --parents or --children) are used. The following settings are available.
+   [--] <path>...
+   <paths>
+   --perl-regexp
+   --pretty[=<format>], --format=<format>
+   -r
+   --relative-date
+   --remotes[=<pattern>]
+   --remove-empty
+   --reverse
+   <revision range>
+   --show-notes[=<ref>], --[no-]standard-notes
+   --show-signature
+   --simplify-by-decoration
+   --simplify-merges
+   --simplify-merges
+   --since=<date>, --after=<date>
+   --skip=<number>
+   --source
+   --sparse
+   --sparse
+   --stdin
+   -t
+   --tags[=<pattern>]
+   --topo-order
+   --unpacked
+   --until=<date>, --before=<date>
+   --use-mailmap
+   --walk-reflogs is in use.
+   --abort
+   <commit>...
+   --commit, --no-commit
+   --edit, -e, --no-edit
+   --ff
+   --ff-only
+   --log[=<n>], --no-log
+   -m <msg>
+   --no-ff
+   --[no-]rerere-autoupdate
+   --progress, --no-progress
+   -q, --quiet
+   -S[<keyid>], --gpg-sign[=<keyid>]
+   --squash, --no-squash
+   -s <strategy>, --strategy=<strategy>
+   --stat, -n, --no-stat
+   --summary, --no-summary
+   --verify-signatures, --no-verify-signatures
+   -v, --verbose
+   -X <option>, --strategy-option=<option>
+   -a, --append
+   --all
+   --commit, --no-commit
+   --depth=<depth>
+   --edit, -e, --no-edit
+   --ff
+   --ff-only
+   -f, --force
+   -k, --keep
+   --log[=<n>], --no-log
+   --no-ff
+   --no-rebase
+   --[no-]recurse-submodules[=yes|on-demand|no]
+   --no-tags
+   --progress
+   -q, --quiet
+   <refspec>
+   <repository>
+   -r, --rebase[=false|true|preserve]
+   --squash, --no-squash
+   -s <strategy>, --strategy=<strategy>
+   --stat, -n, --no-stat
+   --summary, --no-summary
+   --unshallow
+   --update-shallow
+   --upload-pack <upload-pack>
+   -u, --update-head-ok
+   --verify-signatures, --no-verify-signatures
+   -v, --verbose
+   -X <option>, --strategy-option=<option>
+   --all
+   --delete
+   -f, --force
+   flag forces progress status even if the standard error stream is not directed to a terminal.
+   --follow-tags
+   --mirror
+   -n, --dry-run
+   --[no-]force-with-lease, --force-with-lease=<refname>, --force-with-lease=<refname>:<expect>
+   --[no-]thin
+   --[no-]verify
+   --porcelain
+   --progress
+   --prune
+   -q, --quiet
+   --receive-pack=<git-receive-pack>, --exec=<git-receive-pack>
+   --recurse-submodules=check|on-demand
+   <refspec>...
+   --repo=<repository>
+   <repository>
+   --tags
+   -u, --set-upstream
+   -v, --verbose
+   --abort
+   --autosquash, --no-autosquash
+   <branch>
+   -C<n>
+   --committer-date-is-author-date, --ignore-date
+   --continue
+   --edit-todo
+   -f, --force-rebase
+   --fork-point, --no-fork-point
+   --ignore-whitespace, --whitespace=<option>
+   -i, --interactive
+   --keep-empty
+   -m, --merge
+   <newbase> as parent instead.
+   -n, --no-stat
+   --[no-]autostash
+   --no-ff
+   --no-verify
+   --onto <newbase>
+   -p, --preserve-merges
+   -q, --quiet
+   --root
+   --skip
+   -s <strategy>, --strategy=<strategy>
+   --stat
+   <upstream>
+   --verify
+   -v, --verbose
+   -x <cmd>, --exec <cmd>
+   -X <strategy-option>, --strategy-option=<strategy-option>
+   apply [--index] [-q|--quiet] [<stash>]
+   create
+   drop [-q|--quiet] [<stash>]
+   pop [--index] [-q|--quiet] [<stash>]
+   save [-p|--patch] [--[no-]keep-index] [-u|--include-untracked] [-a|--all] [-q|--quiet] [<message>]
+   show [<stash>]
+   store
+   -b, --branch
+   --column[=<options>], --no-column
+   --ignored
+   --ignore-submodules[=<when>]
+   --long
+   --porcelain
+   -s, --short
+   -u[<mode>], --untracked-files[=<mode>]
+   -z
+
+
+
+
+

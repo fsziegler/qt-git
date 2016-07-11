@@ -15,26 +15,17 @@
 // save [-q|--quiet]
 // save [<message>]
 
-struct SVarOption
-{
-    string str;
-    size_t pos;
-};
-
-typedef vector<SVarOption> TVarOptionVect;
-typedef TVarOptionVect::const_iterator TVarOptionVectCItr;
-
 class OptionParser
 {
 public:
-    OptionParser(const string& optionStr);
+    OptionParser(const string& paramStr);
     ~OptionParser(){}
     const TStrVect& getOptnVect() const;
 
 private:
     void ParseNextOption(string& optionStr, string& nextOptionStr);
-    void ParseNextDelimOption(char delimL, char delimR, string& optionStr,
-                              string& nextOptionStr);
+    void ParseNextDelimOption(char delimL, char delimR, const string& prefix,
+                              string& optionStr, string& nextOptionStr);
     void StripWS(string& str);
 
     OptionParser();

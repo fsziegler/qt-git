@@ -1,0 +1,373 @@
+--
+-a
+-A
+--abbrev=<length>
+--abbrev[=<n>]
+--abort
+--after=<date>
+--all
+--all-match
+--allow-empty
+--allow-empty-message
+--amend
+--ancestry-path
+--append
+apply [--index] [-q|--quiet] [<stash>]
+--author=<author>
+--author-date-order
+--author=<pattern>
+--autosquash
+-b
+--bare
+--basic-regexp
+--before=<date>
+--binary
+--bisect
+-b <name>
+-B <new_branch>
+-B[<n>][/<m>]
+--boundary
+<branch>
+--branch
+--branches[=<pattern>]
+<branchname>
+--branch <name>
+--break-rewrites[=[<n>][/<m>]]
+-c
+--cc
+-c <commit>
+-C <commit>
+--check
+--cherry
+--cherry-mark
+--cherry-pick
+--children
+-c <key>=<value>
+--cleanup=<mode>
+-C<n>
+-C[<n>]
+--color[=<when>]
+--color-words[=<regex>]
+--column[=<options>]
+<commit>...
+--commit
+--committer-date-is-author-date
+--committer=<pattern>
+--config <key>=<value>
+--conflict=<style>
+--contains [<commit>]
+--continue
+create
+--create-reflog
+-d
+-D
+--date=<date>
+--date-order
+--date=(relative|local|default|iso|rfc|short|raw)
+--decorate[=short|full|no]
+--delete
+--dense
+--depth <depth>
+--detach
+--diff-algorithm={patience|minimal|histogram|myers}
+--diff-filter=[(A|C|D|M|R|T|U|X|B)...[*]]
+<directory>
+--dirstat[=<param1,param2,...>]
+--do-walk
+drop [-q|--quiet] [<stash>]
+--dry-run
+--dst-prefix=<prefix>
+-e
+-E
+--edit
+--edit-description
+--edit, -e, --no-edit
+--edit-todo
+--encoding=<encoding>
+--exclude=<glob-pattern>
+--exec <cmd>
+--exec=<git-receive-pack>
+--exit-code
+--ext-diff
+--extended-regexp
+-f
+-F
+--ff
+-F <file>
+--ff-only
+<file>...
+--file=<file>
+--find-copies-harder
+--find-copies[=<n>]
+--find-renames[=<n>]
+--first-parent
+--fixed-strings
+--fixup=<commit>
+--follow
+--follow-tags
+--force
+--force-rebase
+--fork-point
+--format=<format>
+--full-diff
+--full-history
+--full-index
+--function-context
+-g
+--glob=<glob-pattern>
+--gpg-sign[=<keyid>]
+--graph
+-G<regex>
+--grep=<pattern>
+--grep-reflog=<pattern>
+<group>
+--histogram
+-i
+--ignore-all-space
+--ignore-blank-lines
+--ignored
+--ignore-date
+--ignore-errors
+--ignore-missing
+--ignore-removal
+--ignore-skip-worktree-bits
+--ignore-space-at-eol
+--ignore-space-change
+--ignore-submodules[=<when>]
+--ignore-whitespace
+--include
+--intent-to-add
+--interactive
+--inter-hunk-context=<lines>
+--irreversible-delete
+-k
+--keep
+--keep-empty
+-l
+--left-only
+--left-right
+<limit>
+--list
+-l<num>
+--local
+--log[=<n>]
+--log-size
+--long
+-L <start>,<end>:<file>, -L :<regex>:<file>
+-m
+-M
+--merge
+--merged [<commit>]
+--merges
+--message=<msg>
+--minimal
+--min-parents=<number>, --max-parents=<number>, --no-min-parents
+--mirror
+-m <msg>
+-M[<n>]
+--move
+--multiple
+-n
+-N
+--name-only
+--name-status
+<new_branch>
+<newbranch>
+--no-abbrev
+--no-abbrev-commit
+--no-all
+--no-autosquash
+--[no-]autostash
+--no-checkout
+--no-color
+--no-column
+--no-commit
+--no-decorate
+--no-edit
+--no-ext-diff
+--no-ff
+--[no-]force-with-lease, --force-with-lease=<refname>, --force-with-lease=<refname>:<expect>
+--no-fork-point
+--no-hardlinks
+--no-ignore-removal
+--no-log
+--no-merged [<commit>]
+--no-merges
+--no-notes
+--no-patch
+--no-post-rewrite
+--no-prefix
+--no-progress
+--no-rebase
+--no-recurse-submodules
+--[no-]recurse-submodules[=yes|on-demand|no]
+--no-renames
+--[no-]rerere-autoupdate
+--[no-]single-branch
+--no-squash
+--[no-]standard-notes
+--no-stat
+--no-status
+--no-summary
+--not
+--no-tags
+--notes[=<ref>]
+--no-textconv
+--[no-]thin
+--no-track
+--[no-]verify
+--no-verify
+--no-verify-signatures
+--no-walk[=(sorted|unsorted)]
+--null
+-<number>, -n <number>, --max-count=<number>
+--numstat
+-o
+--objects
+--objects-edge
+<oldbranch>
+-o <name>
+--oneline
+--only
+--onto <newbase>
+-O<orderfile>
+--origin <name>
+--orphan <new_branch>
+--ours
+-p
+--parents
+--parents or --children) are used. The following settings are available.
+--patch
+--patch-with-raw
+--patch-with-stat
+<path>...
+[--] <path>...
+<paths>
+<pathspec>...
+--patience
+--perl-regexp
+--pickaxe-all
+--pickaxe-regex
+pop [--index] [-q|--quiet] [<stash>]
+--porcelain
+--preserve-merges
+--pretty[=<format>]
+--progress
+--prune
+-p, -u, --patch
+-q
+--quiet
+-r
+-R
+--raw
+--rebase[=false|true|preserve]
+--receive-pack=<git-receive-pack>
+--recurse-submodules
+--recurse-submodules=check|on-demand
+--recurse-submodules-default=[yes|on-demand]
+--recurse-submodules[=yes|on-demand|no]
+--recursive
+--reedit-message=<commit>
+--reference <repository>
+--refresh
+<refspec>
+<refspec>...
+--regexp-ignore-case
+--relative-date
+--relative[=<path>]
+--remotes
+--remotes[=<pattern>]
+--remove-empty
+--repo=<repository>
+<repository>
+--reset-author
+--reuse-message=<commit>
+--reverse
+<revision range>
+--right-only
+--root
+-s
+save [-p|--patch] [--[no-]keep-index] [-u|--include-untracked] [-a|--all] [-q|--quiet] [<message>]
+--separate-git-dir=<git dir>
+--set-upstream
+--set-upstream-to=<upstream>
+--shared
+--shared[=(false|true|umask|group|all|world|everybody|0xxx)]
+--short
+--shortstat
+--show-notes[=<ref>]
+--show-signature
+show [<stash>]
+--signoff
+--simplify-by-decoration
+--simplify-merges
+--since=<date>
+-S[<keyid>]
+--skip
+--skip=<number>
+--source
+--sparse
+--squash
+--squash=<commit>
+--src-prefix=<prefix>
+-s <strategy>
+-S<string>
+<start-point>
+--stat
+--stat, -n, --no-stat
+--status
+--stat[=<width>[,<name-width>[,<count>]]]
+--stdin
+store
+--strategy-option=<option>
+--strategy-option=<strategy-option>
+--strategy=<strategy>
+--submodule[=<format>]
+--submodule-prefix=<path>
+--summary
+-t
+--tags
+--tags[=<pattern>]
+--template=<file>
+--template=<template_directory>
+--text
+--textconv
+-t <file>
+--theirs
+--topo-order
+--track
+<tree-ish>
+-u
+-u[<mode>]
+-U<n>
+--unified=<n>
+--unpacked
+--unset-upstream
+--unshallow
+--until=<date>
+--untracked-files[=<mode>]
+--update
+--update-head-ok
+--update-shallow
+--upload-pack <upload-pack>
+<upstream>
+--use-mailmap
+-u <upload-pack>
+-u <upstream>
+-v
+--verbose
+--verify
+--verify-signatures
+-vv
+-w
+-W
+--walk-reflogs
+--walk-reflogs is in use.
+--whitespace=<option>
+--word-diff[=<mode>]
+--word-diff-regex=<regex>
+-x <cmd>
+-X <option>
+-X <strategy-option>
+-z
+

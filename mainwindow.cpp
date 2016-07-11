@@ -40,7 +40,7 @@ MainWindow::MainWindow(const QString& cmdStr, QWidget *parent) :
             size(),
             QApplication::desktop()->availableGeometry()));
    }
-   setWindowTitle("Fred's qt-git");
+   setWindowTitle("Fred's Power qt-git");
    QString settingStr;
    ms_rootGitDir =
            QFileInfo(ReadSettingFromFile(mc_cfgFileStr,

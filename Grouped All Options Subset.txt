@@ -1,0 +1,104 @@
+1) "--"
+   --
+   
+2) "-a"
+   -a
+   -A
+
+3) "-aa"
+   -vv
+
+4) "-<#>"
+   -<number>
+
+5) "-a <parameter>"
+   -b <name>
+   -B <new_branch>
+   -L <start>,<end>:<file>, -L :<regex>:<file>
+   -X <strategy-option>
+   
+6) "-a<parameter>"
+   -C<n>
+   -G<regex>
+   -l<num>
+   -O<orderfile>
+   -S<string>
+   -U<n>
+
+7) "-a[<parameter>]"
+   -B[<n>][/<m>]
+   -C[<n>]
+   -u[<mode>]
+   
+8) "--option"
+   --abort
+   --all-match
+   --ignore-all-space
+   --no-abbrev
+   --no-ignore-removal
+
+9) "--[no-]option"
+   --[no-]force-with-lease
+
+10) "--option <parameter>"
+   --branch <name>
+   --config <key>=<value>
+
+11) "--option=<parameter>"
+   --abbrev=<length>
+   --dst-prefix=<prefix>
+
+12) "--option=p1|p2"
+   --recurse-submodules=check|on-demand
+
+13) "--option[=<parameter>]"
+   --abbrev[=<n>]
+   --dirstat[=<param1,param2,...>]
+
+14) "--option [<parameter>]"
+   --no-merged [<commit>]
+
+15) "--option[=p1|p2|p3]"
+   --[no-]recurse-submodules[=yes|on-demand|no]
+   --decorate[=short|full|no]
+
+16) "--option[=(p1|p2|p3)]"
+   --no-walk[=(sorted|unsorted)]
+   --shared[=(false|true|umask|group|all|world|everybody|0xxx)]
+   --diff-filter=[(A|C|D|M|R|T|U|X|B)...[*]]
+
+17) "--option=(p1|p2|p3)"
+   --date=(relative|local|default|iso|rfc|short|raw)
+
+18) "--option={p1|p2|p3}"
+   --diff-algorithm={patience|minimal|histogram|myers}
+
+19) "--option=[=[<param1>][/<param2>]]p1|p2|p3}"
+   --break-rewrites[=[<n>][/<m>]]
+
+20) "--option=<param1>:<param2>"
+   --force-with-lease=<refname>:<expect>
+
+21) "--option=<param1>[,<param2>[,<param3>]]"
+   --stat[=<width>[,<name-width>[,<count>]]]
+
+22) "<option>"
+   <upstream>
+
+23) "<option>..."
+   <commit>...
+
+24) "command"
+   create
+   store
+
+25) "command [option1] [option2] [option3]"
+   apply [--index] [-q|--quiet] [<stash>]
+   drop [-q|--quiet] [<stash>]
+   pop [--index] [-q|--quiet] [<stash>]
+   save [-p|--patch] [--[no-]keep-index] [-u|--include-untracked] [-a|--all] [-q|--quiet] [<message>]
+   show [<stash>]
+
+26) "-- <parameter>"
+   [--] <path>...
+

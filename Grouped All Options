@@ -1,0 +1,430 @@
+1) "--"
+   --
+   
+2) "-a"
+   -a
+   -A
+   -b
+   -c
+   -d
+   -D
+   -e
+   -E
+   -f
+   -F
+   -g
+   -i
+   -k
+   -l
+   -m
+   -M
+   -n
+   -N
+   -o
+   -p
+   -q
+   -r
+   -R
+   -s
+   -t
+   -u
+   -v
+   -w
+   -W
+   -z
+   -n
+
+3) "-aa"
+   -vv
+
+4) "-<#>"
+   -<number>
+
+5) "-a <parameter>"
+   -b <name>
+   -B <new_branch>
+   -c <commit>
+   -C <commit>
+   -c <key>=<value>
+   -F <file>
+   -L <start>,<end>:<file>, -L :<regex>:<file>
+   -m <msg>
+   -n <number>
+   -o <name>
+   -s <strategy>
+   -t <file>
+   -u <upload-pack>
+   -u <upstream>
+   -x <cmd>
+   -X <option>
+   -X <strategy-option>
+   
+6) "-a<parameter>"
+   -C<n>
+   -G<regex>
+   -l<num>
+   -O<orderfile>
+   -S<string>
+   -U<n>
+
+7) "-a[<parameter>]"
+   -B[<n>][/<m>]
+   -C[<n>]
+   -M[<n>]
+   -S[<keyid>]
+   -u[<mode>]
+   
+8) "--option"
+   --abort
+   --all
+   --all-match
+   --allow-empty
+   --allow-empty-message
+   --amend
+   --ancestry-path
+   --append
+   --author-date-order
+   --autosquash
+   --bare
+   --basic-regexp
+   --binary
+   --bisect
+   --boundary
+   --branch
+   --cc
+   --check
+   --cherry
+   --cherry-mark
+   --cherry-pick
+   --children
+   --commit
+   --committer-date-is-author-date
+   --continue
+   --create-reflog
+   --date-order
+   --delete
+   --dense
+   --detach
+   --do-walk
+   --dry-run
+   --edit
+   --edit
+   --edit-description
+   --edit-todo
+   --exit-code
+   --ext-diff
+   --extended-regexp
+   --ff
+   --ff-only
+   --find-copies-harder
+   --first-parent
+   --fixed-strings
+   --follow
+   --follow-tags
+   --force
+   --force-rebase
+   --fork-point
+   --full-diff
+   --full-history
+   --full-index
+   --function-context
+   --graph
+   --histogram
+   --ignore-all-space
+   --ignore-blank-lines
+   --ignored
+   --ignore-date
+   --ignore-errors
+   --ignore-missing
+   --ignore-removal
+   --ignore-skip-worktree-bits
+   --ignore-space-at-eol
+   --ignore-space-change
+   --ignore-whitespace
+   --include
+   --intent-to-add
+   --interactive
+   --irreversible-delete
+   --keep
+   --keep-empty
+   --left-only
+   --left-right
+   --list
+   --local
+   --log-size
+   --long
+   --merge
+   --merges
+   --minimal
+   --mirror
+   --move
+   --multiple
+   --name-only
+   --name-status
+   --no-abbrev
+   --no-abbrev-commit
+   --no-all
+   --no-autosquash
+   --no-checkout
+   --no-color
+   --no-column
+   --no-commit
+   --no-decorate
+   --no-edit
+   --no-edit
+   --no-ext-diff
+   --no-ff
+   --no-fork-point
+   --no-hardlinks
+   --no-ignore-removal
+   --no-log
+   --no-merges
+   --no-notes
+   --no-patch
+   --no-post-rewrite
+   --no-prefix
+   --no-progress
+   --no-rebase
+   --no-recurse-submodules
+   --no-renames
+   --no-squash
+   --no-stat
+   --no-status
+   --no-summary
+   --not
+   --no-tags
+   --no-textconv
+   --no-track
+   --no-verify
+   --no-verify-signatures
+   --null
+   --numstat
+   --objects
+   --objects-edge
+   --oneline
+   --only
+   --ours
+   --parents
+   --patch
+   --patch-with-raw
+   --patch-with-stat
+   --patience
+   --perl-regexp
+   --pickaxe-all
+   --pickaxe-regex
+   --porcelain
+   --preserve-merges
+   --progress
+   --prune
+   --quiet
+   --raw
+   --recurse-submodules
+   --recursive
+   --refresh
+   --regexp-ignore-case
+   --relative-date
+   --remotes
+   --remove-empty
+   --reset-author
+   --reverse
+   --right-only
+   --root
+   --set-upstream
+   --shared
+   --short
+   --shortstat
+   --show-signature
+   --signoff
+   --simplify-by-decoration
+   --simplify-merges
+   --skip
+   --source
+   --sparse
+   --squash
+   --stat
+   --status
+   --stdin
+   --summary
+   --tags
+   --text
+   --textconv
+   --theirs
+   --topo-order
+   --track
+   --unpacked
+   --unset-upstream
+   --unshallow
+   --update
+   --update-head-ok
+   --update-shallow
+   --use-mailmap
+   --verbose
+   --verify
+   --verify-signatures
+   --walk-reflogs
+   --no-min-parents
+   --stat
+   --no-stat
+
+9) "--[no-]option"
+   --[no-]autostash
+   --[no-]force-with-lease
+   --[no-]rerere-autoupdate
+   --[no-]single-branch
+   --[no-]standard-notes
+   --[no-]thin
+   --[no-]verify
+
+10) "--option <parameter>"
+   --branch <name>
+   --config <key>=<value>
+   --depth <depth>
+   --exec <cmd>
+   --onto <newbase>
+   --origin <name>
+   --orphan <new_branch>
+   --reference <repository>
+   --upload-pack <upload-pack>
+
+11) "--option=<parameter>"
+   --abbrev=<length>
+   --after=<date>
+   --author=<author>
+   --author=<pattern>
+   --before=<date>
+   --cleanup=<mode>
+   --committer=<pattern>
+   --conflict=<style>
+   --date=<date>
+   --dst-prefix=<prefix>
+   --encoding=<encoding>
+   --exclude=<glob-pattern>
+   --exec=<git-receive-pack>
+   --file=<file>
+   --fixup=<commit>
+   --format=<format>
+   --glob=<glob-pattern>
+   --grep=<pattern>
+   --grep-reflog=<pattern>
+   --inter-hunk-context=<lines>
+   --message=<msg>
+   --receive-pack=<git-receive-pack>
+   --reedit-message=<commit>
+   --repo=<repository>
+   --reuse-message=<commit>
+   --separate-git-dir=<git dir>
+   --set-upstream-to=<upstream>
+   --since=<date>
+   --skip=<number>
+   --squash=<commit>
+   --src-prefix=<prefix>
+   --strategy-option=<option>
+   --strategy-option=<strategy-option>
+   --strategy=<strategy>
+   --submodule-prefix=<path>
+   --template=<file>
+   --template=<template_directory>
+   --unified=<n>
+   --until=<date>
+   --whitespace=<option>
+   --word-diff-regex=<regex>
+   --min-parents=<number>
+   --max-parents=<number>
+   --force-with-lease=<refname>
+   --max-count=<number>
+
+12) "--option=p1|p2"
+   --recurse-submodules=check|on-demand
+
+13) "--option[=<parameter>]"
+   --abbrev[=<n>]
+   --branches[=<pattern>]
+   --color[=<when>]
+   --color-words[=<regex>]
+   --column[=<options>]
+   --dirstat[=<param1,param2,...>]
+   --find-copies[=<n>]
+   --find-renames[=<n>]
+   --gpg-sign[=<keyid>]
+   --ignore-submodules[=<when>]
+   --log[=<n>]
+   --notes[=<ref>]
+   --pretty[=<format>]
+   --relative[=<path>]
+   --remotes[=<pattern>]
+   --show-notes[=<ref>]
+   --submodule[=<format>]
+   --tags[=<pattern>]
+   --untracked-files[=<mode>]
+   --word-diff[=<mode>]
+
+14) "--option [<parameter>]"
+   --contains [<commit>]
+   --merged [<commit>]
+   --no-merged [<commit>]
+
+15) "--option[=p1|p2|p3]"
+   --[no-]recurse-submodules[=yes|on-demand|no]
+   --decorate[=short|full|no]
+   --rebase[=false|true|preserve]
+   --recurse-submodules-default=[yes|on-demand]
+   --recurse-submodules[=yes|on-demand|no]
+
+16) "--option[=(p1|p2|p3)]"
+   --no-walk[=(sorted|unsorted)]
+   --shared[=(false|true|umask|group|all|world|everybody|0xxx)]
+   --diff-filter=[(A|C|D|M|R|T|U|X|B)...[*]]
+
+17) "--option=(p1|p2|p3)"
+   --date=(relative|local|default|iso|rfc|short|raw)
+
+18) "--option={p1|p2|p3}"
+   --diff-algorithm={patience|minimal|histogram|myers}
+
+19) "--option=[=[<param1>][/<param2>]]p1|p2|p3}"
+   --break-rewrites[=[<n>][/<m>]]
+
+20) "--option=<param1>:<param2>"
+   --force-with-lease=<refname>:<expect>
+
+21) "--option=<param1>[,<param2>[,<param3>]]"
+   --stat[=<width>[,<name-width>[,<count>]]]
+
+22) "<option>"
+   <branch>
+   <branchname>
+   <directory>
+   <group>
+   <limit>
+   <new_branch>
+   <newbranch>
+   <oldbranch>
+   <paths>
+   <refspec>
+   <repository>
+   <revision range>
+   <start-point>
+   <tree-ish>
+   <upstream>
+
+23) "<option>..."
+   <commit>...
+   <file>...
+   <path>...
+   <pathspec>...
+   <refspec>...
+
+24) "command"
+   create
+   store
+
+25) "command [option1] [option2] [option3]"
+   apply [--index] [-q|--quiet] [<stash>]
+   drop [-q|--quiet] [<stash>]
+   pop [--index] [-q|--quiet] [<stash>]
+   save [-p|--patch] [--[no-]keep-index] [-u|--include-untracked] [-a|--all] [-q|--quiet] [<message>]
+   show [<stash>]
+
+26) "-- <parameter>"
+   [--] <path>...
+
