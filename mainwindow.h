@@ -5,6 +5,7 @@
 #include <QFileInfo>
 #include <QCheckBox>
 #include <QLabel>
+#include <QJsonObject>
 
 #include <string>
 #include <vector>
@@ -22,11 +23,14 @@ class MainWindow : public QMainWindow
 {
     Q_OBJECT
 
+private:
+    static void ClearStaticMembers();
+
 public:
     explicit MainWindow(const QString& cmdStr, QWidget *parent = 0);
     ~MainWindow();
 
-    void ClearAll();
+    void ClearStash();
     static size_t GetProcessResults(const string& cmd, const string& execDir,
                                     const TStrVect& args, TStrVect& resultVect);
 
@@ -35,10 +39,8 @@ public:
     static void SetButtonFormattedToolTip(QAbstractButton *pCB,
                                             const QString& tooltip,
                                             int width=120);
-    static const QString& ReadSettingFromFile(const QString& settingFileStr,
-                                              const QString& altTextStr,
-                                              QLabel* settingLabel,
-                                              QString& settingStr);
+    static void ReadSettings();
+    static void SaveSettings();
 
 private slots:
     void on_btn_choose_git_root_clicked();
@@ -78,10 +80,12 @@ private slots:
     void on_btn_git_log_clicked();
 
 private:
+    static QJsonObject ms_settings;
     static QFileInfo ms_rootGitDir;
+    static QString ms_settingsFileStr;
+    static QString ms_remoteRepoFileStr;
+
     const QFileInfo mc_appDir;
-    const QString mc_cfgFileStr;
-    const QString mc_remoteRepoFileStr;
     Ui::MainWindow *ui;
 };
 

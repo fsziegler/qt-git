@@ -11,6 +11,7 @@
 #include <QPalette>
 #include <QCryptographicHash>
 #include <QRadioButton>
+#include <QFile>
 
 #include <iostream>
 
@@ -66,7 +67,7 @@ const QString equalsParamSpec("(.+=)<(.+)>");
 const QString optionalParamSpec("(.+)\\[<(.+)>\\]");
 const QString optionalSlashParamSpec("(.+)\\[/<(.+)>\\]");
 const QString optionalEqualsParamSpec("(.+)\\[=<(.+)>\\]");
-const QString multipleParamSpec("<(.+)>\.\.\.");
+const QString multipleParamSpec("<(.+)>\\.\\.\\.");
 
 vector<QString> paramSpecs =
 {
@@ -81,7 +82,7 @@ vector<QString> paramSpecs =
 
 const QString choiceSpec("^.+\\|.+$");
 
-const QRegularExpression reIsSection("^[A-Z][A-Z \-]+$");
+const QRegularExpression reIsSection("^[A-Z][A-Z \\-]+$");
 ToolTipLineType TestDialog::GetToolTipLineType(string& lineStr)
 {
     if(0 == lineStr.length())
@@ -151,9 +152,9 @@ void ParseSingleOption(const string& option, TStrVect& parsedOpts)
 }
 
 const QString reSubOptionStr(
-        "(^[a-zA-Z\-<>_]+(?:[\.]{3})?)(.*)|(\\\[--\\\])(.*)");
+        "(^[a-zA-Z\\-<>_]+(?:[\\.]{3})?)(.*)|(\\[--\\])(.*)");
 const QRegularExpression reSubOption(reSubOptionStr);
-const QRegularExpression reWithNoOptParam("^(--)\\\[no-\\\](.+)");  // --[no-].+
+const QRegularExpression reWithNoOptParam("^(--)\\[no-\\](.+)");  // --[no-].+
 bool TestDialog::HandleSpecialOptionLine(string& optionStr, string& tooltipStr,
                                      int& row, int &col)
 {
@@ -184,7 +185,7 @@ bool TestDialog::HandleSpecialOptionLine(string& optionStr, string& tooltipStr,
             const string s2(noOptParamMatch.captured(2).toStdString());
             optnStrVect.push_back(string(s1 + s2));
             optnStrVect.push_back(string(s1 + "no-" + s2));
-            row = (1 == col ? ++row : row);
+            row = (1 == col ? row + 1 : row);
             col = 0;
         }
         else
@@ -195,7 +196,7 @@ bool TestDialog::HandleSpecialOptionLine(string& optionStr, string& tooltipStr,
         for(auto itr: optnStrVect)
         {
             itr.c_str();
-            bool b = noOptParamMatch.hasMatch();
+//            bool b = noOptParamMatch.hasMatch();
             if((0 == parameters.length()) || noOptParamMatch.hasMatch())
             {
                 if(('-' == itr[0])
@@ -259,8 +260,8 @@ size_t TestDialog::FindNextOptionDelim(size_t startPos, string& optionStr) const
         for(TCharPairVect::const_iterator itr = groupDelim.begin();
             groupDelim.end() != itr; ++itr)
         {
-            char c = (*itr).first;
-            c = (*itr).second;
+//            char c = (*itr).first;
+//            c = (*itr).second;
             net += ((*itr).first == optionStr[pos] ? 1 : 0);
             net -= ((*itr).second == optionStr[pos] ? 1 : 0);
         }
@@ -305,13 +306,13 @@ void TestDialog::HandleOptionLine(const string& nextLineStr, string& optionStr,
             parsedOptionStr = optionStr.substr(pos0);
             stripLeadingWS(parsedOptionStr);
             optionStrVect.push_back(parsedOptionStr);
-            row = (1 == col ? ++row : row);
+            row = (1 == col ? row + 1 : row);
             col = 0;
         }
         for(auto itr: optionStrVect)
         {
             itr.c_str();
-            const char* str = itr.c_str();
+//            const char* str = itr.c_str();
 //            const string& optStr = *itr;
             if(!HandleSpecialOptionLine(itr, tooltipStr, row, col))
             {
@@ -320,7 +321,7 @@ void TestDialog::HandleOptionLine(const string& nextLineStr, string& optionStr,
         }
         if((1 < optionStrVect.size()) && (1 == optionStrVect.size() % 2))
         {
-            row = (1 == col ? ++row : row);
+            row = (1 == col ? row + 1 : row);
             col = 0;
         }
 
@@ -337,14 +338,30 @@ void TestDialog::SetCommand(const QString& cmd, const QString& arg0)
     m_cmd = cmd;
     m_arg0 = arg0;
 
-    // Get the help text for this git command
-    const string cmdStr("git");
-    const string execDir(".");
-    TStrVect args;
-    args.push_back(arg0.toStdString());
-    args.push_back("--help");
     TStrVect resultVect;
-    MainWindow::GetProcessResults(cmdStr, execDir, args, resultVect);
+    const QString helpFileStr(cmd + "-" + arg0 + ".txt");
+    QFile helpFile(helpFileStr);
+    if(helpFile.exists())
+    {
+       if(helpFile.open(QIODevice::ReadOnly | QIODevice::Text))
+       {
+           while (!helpFile.atEnd())
+           {
+               QByteArray line = helpFile.readLine();
+               resultVect.push_back(line.constData());
+           }
+       }
+    }
+    else
+    {
+        // Get the help text for this git command
+        const string cmdStr("git");
+        const string execDir(".");
+        TStrVect args;
+        args.push_back(arg0.toStdString());
+        args.push_back("--help");
+        MainWindow::GetProcessResults(cmdStr, execDir, args, resultVect);
+    }
 
     string title("git-");
     title.append(arg0.toStdString());
@@ -407,7 +424,7 @@ void TestDialog::SetCommand(const QString& cmd, const QString& arg0)
                    }
                    catch(...)
                    {
-                       int j;
+//                       int j;
                    }
                } while(NextSectionLine != GetToolTipLineType(lineStr));
                HandleOptionLine(lineStr, optionStr, tooltipStr, row, col);
@@ -453,7 +470,7 @@ void TestDialog::AddCheckbox(const QString& cbTitle, const QString& cbTooltip,
     cb->Connect(this);
 
     m_lastRow = (row > m_lastRow ? row : m_lastRow);
-    row = (1 == col ? ++row : row);
+    row = (1 == col ? row + 1  : row);
     col = (0 == col ? 1 : 0);
 }
 
@@ -470,11 +487,11 @@ bool TestDialog::HasPrefix(char prefix, const string& text) const
     while(text.length() > pos + 1)
     {
         const char c = text[pos];
-        if((' ' != c) && ('=' != c))
+        if((' ' != c) && (prefix != c))
         {
             return false;
         }
-        if('=' == c)
+        if(prefix == c)
         {
             return true;
         }
@@ -555,6 +572,7 @@ void TestDialog::accept()
 
 void TestDialog::CBStateChanged(int i)
 {
+    ++i;    // Just to get rid of compiler warning
     for(TStrCBMapCItr itr = m_strCBMap.begin(); m_strCBMap.end() != itr; ++itr)
     {
         GitCheckBox* cb = (*itr).second;
@@ -685,7 +703,8 @@ QString TestDialog::GetXORChoiceDialog(string cmdStr, bool& ok, string& option)
     size_t pos1(cmdStr.find_first_of('|'));
     const size_t end(cmdStr.find(']'));
 
-    string opt(cmdStr.substr(++pos0, pos1 - pos0 - 1));
+    ++pos0;
+    string opt(cmdStr.substr(pos0, pos1 - pos0 - 1));
     optionsVect.push_back(opt);
 
     pos0 = ++pos1;

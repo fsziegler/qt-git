@@ -8,6 +8,7 @@
 #include <QDesktopWidget>
 #include <QInputDialog>
 #include <QMessageBox>
+#include <QJsonDocument>
 
 #include "gitinitdialog.h"
 #include "gitclonedialog.h"
@@ -18,17 +19,37 @@
 
 using namespace std;
 
+QJsonObject MainWindow::ms_settings;
 QFileInfo MainWindow::ms_rootGitDir;
+QString MainWindow::ms_settingsFileStr;
+QString MainWindow::ms_remoteRepoFileStr;
+
+void MainWindow::ClearStaticMembers()
+{
+    if(!ms_settings.isEmpty())
+    {
+        throw;
+    }
+    if(ms_rootGitDir.exists())
+    {
+        throw;
+    }
+    ms_settingsFileStr.clear();
+    ms_remoteRepoFileStr.clear();
+}
 
 MainWindow::MainWindow(const QString& cmdStr, QWidget *parent) :
    QMainWindow(parent),
    mc_appDir(QFileInfo(cmdStr).path()),
-   mc_cfgFileStr(mc_appDir.filePath() + "/rootGitDir.txt"),
-   mc_remoteRepoFileStr(mc_appDir.filePath() + "/remoteRepoUrl.txt"),
    ui(new Ui::MainWindow)
 {
-   ms_rootGitDir = cmdStr;
+   ClearStaticMembers();
+   ms_settingsFileStr.append(mc_appDir.filePath()).append("/settings.json");
+   ReadSettings();
    ui->setupUi(this);
+   ui->label_git_root->setText(ms_rootGitDir.filePath());
+   ui->label_remote_repo->setText(ms_remoteRepoFileStr);
+
    const QRect screenRect(QApplication::desktop()->availableGeometry());
    if((screenRect.width() >= width()) &&
          (screenRect.height() >= height()))
@@ -41,21 +62,7 @@ MainWindow::MainWindow(const QString& cmdStr, QWidget *parent) :
             QApplication::desktop()->availableGeometry()));
    }
    setWindowTitle("Fred's Power qt-git");
-   QString settingStr;
-   ms_rootGitDir =
-           QFileInfo(ReadSettingFromFile(mc_cfgFileStr,
-                                         QString("[Git root unknown]"),
-                                         ui->label_git_root,
-                                         settingStr));
-   ReadSettingFromFile(mc_remoteRepoFileStr,
-                       QString("[Remote repo unknown]"),
-                       ui->label_remote_repo,
-                       settingStr);
 
-//   ui->comboBox_stash->addItem("foo");
-//   ui->comboBox_stash->addItem("bar");
-//   ui->comboBox_stash->addItem("doo");
-//   ui->comboBox_stash->addItem("echo");
    OnGitStatus();
 
    SetButtonFormattedToolTip(ui->btn_choose_git_root,
@@ -180,7 +187,7 @@ MainWindow::~MainWindow()
    delete ui;
 }
 
-void MainWindow::ClearAll()
+void MainWindow::ClearStash()
 {
    ui->comboBox_stash->clear();
 }
@@ -344,25 +351,37 @@ void MainWindow::SetButtonFormattedToolTip(QAbstractButton *pCB,
 //    cout << modToolTip.toStdString() << endl << endl;
 }
 
-const QString& MainWindow::ReadSettingFromFile(const QString& settingFileStr,
-                                     const QString& altTextStr,
-                                               QLabel* settingLabel,
-                                               QString& settingStr)
+void MainWindow::ReadSettings()
 {
-    settingStr = altTextStr;
-    QFile cfgFile(settingFileStr);
-    if(cfgFile.exists())
+    QFile loadFile(ms_settingsFileStr);
+
+    if (!loadFile.open(QIODevice::ReadOnly))
     {
-       if(cfgFile.open(QIODevice::ReadOnly | QIODevice::Text))
-       {
-          QByteArray line = cfgFile.readLine();
-          settingStr = line;
-//          ms_rootGitDir = QFileInfo(QString(line));
-          settingLabel->setText(ms_rootGitDir.filePath());
-       }
+        throw;
     }
-    settingLabel->setText(settingStr);
-    return settingStr;
+
+    QByteArray saveData = loadFile.readAll();
+
+    QJsonDocument loadDoc(QJsonDocument::fromJson(saveData));
+
+    ms_settings = loadDoc.object();
+    ms_rootGitDir = ms_settings["Git Root Directory"].toString();
+    ms_remoteRepoFileStr = ms_settings["Git Remote Repo"].toString();
+}
+
+void MainWindow::SaveSettings()
+{
+    ms_settings["Git Root Directory"] = ms_rootGitDir.filePath();
+    ms_settings["Git Remote Repo"] = ms_remoteRepoFileStr;
+
+    QFile saveFile(ms_settingsFileStr);
+
+    if (!saveFile.open(QIODevice::WriteOnly))
+    {
+        throw;
+    }
+    QJsonDocument saveDoc(ms_settings);
+    saveFile.write(saveDoc.toJson());
 }
 
 void MainWindow::on_btn_choose_git_root_clicked()
@@ -372,16 +391,10 @@ void MainWindow::on_btn_choose_git_root_clicked()
                  QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
    if(!dir.isNull())
    {
-      ClearAll();
+      ClearStash();
       ms_rootGitDir = dir;
       ui->label_git_root->setText(dir);
-      QFile cfgFile(mc_cfgFileStr);
-      if(cfgFile.open(QIODevice::WriteOnly | QIODevice::Text))
-      {
-         QTextStream out(&cfgFile);
-         out << ms_rootGitDir.filePath();
-         cfgFile.close();
-      }
+      SaveSettings();
    }
 }
 
@@ -417,31 +430,10 @@ void MainWindow::on_btn_remote_repo_clicked()
                                   ui->label_remote_repo->text(), &ok);
     if (ok && !text.isEmpty())
     {
+        ms_remoteRepoFileStr = text;
         ui->label_remote_repo->setText(text);
-        QFile cfgFile(mc_remoteRepoFileStr);
-        if(cfgFile.open(QIODevice::WriteOnly | QIODevice::Text))
-        {
-           QTextStream out(&cfgFile);
-           out << text;
-           cfgFile.close();
-        }
+        SaveSettings();
     }
-
-
-//    if(!dir.isNull())
-//    {
-//       ClearAll();
-//       ms_rootGitDir = dir;
-//       ui->label_git_root->setText(dir);
-//       QFile cfgFile(mc_cfgFileStr);
-//       if(cfgFile.open(QIODevice::WriteOnly | QIODevice::Text))
-//       {
-//          QTextStream out(&cfgFile);
-//          out << ms_rootGitDir.filePath();
-//          cfgFile.close();
-//       }
-//    }
-
 }
 
 void MainWindow::on_btn_git_branch_clicked()
