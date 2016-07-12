@@ -10,6 +10,7 @@
 #include <QInputDialog>
 #include <QPalette>
 #include <QCryptographicHash>
+#include <QRadioButton>
 
 #include <iostream>
 
@@ -77,6 +78,8 @@ vector<QString> paramSpecs =
     onlyparamSpec,
     multipleParamSpec,
 };
+
+const QString choiceSpec("^.+\\|.+$");
 
 const QRegularExpression reIsSection("^[A-Z][A-Z \-]+$");
 ToolTipLineType TestDialog::GetToolTipLineType(string& lineStr)
@@ -628,6 +631,36 @@ void TestDialog::CBStateChanged(int i)
                         }
                         break;
                     }
+                    else
+                    {
+                        if(QRegularExpression(choiceSpec).match(
+                                    QString(title)).hasMatch())
+                        {
+                            bool ok;
+                            string option;
+                            QString result =
+                                    GetXORChoiceDialog(title, ok, option);
+                            if(0 < result.length())
+                            {
+                                cb->clearParamText();
+                                QString newText(option.c_str());
+                                if(0 != result.compare(" "))
+                                {
+                                    newText.append("=").append(result);
+                                }
+                                cb->setText(newText);
+                            }
+                            else
+                            {
+                                cb->setCheckState(Qt::Unchecked);
+                                (*boolItr).second = false;
+                                cb->clearParamText();
+                                cb->setText(cb->getOrigText());
+                            }
+                            break;
+                        }
+
+                    }
                 }
             }
             else
@@ -639,13 +672,84 @@ void TestDialog::CBStateChanged(int i)
     }   //  for(TStrCBMapCItr itr ...
 }
 
+QString TestDialog::GetXORChoiceDialog(string cmdStr, bool& ok, string& option)
+{
+    //--recurse-submodules[=yes|on-demand|no]
+    //--recurse-submodules-default=[yes|on-demand]
+    const size_t eqPos(cmdStr.find_first_of('='));
+    const size_t lsbPos(cmdStr.find_first_of('['));
+    option = cmdStr.substr(0, eqPos > lsbPos ? lsbPos : eqPos);
+    bool optParam(eqPos > lsbPos);  // ...[=...
+    TStrVect optionsVect;
+    size_t pos0(eqPos > lsbPos ? eqPos : lsbPos);
+    size_t pos1(cmdStr.find_first_of('|'));
+    const size_t end(cmdStr.find(']'));
+
+    string opt(cmdStr.substr(++pos0, pos1 - pos0 - 1));
+    optionsVect.push_back(opt);
+
+    pos0 = ++pos1;
+    while(string::npos != (pos1 = cmdStr.find('|', pos0)))
+    {
+        opt = cmdStr.substr(pos0, pos1 - pos0);
+        optionsVect.push_back(opt);
+        pos0 = ++pos1;
+    }
+    opt = cmdStr.substr(pos0, end - pos0);
+    optionsVect.push_back(opt);
+
+    int row(0), col(0);
+    QDialog* optDlg = new QDialog(this);
+    optDlg->setWindowTitle(option.c_str());
+    QGridLayout* gridLayout = new QGridLayout(optDlg);
+
+    vector<QRadioButton*> btnVect;
+    const QString NoOptionStr("(No Option)");
+    if(optParam)
+    {
+        QRadioButton* rb = new QRadioButton(NoOptionStr, optDlg);
+        btnVect.push_back(rb);
+        gridLayout->addWidget(rb, row++, col);
+    }
+    for(TStrVectCItr itr = optionsVect.begin(); optionsVect.end() != itr; ++itr)
+    {
+        QRadioButton* rb = new QRadioButton((*itr).c_str(), optDlg);
+        btnVect.push_back(rb);
+        gridLayout->addWidget(rb, row++, col);
+    }
+
+    QDialogButtonBox* okCancelBtns = new QDialogButtonBox(QDialogButtonBox::Ok
+                                                          | QDialogButtonBox::Cancel);
+    connect(okCancelBtns, &QDialogButtonBox::accepted, optDlg, &QDialog::accept);
+    connect(okCancelBtns, &QDialogButtonBox::rejected, optDlg, &QDialog::reject);
+    gridLayout->addWidget(okCancelBtns, row, col);
+    optDlg->setLayout(gridLayout);
+    ok = optDlg->exec();
+    if(ok)
+    {
+        size_t cnt(0);
+        while(btnVect.size() > cnt)
+        {
+            const QRadioButton* rb = btnVect[cnt];
+            if(rb->isChecked())
+            {
+                bool b = (NoOptionStr == rb->text());
+                return (b ? " " : rb->text());
+            }
+            ++cnt;
+        }
+    }
+    return QString("");
+}
+
 void TestDialog::ChangeEnabledState(const GitCheckBox* cb)
 {
     if('-' == cb->text().toStdString()[0])
     {
         const QByteArray hash = cb->getHash();
         const QString text = cb->text();
-        for(TStrCBMapCItr itr = m_strCBMap.begin(); m_strCBMap.end() != itr; ++itr)
+        for(TStrCBMapCItr itr = m_strCBMap.begin(); m_strCBMap.end() != itr;
+            ++itr)
         {
             GitCheckBox* currCb = (*itr).second;
             if((text != currCb->text()) && (hash == currCb->getHash()))
