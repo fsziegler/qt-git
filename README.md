@@ -1,5 +1,5 @@
 # Power qt-git
-A power git tool designed to support many major commands through a cross-platform UI.
+A power git tool designed to support many major commands through a cross-platform UI. Inspired by "Pro Git" by Chacon, Scott (2009-08-26), Apress. Kindle Edition. 
 
 This app has two fields for choosing the local and remote repos to use, and remembers the user's choice between sessions.
 
