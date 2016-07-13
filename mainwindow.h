@@ -37,6 +37,8 @@ public:
     static void SaveSettings();
     static void SaveSettings(const QJsonObject& jsonObj,
                              const string& fileNameStr);
+private:
+    void RunCmdDialog(const string& gitCmdStr);
 
 private slots:
     void on_btn_choose_git_root_clicked();

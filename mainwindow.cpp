@@ -209,6 +209,12 @@ size_t MainWindow::GetProcessResults(const string& cmd, const string& execDir,
       proc.setWorkingDirectory(execDir.c_str());
    }
 
+   if((0 == strList[0].compare("clone"))
+           && ((1 == strList.length())
+               || (0 != strList[1].compare("--help"))))
+   {
+       strList.push_back(ms_remoteRepoFileStr);
+   }
    // Execute
    proc.start(cmd.c_str(), strList);
 //    proc.start(cmd.c_str(), QStringList() << args.c_str() << "-R");
@@ -390,6 +396,15 @@ void MainWindow::SaveSettings(const QJsonObject& jsonObj,
     saveFile.write(saveDoc.toJson());
 }
 
+void MainWindow::RunCmdDialog(const string& gitCmdStr)
+{
+    TestDialog dlg;
+    dlg.SetDirectory(ms_rootGitDir.filePath());
+    dlg.SetCommand("git", gitCmdStr.c_str());
+    dlg.ExecuteLayout();
+    dlg.exec();
+}
+
 void MainWindow::on_btn_choose_git_root_clicked()
 {
    QString dir = QFileDialog::getExistingDirectory(this, tr("Open Directory"),
@@ -417,14 +432,16 @@ void MainWindow::on_comboBox_stash_currentIndexChanged(const QString &arg1)
 
 void MainWindow::on_btn_git_init_clicked()
 {
-   GitInitDialog initDlg;
-   initDlg.exec();
+    RunCmdDialog("init");
+//   GitInitDialog initDlg;
+//   initDlg.exec();
 }
 
 void MainWindow::on_btn_git_clone_clicked()
 {
-    GitCloneDialog cloneDlg;
-    cloneDlg.exec();
+    RunCmdDialog("clone");
+//    GitCloneDialog cloneDlg;
+//    cloneDlg.exec();
 }
 
 void MainWindow::on_btn_remote_repo_clicked()
@@ -444,104 +461,65 @@ void MainWindow::on_btn_remote_repo_clicked()
 
 void MainWindow::on_btn_git_branch_clicked()
 {
-    TestDialog dlg;
-    dlg.SetCommand("git", "branch");
-    dlg.ExecuteLayout();
-    dlg.exec();
+    RunCmdDialog("branch");
 }
 
 void MainWindow::on_btn_git_checkout_clicked()
 {
-    TestDialog dlg;
-    dlg.SetCommand("git", "checkout");
-    dlg.ExecuteLayout();
-    dlg.exec();
+    RunCmdDialog("checkout");
 }
 
 void MainWindow::on_btn_git_merge_clicked()
 {
-    TestDialog dlg;
-    dlg.SetCommand("git", "merge");
-    dlg.ExecuteLayout();
-    dlg.exec();
+    RunCmdDialog("merge");
 }
 
 void MainWindow::on_btn_git_fetch_clicked()
 {
-    TestDialog dlg;
-    dlg.SetCommand("git", "fetch");
-    dlg.ExecuteLayout();
-    dlg.exec();
+    RunCmdDialog("fetch");
 }
 
 void MainWindow::on_btn_git_rebase_clicked()
 {
-    TestDialog dlg;
-    dlg.SetCommand("git", "rebase");
-    dlg.ExecuteLayout();
-    dlg.exec();
+    RunCmdDialog("rebase");
 }
 
 void MainWindow::on_btn_git_add_clicked()
 {
-    TestDialog dlg;
-    dlg.SetCommand("git", "add");
-    dlg.ExecuteLayout();
-    dlg.exec();
+    RunCmdDialog("add");
 }
 
 void MainWindow::on_btn_git_stash_clicked()
 {
-    TestDialog dlg;
-    dlg.SetCommand("git", "stash");
-    dlg.ExecuteLayout();
-    dlg.exec();
+    RunCmdDialog("stash");
 }
 
 void MainWindow::on_btn_git_commit_clicked()
 {
-    TestDialog dlg;
-    dlg.SetCommand("git", "commit");
-    dlg.ExecuteLayout();
-    dlg.exec();
+    RunCmdDialog("commit");
 }
 
 void MainWindow::on_btn_git_push_clicked()
 {
-    TestDialog dlg;
-    dlg.SetCommand("git", "push");
-    dlg.ExecuteLayout();
-    dlg.exec();
+    RunCmdDialog("push");
 }
 
 void MainWindow::on_btn_git_pull_clicked()
 {
-    TestDialog dlg;
-    dlg.SetCommand("git", "pull");
-    dlg.ExecuteLayout();
-    dlg.exec();
+    RunCmdDialog("pull");
 }
 
 void MainWindow::on_btn_git_diff_clicked()
 {
-    TestDialog dlg;
-    dlg.SetCommand("git", "diff");
-    dlg.ExecuteLayout();
-    dlg.exec();
+    RunCmdDialog("diff");
 }
 
 void MainWindow::on_btn_git_status_clicked()
 {
-    TestDialog dlg;
-    dlg.SetCommand("git", "status");
-    dlg.ExecuteLayout();
-    dlg.exec();
+    RunCmdDialog("status");
 }
 
 void MainWindow::on_btn_git_log_clicked()
 {
-    TestDialog dlg;
-    dlg.SetCommand("git", "log");
-    dlg.ExecuteLayout();
-    dlg.exec();
+    RunCmdDialog("log");
 }

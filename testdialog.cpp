@@ -53,10 +53,17 @@ int stripLeadingWS(string& str)
 
 void stripTrailingLF(string& str)
 {
-    while('\n' == str[str.length() - 1])
+    if(0 == str.compare("\n\n"))
     {
-        const size_t len(str.length());
-        str.erase(len - 2, len - 1);
+        str.clear();
+    }
+    else
+    {
+        while('\n' == str[str.length() - 1])
+        {
+            const size_t len(str.length());
+            str.erase(len - 2, len - 1);
+        }
     }
 }
 
@@ -99,7 +106,16 @@ ToolTipLineType TestDialog::GetToolTipLineType(string& lineStr)
 //    "       "
     if(7 == stripLeadingWS(lineStr))
     {
-        return OptionLine;
+        const char c = lineStr[0];
+        if(0 < c)
+        {
+//            cout << lineStr[0] << endl;
+            return OptionLine;
+        }
+        else
+        {
+            cout << lineStr[0] << endl;
+        }
     }
     return HelpTextLine;
 }
@@ -282,7 +298,7 @@ size_t TestDialog::FindNextOptionDelim(size_t startPos, string& optionStr) const
 void TestDialog::HandleOptionLine(const string& nextLineStr, string& optionStr,
                                   string& tooltipStr, int& row, int &col)
 {
-    if(0 < tooltipStr.length())
+    if((0 < tooltipStr.length()) && (0 < optionStr.length()))
     {
         stripTrailingLF(tooltipStr);
 
