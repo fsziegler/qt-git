@@ -1,18 +1,11 @@
 #include "testdialog.h"
 #include "ui_testdialog.h"
-#include "mainwindow.h"
 #include "gitcheckbox.h"
 #include "optionparser.h"
-#include "gitjsontext.h"
 
-#include <QPushButton>
 #include <QMessageBox>
-#include <QRegularExpression>
 #include <QInputDialog>
-#include <QPalette>
-#include <QCryptographicHash>
 #include <QRadioButton>
-#include <QFile>
 #include <QJsonArray>
 
 #include <iostream>

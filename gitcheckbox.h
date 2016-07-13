@@ -1,8 +1,6 @@
 #ifndef GITCHECKBOX_H
 #define GITCHECKBOX_H
 
-#include <QObject>
-#include <QWidget>
 #include "testdialog.h"
 
 class GitCheckBox : public QCheckBox

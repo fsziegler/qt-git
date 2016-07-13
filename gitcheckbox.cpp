@@ -1,5 +1,4 @@
 #include "gitcheckbox.h"
-#include <QMessageBox>
 #include <QCryptographicHash>
 
 GitCheckBox::GitCheckBox(const QString &text, TestDialog* pTestDialog,

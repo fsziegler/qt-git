@@ -3,11 +3,8 @@
 
 #include <QFileDialog>
 #include <QProcess>
-#include <QDebug>
-#include <QRegularExpression>
 #include <QDesktopWidget>
 #include <QInputDialog>
-#include <QMessageBox>
 #include <QJsonDocument>
 
 #include "testdialog.h"

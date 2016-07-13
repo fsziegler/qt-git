@@ -4,7 +4,6 @@
 #include <QMainWindow>
 #include <QFileInfo>
 #include <QCheckBox>
-#include <QLabel>
 #include <QJsonObject>
 
 #include "gitjsontext.h"

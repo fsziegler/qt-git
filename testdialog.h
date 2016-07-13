@@ -5,7 +5,6 @@
 #include <QCheckBox>
 #include <QGridLayout>
 #include <QDialogButtonBox>
-#include <map>
 
 using namespace std;
 
