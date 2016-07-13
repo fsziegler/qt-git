@@ -1,4 +1,4 @@
-# qt-git
+# Power qt-git
 A power git tool designed to support many major commands through a cross-platform UI.
 
 This app has two fields for choosing the local and remote repos to use, and remembers the user's choice between sessions.
