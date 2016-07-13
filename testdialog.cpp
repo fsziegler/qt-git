@@ -527,11 +527,11 @@ void TestDialog::accept()
             {
                 args.push_back(match.captured(1).toStdString());
 
-                QMessageBox msgBox;
-                QString msg("Long Command: ");
-                msg.append(match.captured(1));
-                msgBox.setText(msg);
-                msgBox.exec();
+//                QMessageBox msgBox;
+//                QString msg("Long Command: ");
+//                msg.append(match.captured(1));
+//                msgBox.setText(msg);
+//                msgBox.exec();
             }
             else
             {
@@ -541,11 +541,11 @@ void TestDialog::accept()
                 {
                     args.push_back(match.captured(1).toStdString());
 
-                    QMessageBox msgBox;
-                    QString msg("Short Command: ");
-                    msg.append(match.captured(1));
-                    msgBox.setText(msg);
-                    msgBox.exec();
+//                    QMessageBox msgBox;
+//                    QString msg("Short Command: ");
+//                    msg.append(match.captured(1));
+//                    msgBox.setText(msg);
+//                    msgBox.exec();
                 }
             }
         }
@@ -572,7 +572,7 @@ void TestDialog::accept()
     for(auto itr: resultVect)
     {
         string str (itr);
-        msg.append(QString(str.c_str())).append(" ");
+        msg.append(QString(str.c_str())).append("\n");
     }
     msgBox.setText(msg);
     msgBox.exec();
