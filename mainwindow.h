@@ -7,13 +7,7 @@
 #include <QLabel>
 #include <QJsonObject>
 
-#include <string>
-#include <vector>
-
-using namespace std;
-
-typedef vector<string> TStrVect;
-typedef TStrVect::const_iterator TStrVectCItr;
+#include "gitjsontext.h"
 
 namespace Ui {
 class MainWindow;

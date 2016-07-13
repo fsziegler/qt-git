@@ -19,7 +19,8 @@ SOURCES += main.cpp\
     gitclonedialog.cpp \
     testdialog.cpp \
     gitcheckbox.cpp \
-    optionparser.cpp
+    optionparser.cpp \
+    gitjsontext.cpp
 
 HEADERS  += mainwindow.h \
     gitinitdialog.h \
@@ -27,9 +28,7 @@ HEADERS  += mainwindow.h \
     testdialog.h \
     gitcheckbox.h \
     optionparser.h \
-    gitjson.h
-
-windows:HEADERS  += gitjson.h
+    gitjsontext.h
 
 FORMS    += mainwindow.ui \
     gitinitdialog.ui \

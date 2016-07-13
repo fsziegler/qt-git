@@ -3,6 +3,7 @@
 #include "mainwindow.h"
 #include "gitcheckbox.h"
 #include "optionparser.h"
+#include "gitjsontext.h"
 
 #include <QPushButton>
 #include <QMessageBox>
@@ -15,10 +16,6 @@
 #include <QJsonArray>
 
 #include <iostream>
-
-#ifdef Q_OS_WIN
-    #include "gitjson.h"
-#endif
 
 using namespace std;
 
@@ -343,21 +340,9 @@ void TestDialog::SetCommand(const QString& cmd, const QString& arg0)
     m_cmd = cmd;
     m_arg0 = arg0;
 
-    TStrVect resultVect;
-    const QString helpFileStr(cmd + "-" + arg0 + ".txt");
-    QFile helpFile(helpFileStr);
-    if(helpFile.exists())
-    {
-       if(helpFile.open(QIODevice::ReadOnly | QIODevice::Text))
-       {
-           while (!helpFile.atEnd())
-           {
-               QByteArray line = helpFile.readLine();
-               resultVect.push_back(line.constData());
-           }
-       }
-    }
-    else
+    const string gitCmd(cmd.toStdString() + "-" + arg0.toStdString());
+    TStrVect resultVect = GitJsonText::instance().GetGitCmdVect(gitCmd);
+    if(0 == resultVect.size())
     {
         // Get the help text for this git command
         const string cmdStr("git");
