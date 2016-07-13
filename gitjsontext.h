@@ -21,7 +21,7 @@ public:
     const TStrVect& GetGitCmdVect(const string& gitCmdStr);
 
 private:
-#ifdef Q_OS_WIN
+#ifdef _WIN32
     void LoadGitPull();
     void LoadGitStash();
     void LoadGitPush();

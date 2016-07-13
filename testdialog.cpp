@@ -413,6 +413,7 @@ void TestDialog::SetCommand(const QString& cmd, const QString& arg0)
                                break;
                            default:
                                throw;
+                                break;
                        }
                    }
                    catch(...)

@@ -18,7 +18,7 @@ const TStrVect& GitJsonText::GetGitCmdVect(const string& gitCmdStr)
 
 GitJsonText::GitJsonText()
 {
-#ifdef Q_OS_WIN
+#ifdef _WIN32
     LoadGitPull();
     LoadGitStash();
     LoadGitPush();
@@ -37,7 +37,7 @@ GitJsonText::GitJsonText()
 #endif
 }
 
-#ifdef Q_OS_WIN
+#ifdef _WIN32
 void GitJsonText::LoadGitPull()
 {
     TStrVect strVect =
