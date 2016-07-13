@@ -714,7 +714,7 @@ QString TestDialog::GetXORChoiceDialog(string cmdStr, bool& ok, string& option)
     const size_t end(cmdStr.find(']'));
 
     ++pos0;
-    string opt(cmdStr.substr(pos0, pos1 - pos0 - 1));
+    string opt(cmdStr.substr(pos0, pos1 - pos0));
     optionsVect.push_back(opt);
 
     pos0 = ++pos1;
