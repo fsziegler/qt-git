@@ -12,6 +12,7 @@
 #include <QCryptographicHash>
 #include <QRadioButton>
 #include <QFile>
+#include <QJsonArray>
 
 #include <iostream>
 
@@ -367,11 +368,13 @@ void TestDialog::SetCommand(const QString& cmd, const QString& arg0)
     title.append(arg0.toStdString());
     SetTitle(title.c_str());
     cout << endl << "***** " << title << endl;
+    QJsonArray jsonArry;
 
     // Parse all the OPTIONs
     for(TStrVectCItr itr = resultVect.begin(); resultVect.end() != itr; ++itr)
     {
        string lineStr(*itr);
+       jsonArry.append(QString(lineStr.c_str()));
        QRegularExpressionMatch match = reIsSection.match(lineStr.c_str());
        if(match.hasMatch())
        {
@@ -387,6 +390,7 @@ void TestDialog::SetCommand(const QString& cmd, const QString& arg0)
                    try
                    {
                        lineStr = *itr;
+                       jsonArry.append(QString(lineStr.c_str()));
                        switch(GetToolTipLineType(lineStr))
                        {
                            // Append the help text for each option in its tool
@@ -431,6 +435,11 @@ void TestDialog::SetCommand(const QString& cmd, const QString& arg0)
            }
        }
     }
+    string jsonFileStr(title);
+    jsonFileStr.append(".json");
+    QJsonObject jsonObj;
+    jsonObj[title.c_str()] = jsonArry;
+    MainWindow::SaveSettings(jsonObj, jsonFileStr);
 }
 
 void TestDialog::SetTitle(const QString& title)

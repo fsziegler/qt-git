@@ -26,7 +26,10 @@ HEADERS  += mainwindow.h \
     gitclonedialog.h \
     testdialog.h \
     gitcheckbox.h \
-    optionparser.h
+    optionparser.h \
+    gitjson.h
+
+windows:HEADERS  += gitjson.h
 
 FORMS    += mainwindow.ui \
     gitinitdialog.ui \

@@ -41,6 +41,8 @@ public:
                                             int width=120);
     static void ReadSettings();
     static void SaveSettings();
+    static void SaveSettings(const QJsonObject& jsonObj,
+                             const string& fileNameStr);
 
 private slots:
     void on_btn_choose_git_root_clicked();
@@ -80,7 +82,7 @@ private slots:
     void on_btn_git_log_clicked();
 
 private:
-    static QJsonObject ms_settings;
+    static QJsonObject ms_jsonSettings;
     static QFileInfo ms_rootGitDir;
     static QString ms_settingsFileStr;
     static QString ms_remoteRepoFileStr;

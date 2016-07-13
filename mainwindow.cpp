@@ -19,14 +19,14 @@
 
 using namespace std;
 
-QJsonObject MainWindow::ms_settings;
+QJsonObject MainWindow::ms_jsonSettings;
 QFileInfo MainWindow::ms_rootGitDir;
 QString MainWindow::ms_settingsFileStr;
 QString MainWindow::ms_remoteRepoFileStr;
 
 void MainWindow::ClearStaticMembers()
 {
-    if(!ms_settings.isEmpty())
+    if(!ms_jsonSettings.isEmpty())
     {
         throw;
     }
@@ -364,23 +364,29 @@ void MainWindow::ReadSettings()
 
     QJsonDocument loadDoc(QJsonDocument::fromJson(saveData));
 
-    ms_settings = loadDoc.object();
-    ms_rootGitDir = ms_settings["Git Root Directory"].toString();
-    ms_remoteRepoFileStr = ms_settings["Git Remote Repo"].toString();
+    ms_jsonSettings = loadDoc.object();
+    ms_rootGitDir = ms_jsonSettings["Git Root Directory"].toString();
+    ms_remoteRepoFileStr = ms_jsonSettings["Git Remote Repo"].toString();
 }
 
 void MainWindow::SaveSettings()
 {
-    ms_settings["Git Root Directory"] = ms_rootGitDir.filePath();
-    ms_settings["Git Remote Repo"] = ms_remoteRepoFileStr;
+    ms_jsonSettings["Git Root Directory"] = ms_rootGitDir.filePath();
+    ms_jsonSettings["Git Remote Repo"] = ms_remoteRepoFileStr;
 
-    QFile saveFile(ms_settingsFileStr);
+    SaveSettings(ms_jsonSettings, ms_settingsFileStr.toStdString());
+}
+
+void MainWindow::SaveSettings(const QJsonObject& jsonObj,
+                              const string& fileNameStr)
+{
+    QFile saveFile(fileNameStr.c_str());
 
     if (!saveFile.open(QIODevice::WriteOnly))
     {
         throw;
     }
-    QJsonDocument saveDoc(ms_settings);
+    QJsonDocument saveDoc(jsonObj);
     saveFile.write(saveDoc.toJson());
 }
 
