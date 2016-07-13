@@ -71,6 +71,7 @@ private slots:
     void accept();
     void CBStateChanged(int i);
 
+    void StripChar(char c, string& text);
     QString GetXORChoiceDialog(string title, bool& ok, string& option);
     void ChangeEnabledState(const GitCheckBox* cb);
 private:

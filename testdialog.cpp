@@ -700,6 +700,16 @@ void TestDialog::CBStateChanged(int i)
     }   //  for(TStrCBMapCItr itr ...
 }
 
+void TestDialog::StripChar(char c, string& text)
+{
+    size_t pos = text.find_first_of(c);
+    while(string::npos != pos)
+    {
+        text.erase(pos, 1);
+        pos = text.find_first_of(c);
+    }
+}
+
 QString TestDialog::GetXORChoiceDialog(string cmdStr, bool& ok, string& option)
 {
     //--recurse-submodules[=yes|on-demand|no]
@@ -714,17 +724,18 @@ QString TestDialog::GetXORChoiceDialog(string cmdStr, bool& ok, string& option)
     const size_t end(cmdStr.find(']'));
 
     ++pos0;
-    string opt(cmdStr.substr(pos0, pos1 - pos0));
-    optionsVect.push_back(opt);
-
-    pos0 = ++pos1;
+    string opt;
     while(string::npos != (pos1 = cmdStr.find('|', pos0)))
     {
         opt = cmdStr.substr(pos0, pos1 - pos0);
+        StripChar('(', opt);
+        StripChar(')', opt);
         optionsVect.push_back(opt);
         pos0 = ++pos1;
     }
     opt = cmdStr.substr(pos0, end - pos0);
+    StripChar('(', opt);
+    StripChar(')', opt);
     optionsVect.push_back(opt);
 
     int row(0), col(0);
