@@ -10,8 +10,6 @@
 #include <QMessageBox>
 #include <QJsonDocument>
 
-#include "gitinitdialog.h"
-#include "gitclonedialog.h"
 #include "testdialog.h"
 
 #include <iostream>

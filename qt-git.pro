@@ -15,22 +15,16 @@ QMAKE_CXXFLAGS += -std=c++11
 
 SOURCES += main.cpp\
         mainwindow.cpp \
-    gitinitdialog.cpp \
-    gitclonedialog.cpp \
     testdialog.cpp \
     gitcheckbox.cpp \
     optionparser.cpp \
     gitjsontext.cpp
 
 HEADERS  += mainwindow.h \
-    gitinitdialog.h \
-    gitclonedialog.h \
     testdialog.h \
     gitcheckbox.h \
     optionparser.h \
     gitjsontext.h
 
 FORMS    += mainwindow.ui \
-    gitinitdialog.ui \
-    gitclonedialog.ui \
     testdialog.ui
