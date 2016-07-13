@@ -16,6 +16,10 @@
 
 #include <iostream>
 
+#ifdef Q_OS_WIN
+    #include "gitjson.h"
+#endif
+
 using namespace std;
 
 TestDialog::TestDialog(QWidget *parent) :
