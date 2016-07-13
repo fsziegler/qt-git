@@ -425,11 +425,6 @@ void TestDialog::SetCommand(const QString& cmd, const QString& arg0)
            }
        }
     }
-    string jsonFileStr(title);
-    jsonFileStr.append(".json");
-    QJsonObject jsonObj;
-    jsonObj[title.c_str()] = jsonArry;
-    MainWindow::SaveSettings(jsonObj, jsonFileStr);
 }
 
 void TestDialog::SetTitle(const QString& title)
