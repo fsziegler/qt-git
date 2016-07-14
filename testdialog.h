@@ -48,6 +48,7 @@ public:
             string& tooltipStr, // The current tool tip string
             int& row, int &col);
     size_t FindNextOptionDelim(size_t startPos, string& optionStr) const;
+    void UpdateRowCol(int& row, int &col);
     // HandleOptionLine() creates a checkbox from optionStr and tooltipStr if
     // both are populated; otherwise it continues to populate an incomplete
     // optionStr.

@@ -288,6 +288,12 @@ size_t TestDialog::FindNextOptionDelim(size_t startPos, string& optionStr) const
     return string::npos;
 }
 
+void TestDialog::UpdateRowCol(int& row, int &col)
+{
+    row = (1 == col ? row + 1 : row);
+    col = 0;
+}
+
 void TestDialog::HandleOptionLine(const string& nextLineStr, string& optionStr,
                                   string& tooltipStr, int& row, int &col)
 {
@@ -317,8 +323,7 @@ void TestDialog::HandleOptionLine(const string& nextLineStr, string& optionStr,
             parsedOptionStr = optionStr.substr(pos0);
             stripLeadingWS(parsedOptionStr);
             optionStrVect.push_back(parsedOptionStr);
-            row = (1 == col ? row + 1 : row);
-            col = 0;
+            UpdateRowCol(row, col);
         }
         for(auto itr: optionStrVect)
         {
@@ -332,7 +337,7 @@ void TestDialog::HandleOptionLine(const string& nextLineStr, string& optionStr,
         }
         if((1 < optionStrVect.size()) && (1 == optionStrVect.size() % 2))
         {
-            row = (1 == col ? row + 1 : row);
+            UpdateRowCol(row, col);
             col = 0;
         }
 
