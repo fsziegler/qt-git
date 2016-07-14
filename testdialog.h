@@ -27,6 +27,16 @@ enum ToolTipLineType
     NextSectionLine,
 };
 
+struct CheckBoxItem
+{
+    string text;
+    string tooltip;
+};
+
+typedef vector<CheckBoxItem> CheckBoxItemVect;
+typedef CheckBoxItemVect::const_iterator CheckBoxItemVectCItr;
+
+
 class TestDialog : public QDialog
 {
     Q_OBJECT
@@ -46,9 +56,9 @@ public:
     bool HandleSpecialOptionLine(
             string& optionStr,  // The current checkbox string
             string& tooltipStr, // The current tool tip string
-            int& row, int &col);
+            CheckBoxItemVect& cbItemVect);
     size_t FindNextOptionDelim(size_t startPos, string& optionStr) const;
-    void UpdateRowCol(int& row, int &col);
+    void UpdateRowCol(int numCols, int& row, int &col);
     // HandleOptionLine() creates a checkbox from optionStr and tooltipStr if
     // both are populated; otherwise it continues to populate an incomplete
     // optionStr.
@@ -56,7 +66,8 @@ public:
             const string& nextLineStr,  // The next line to process
             string& optionStr,          // The current checkbox string
             string& tooltipStr,         // The current tool tip string
-            int& row, int &col);
+            CheckBoxItemVect& cbItemVect);
+    void HandleOptionLine(int& row, int &col, CheckBoxItemVect& cbItemVect);
     // SetCommand() constructs the dialog box from the git command help,
     // parsing all commands under the OPTIONS section
     void SetCommand(const QString& cmd, const QString& arg0);

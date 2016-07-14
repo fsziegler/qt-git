@@ -12,6 +12,9 @@
 
 using namespace std;
 
+const int addColumnThreshold(15);
+const int minCols(2);
+
 TestDialog::TestDialog(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::TestDialog),
@@ -167,7 +170,7 @@ const QString reSubOptionStr(
 const QRegularExpression reSubOption(reSubOptionStr);
 const QRegularExpression reWithNoOptParam("^(--)\\[no-\\](.+)");  // --[no-].+
 bool TestDialog::HandleSpecialOptionLine(string& optionStr, string& tooltipStr,
-                                     int& row, int &col)
+                                         CheckBoxItemVect& cbItemVect)
 {
     QRegularExpressionMatch subOptMatch = reSubOption.match(optionStr.c_str());
     const string som0 = subOptMatch.captured(0).toStdString();
@@ -196,8 +199,6 @@ bool TestDialog::HandleSpecialOptionLine(string& optionStr, string& tooltipStr,
             const string s2(noOptParamMatch.captured(2).toStdString());
             optnStrVect.push_back(string(s1 + s2));
             optnStrVect.push_back(string(s1 + "no-" + s2));
-            row = (1 == col ? row + 1 : row);
-            col = 0;
         }
         else
         {
@@ -207,21 +208,14 @@ bool TestDialog::HandleSpecialOptionLine(string& optionStr, string& tooltipStr,
         for(auto itr: optnStrVect)
         {
             itr.c_str();
-//            bool b = noOptParamMatch.hasMatch();
             if((0 == parameters.length()) || noOptParamMatch.hasMatch())
             {
-                if(('-' == itr[0])
-                    || ('<' == itr[0])
-                    || (0 == itr.compare(0, 4, "[--]")))
-                {
-                    AddCheckbox(itr.c_str(), tooltipStr.c_str(), row, col);
-                    cout << itr << endl;
-                }
-                else
-                {
-                    AddCheckbox(itr.c_str(), tooltipStr.c_str(), row, col);
-                    cout << itr << endl;
-                }
+                CheckBoxItem cbItem;
+                cbItem.tooltip = tooltipStr;
+                cbItem.text = itr.c_str();
+                cbItemVect.push_back(cbItem);
+//                AddCheckbox(itr.c_str(), tooltipStr.c_str(), row, col);
+                cout << itr << endl;
             }
             else
             {
@@ -233,12 +227,17 @@ bool TestDialog::HandleSpecialOptionLine(string& optionStr, string& tooltipStr,
                     string chkBoxStr(itr);
                     if(' ' == optionStr[chkBoxStr.length()])
                     {
-                        chkBoxStr.append(' ' != chkBoxStr[chkBoxStr.length() - 1] \
-                                         ? " " : "");
+                        chkBoxStr.append(' ' != chkBoxStr[
+                                chkBoxStr.length() - 1] ? " " : "");
                     }
                     chkBoxStr.append(*itr2);
-                    AddCheckbox(chkBoxStr.c_str(), tooltipStr.c_str(), row,
-                                col);
+
+                    CheckBoxItem cbItem;
+                    cbItem.tooltip = tooltipStr;
+                    cbItem.text = chkBoxStr;
+                    cbItemVect.push_back(cbItem);
+//                    AddCheckbox(chkBoxStr.c_str(), tooltipStr.c_str(), row,
+//                                col);
                     cout << chkBoxStr << endl;
                 }
             }
@@ -288,14 +287,16 @@ size_t TestDialog::FindNextOptionDelim(size_t startPos, string& optionStr) const
     return string::npos;
 }
 
-void TestDialog::UpdateRowCol(int& row, int &col)
+void TestDialog::UpdateRowCol(int numCols, int& row, int &col)
 {
-    row = (1 == col ? row + 1 : row);
-    col = 0;
+    const int maxCol(numCols - 1);
+    row = (maxCol == col ? row + 1 : row);
+    col = (maxCol == col ? 0 : col + 1);
 }
 
 void TestDialog::HandleOptionLine(const string& nextLineStr, string& optionStr,
-                                  string& tooltipStr, int& row, int &col)
+                                  string& tooltipStr,
+                                  CheckBoxItemVect& cbItemVect)
 {
     if((0 < tooltipStr.length()) && (0 < optionStr.length()))
     {
@@ -303,10 +304,14 @@ void TestDialog::HandleOptionLine(const string& nextLineStr, string& optionStr,
 
         size_t pos0(0);
         size_t pos1(FindNextOptionDelim(0, optionStr));
-        TStrVect optionStrVect;
+//        TStrVect optionStrVect;
+        CheckBoxItemVect tmpCBItemVect;
+        CheckBoxItem tmpCBItem;
         if(string::npos == pos1 )
         {
-            optionStrVect.push_back(optionStr);
+            tmpCBItem.text = optionStr;
+            tmpCBItemVect.push_back(tmpCBItem);
+//            optionStrVect.push_back(optionStr);
         }
         else
         {
@@ -315,31 +320,41 @@ void TestDialog::HandleOptionLine(const string& nextLineStr, string& optionStr,
             {
                 string parsedOptionStr = optionStr.substr(pos0, pos1 - pos0);
                 stripLeadingWS(parsedOptionStr);
-                optionStrVect.push_back(parsedOptionStr);
+                tmpCBItem.text = parsedOptionStr;
+                tmpCBItemVect.push_back(tmpCBItem);
+//                optionStrVect.push_back(parsedOptionStr);
                 pos0 = pos1;
                 pos1 = FindNextOptionDelim(++pos0, optionStr);
             }
             while(string::npos != pos1);
             parsedOptionStr = optionStr.substr(pos0);
             stripLeadingWS(parsedOptionStr);
-            optionStrVect.push_back(parsedOptionStr);
-            UpdateRowCol(row, col);
+            tmpCBItem.text = parsedOptionStr;
+            tmpCBItemVect.push_back(tmpCBItem);
+//            optionStrVect.push_back(parsedOptionStr);
+//            UpdateRowCol(row, col);
         }
-        for(auto itr: optionStrVect)
+//        for(auto itr: optionStrVect)
+        for(CheckBoxItemVectCItr itr = tmpCBItemVect.begin();
+            tmpCBItemVect.end() != itr; ++itr)
         {
-            itr.c_str();
+            CheckBoxItem itrCBItem = (*itr);
 //            const char* str = itr.c_str();
 //            const string& optStr = *itr;
-            if(!HandleSpecialOptionLine(itr, tooltipStr, row, col))
+//            if(!HandleSpecialOptionLine(itr, tooltipStr, cbItemVect))
+            if(!HandleSpecialOptionLine(itrCBItem.text, tooltipStr, cbItemVect))
             {
-                AddCheckbox(itr.c_str(), tooltipStr.c_str(), row, col);
+                tmpCBItem.text = (*itr).text;
+                tmpCBItem.tooltip = (*itr).tooltip;
+                cbItemVect.push_back(tmpCBItem);
+//                AddCheckbox(itr.c_str(), tooltipStr.c_str(), row, col);
             }
         }
-        if((1 < optionStrVect.size()) && (1 == optionStrVect.size() % 2))
-        {
-            UpdateRowCol(row, col);
-            col = 0;
-        }
+//        if((1 < optionStrVect.size()) && (1 == optionStrVect.size() % 2))
+//        {
+//            UpdateRowCol(row, col);
+//            col = 0;
+//        }
 
         optionStr.clear();
         tooltipStr.clear();
@@ -372,6 +387,7 @@ void TestDialog::SetCommand(const QString& cmd, const QString& arg0)
     SetTitle(title.c_str());
     cout << endl << "***** " << title << endl;
     QJsonArray jsonArry;
+    CheckBoxItemVect cbItemVect;
 
     // Parse all the OPTIONs
     for(TStrVectCItr itr = resultVect.begin(); resultVect.end() != itr; ++itr)
@@ -384,7 +400,6 @@ void TestDialog::SetCommand(const QString& cmd, const QString& arg0)
            bool firstOpt(true);
            if(0 == lineStr.compare("OPTIONS"))
            {
-               int row(0), col(0);
                string optionStr;
                string tooltipStr;
                do
@@ -421,7 +436,7 @@ void TestDialog::SetCommand(const QString& cmd, const QString& arg0)
                            // Parse the command line option
                            case OptionLine:
                                HandleOptionLine(lineStr, optionStr, tooltipStr,
-                                                row, col);
+                                                cbItemVect);
                                break;
                            case NextSectionLine:
                                break;
@@ -435,9 +450,53 @@ void TestDialog::SetCommand(const QString& cmd, const QString& arg0)
 //                       int j;
                    }
                } while(NextSectionLine != GetToolTipLineType(lineStr));
-               HandleOptionLine(lineStr, optionStr, tooltipStr, row, col);
+               HandleOptionLine(lineStr, optionStr, tooltipStr, cbItemVect);
            }
        }
+    }
+    int row(0), col(0);
+    m_lastRow = 0;
+
+    const int quot(div(cbItemVect.size(), addColumnThreshold).quot);
+    const int maxCols(minCols >= quot ? minCols : quot);
+    for(CheckBoxItemVectCItr itr = cbItemVect.begin(); cbItemVect.end() != itr;
+        ++itr)
+    {
+        // Populate tmpCBItemVect with all item1s having the same tooltip
+        CheckBoxItemVect tmpCBItemVect;
+        const string tooltip((*itr).tooltip);
+        do
+        {
+            const string txt((*itr).text);
+            tmpCBItemVect.push_back(*itr);
+            CheckBoxItemVectCItr tmpItr = itr + 1;
+            if((cbItemVect.end() == tmpItr)
+                    || (0 != (*tmpItr).tooltip.compare(tooltip)))
+            {
+                break;
+            }
+            ++itr;
+        } while(cbItemVect.end() != itr);
+
+        // Adjust row/column so that same tooltip items start at column 0 if
+        // they will wrap around
+        bool tooManyCols(maxCols < col + (int)tmpCBItemVect.size());
+        if((1 < tmpCBItemVect.size()) && (tooManyCols))
+        {
+            ++row;
+            col = 0;
+        }
+
+        // Populate same tooltip check boxes in dialog box
+        const QString cbTooltip(tooltip.c_str());
+        for(CheckBoxItemVectCItr itr2 = tmpCBItemVect.begin();
+            tmpCBItemVect.end() != itr2; ++itr2)
+        {
+            const CheckBoxItem& cbItem = (*itr2);
+            const QString cbTitle(cbItem.text.c_str());
+            AddCheckbox(cbTitle, cbTooltip, row, col);
+            UpdateRowCol(maxCols, row, col);
+        }
     }
 }
 
@@ -478,8 +537,8 @@ void TestDialog::AddCheckbox(const QString& cbTitle, const QString& cbTooltip,
     cb->Connect(this);
 
     m_lastRow = (row > m_lastRow ? row : m_lastRow);
-    row = (1 == col ? row + 1  : row);
-    col = (0 == col ? 1 : 0);
+//    row = (1 == col ? row + 1  : row);
+//    col = (0 == col ? 1 : 0);
 }
 
 void TestDialog::ExecuteLayout()
