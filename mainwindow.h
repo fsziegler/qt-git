@@ -8,6 +8,9 @@
 
 #include "gitjsontext.h"
 
+void ExceptionHandler();
+void ExceptionHandler(const string& what);
+
 namespace Ui {
 class MainWindow;
 }

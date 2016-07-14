@@ -99,13 +99,11 @@ ToolTipLineType TestDialog::GetToolTipLineType(string& lineStr)
     {
         return NextSectionLine;
     }
-//    "       "
     if(7 == stripLeadingWS(lineStr))
     {
         const char c = lineStr[0];
         if(0 < c)
         {
-//            cout << lineStr[0] << endl;
             return OptionLine;
         }
         else
@@ -114,55 +112,6 @@ ToolTipLineType TestDialog::GetToolTipLineType(string& lineStr)
         }
     }
     return HelpTextLine;
-}
-
-void ParseSingleOption(const string& option, TStrVect& parsedOpts)
-{
-    int nested(0);
-    size_t ptr(0);
-    while(option.length() > ptr)
-    {
-        nested += ('[' == option[ptr] ? 1 : 0);
-        ++ptr;
-    }
-    if(2 < nested)
-    {
-        throw;
-    }
-
-    // Remove outer square brackets
-    string optnCpy(option);
-    ptr = 0;
-    while('[' != optnCpy[0])
-    {
-        ++ptr;
-    }
-    optnCpy.erase(0, ptr + 1);
-    ptr = optnCpy.length() - 1;
-    while(']' != optnCpy[ptr])
-    {
-        --ptr;
-    }
-    optnCpy.erase(ptr, optnCpy.length() - 1);
-
-    if(1 == nested)
-    {
-        parsedOpts.push_back(optnCpy);
-    }
-    if(2 == nested)
-    {
-        size_t ptr_l = optnCpy.find_first_of('[');
-        size_t ptr_r = optnCpy.find_first_of(']');
-
-        string optnWith(optnCpy);
-        optnWith.erase(ptr_l, 1);
-        optnWith.erase(ptr_r-1, 1);
-        parsedOpts.push_back(optnWith);
-
-        string optnWithOut(optnCpy);
-        optnWithOut.erase(ptr_l, ptr_r - ptr_l + 1);
-        parsedOpts.push_back(optnWith);
-    }
 }
 
 const QString reSubOptionStr(
@@ -214,7 +163,6 @@ bool TestDialog::HandleSpecialOptionLine(string& optionStr, string& tooltipStr,
                 cbItem.tooltip = tooltipStr;
                 cbItem.text = itr.c_str();
                 cbItemVect.push_back(cbItem);
-//                AddCheckbox(itr.c_str(), tooltipStr.c_str(), row, col);
                 cout << itr << endl;
             }
             else
@@ -236,8 +184,6 @@ bool TestDialog::HandleSpecialOptionLine(string& optionStr, string& tooltipStr,
                     cbItem.tooltip = tooltipStr;
                     cbItem.text = chkBoxStr;
                     cbItemVect.push_back(cbItem);
-//                    AddCheckbox(chkBoxStr.c_str(), tooltipStr.c_str(), row,
-//                                col);
                     cout << chkBoxStr << endl;
                 }
             }
@@ -260,8 +206,6 @@ TCharPairVect groupDelim =
 
 size_t TestDialog::FindNextOptionDelim(size_t startPos, string& optionStr) const
 {
-//    01234567890123456789
-//    abc,defg,hijkl
     int net(0);
     size_t pos(startPos);
     while(optionStr.length() > pos + 1)
@@ -270,8 +214,6 @@ size_t TestDialog::FindNextOptionDelim(size_t startPos, string& optionStr) const
         for(TCharPairVect::const_iterator itr = groupDelim.begin();
             groupDelim.end() != itr; ++itr)
         {
-//            char c = (*itr).first;
-//            c = (*itr).second;
             net += ((*itr).first == optionStr[pos] ? 1 : 0);
             net -= ((*itr).second == optionStr[pos] ? 1 : 0);
         }
@@ -304,14 +246,12 @@ void TestDialog::HandleOptionLine(const string& nextLineStr, string& optionStr,
 
         size_t pos0(0);
         size_t pos1(FindNextOptionDelim(0, optionStr));
-//        TStrVect optionStrVect;
         CheckBoxItemVect tmpCBItemVect;
         CheckBoxItem tmpCBItem;
         if(string::npos == pos1 )
         {
             tmpCBItem.text = optionStr;
             tmpCBItemVect.push_back(tmpCBItem);
-//            optionStrVect.push_back(optionStr);
         }
         else
         {
@@ -322,7 +262,6 @@ void TestDialog::HandleOptionLine(const string& nextLineStr, string& optionStr,
                 stripLeadingWS(parsedOptionStr);
                 tmpCBItem.text = parsedOptionStr;
                 tmpCBItemVect.push_back(tmpCBItem);
-//                optionStrVect.push_back(parsedOptionStr);
                 pos0 = pos1;
                 pos1 = FindNextOptionDelim(++pos0, optionStr);
             }
@@ -331,30 +270,18 @@ void TestDialog::HandleOptionLine(const string& nextLineStr, string& optionStr,
             stripLeadingWS(parsedOptionStr);
             tmpCBItem.text = parsedOptionStr;
             tmpCBItemVect.push_back(tmpCBItem);
-//            optionStrVect.push_back(parsedOptionStr);
-//            UpdateRowCol(row, col);
         }
-//        for(auto itr: optionStrVect)
         for(CheckBoxItemVectCItr itr = tmpCBItemVect.begin();
             tmpCBItemVect.end() != itr; ++itr)
         {
             CheckBoxItem itrCBItem = (*itr);
-//            const char* str = itr.c_str();
-//            const string& optStr = *itr;
-//            if(!HandleSpecialOptionLine(itr, tooltipStr, cbItemVect))
             if(!HandleSpecialOptionLine(itrCBItem.text, tooltipStr, cbItemVect))
             {
                 tmpCBItem.text = (*itr).text;
                 tmpCBItem.tooltip = (*itr).tooltip;
                 cbItemVect.push_back(tmpCBItem);
-//                AddCheckbox(itr.c_str(), tooltipStr.c_str(), row, col);
             }
         }
-//        if((1 < optionStrVect.size()) && (1 == optionStrVect.size() % 2))
-//        {
-//            UpdateRowCol(row, col);
-//            col = 0;
-//        }
 
         optionStr.clear();
         tooltipStr.clear();
@@ -441,13 +368,28 @@ void TestDialog::SetCommand(const QString& cmd, const QString& arg0)
                            case NextSectionLine:
                                break;
                            default:
-                               throw;
-                                break;
+                               throw runtime_error("Unknown "
+                                                   "GetToolTipLineType()");
+                               break;
                        }
+                   }
+                   catch(exception& e)
+                   {
+                       QMessageBox msgBox;
+                       QString msg("Exception throw: ");
+                       msg.append(e.what());
+                       msgBox.setText(msg);
+                       msgBox.exec();
                    }
                    catch(...)
                    {
-//                       int j;
+                       QMessageBox msgBox;
+                       QString msg("Exception throw: UNKNOWN");
+                       msg.append(__FILE__);
+                       msg.append(": ");
+                       msg.append(__LINE__);
+                       msgBox.setText(msg);
+                       msgBox.exec();
                    }
                } while(NextSectionLine != GetToolTipLineType(lineStr));
                HandleOptionLine(lineStr, optionStr, tooltipStr, cbItemVect);

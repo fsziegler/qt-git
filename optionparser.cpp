@@ -20,7 +20,8 @@ bool OptionParser::RemoveChar(char c, string& str) const
 {
     if(str.find_first_of(c) != str.find_last_of(c))
     {
-        throw;
+        throw runtime_error("OptionParser::RemoveChar():\n"
+                            "str.find_first_of(c) != str.find_last_of(c)");
     }
     size_t pos = str.find(c);
     if(string::npos != pos)
@@ -82,7 +83,10 @@ void OptionParser::ParseNextDelimOption(char delimL, char delimR,
             && ((prefix[0] != optionStr[endR])
                 || (delimL != optionStr[endR + 1])))
     {
-        throw;
+        throw runtime_error("OptionParser::ParseNextDelimOption():\n"
+                            "if((delimL != optionStr[endR])"
+                                    "&& ((prefix[0] != optionStr[endR])"
+                                        "|| (delimL != optionStr[endR + 1])))");
     }
     // Count the nested layers and find the terminating delimiter
     int net(0);

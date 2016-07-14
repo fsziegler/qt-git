@@ -6,6 +6,7 @@
 #include <QDesktopWidget>
 #include <QInputDialog>
 #include <QJsonDocument>
+#include <QMessageBox>
 
 #include "testdialog.h"
 
@@ -19,15 +20,39 @@ QFileInfo MainWindow::ms_rootGitDir;
 QString MainWindow::ms_settingsFileStr;
 QString MainWindow::ms_remoteRepoFileStr;
 
+void ExceptionHandler()
+{
+    ExceptionHandler("Exception throw: UNKNOWN");
+}
+
+void ExceptionHandler(const string& what)
+{
+    QMessageBox msgBox;
+    QString msg("Exception throw: ");
+    msg.append(what.c_str());
+    msgBox.setText(msg);
+    msgBox.exec();
+}
+
 void MainWindow::ClearStaticMembers()
 {
     if(!ms_jsonSettings.isEmpty())
     {
-        throw;
+        QString error("MainWindow::ClearStaticMembers(): "
+                      "ms_jsonSettings.isEmpty()\n");
+        error.append(__FILE__);
+        error.append(": ");
+        error.append(__LINE__);
+        throw runtime_error(error.toStdString());
     }
     if(ms_rootGitDir.exists())
     {
-        throw;
+        QString error("MainWindow::ClearStaticMembers(): "
+                      "ms_rootGitDir.exists()\n");
+        error.append(__FILE__);
+        error.append(": ");
+        error.append(__LINE__);
+        throw runtime_error(error.toStdString());
     }
     ms_settingsFileStr.clear();
     ms_remoteRepoFileStr.clear();
@@ -38,24 +63,36 @@ MainWindow::MainWindow(const QString& cmdStr, QWidget *parent) :
    mc_appDir(QFileInfo(cmdStr).path()),
    ui(new Ui::MainWindow)
 {
-   ClearStaticMembers();
-   ms_settingsFileStr.append(mc_appDir.filePath()).append("/settings.json");
-   ReadSettings();
-   ui->setupUi(this);
-   ui->label_git_root->setText(ms_rootGitDir.filePath());
-   ui->label_remote_repo->setText(ms_remoteRepoFileStr);
+    try
+    {
+        ClearStaticMembers();
+        ms_settingsFileStr.append(mc_appDir.filePath()).append("/settings.json");
+        ReadSettings();
+        ui->setupUi(this);
+        ui->label_git_root->setText(ms_rootGitDir.filePath());
+        ui->label_remote_repo->setText(ms_remoteRepoFileStr);
 
-   const QRect screenRect(QApplication::desktop()->availableGeometry());
-   if((screenRect.width() >= width()) &&
-         (screenRect.height() >= height()))
-   {
-      setGeometry(
-         QStyle::alignedRect(
-            Qt::LeftToRight,
-            Qt::AlignCenter,
-            size(),
-            QApplication::desktop()->availableGeometry()));
-   }
+        const QRect screenRect(QApplication::desktop()->availableGeometry());
+        if((screenRect.width() >= width()) &&
+              (screenRect.height() >= height()))
+        {
+           setGeometry(
+              QStyle::alignedRect(
+                 Qt::LeftToRight,
+                 Qt::AlignCenter,
+                 size(),
+                 QApplication::desktop()->availableGeometry()));
+        }
+    }
+    catch(exception& e)
+    {
+        ExceptionHandler(e.what());
+    }
+    catch(...)
+    {
+        ExceptionHandler();
+    }
+
    setWindowTitle("Fred's Power qt-git");
 
    OnGitStatus();
@@ -358,7 +395,15 @@ void MainWindow::ReadSettings()
 
     if (!loadFile.open(QIODevice::ReadOnly))
     {
-        throw;
+        QString error("MainWindow::ReadSettings(): "
+                      "!loadFile.open(QIODevice::ReadOnly)\n"
+                      "File = ");
+        error.append(ms_settingsFileStr);
+        error.append("\n");
+        error.append(__FILE__);
+        error.append(": ");
+        error.append(__LINE__);
+        throw runtime_error(error.toStdString());
     }
 
     QByteArray saveData = loadFile.readAll();
@@ -385,7 +430,15 @@ void MainWindow::SaveSettings(const QJsonObject& jsonObj,
 
     if (!saveFile.open(QIODevice::WriteOnly))
     {
-        throw;
+        QString error("MainWindow::SaveSettings(): "
+                      "!saveFile.open(QIODevice::WriteOnly)\n"
+                      "File = ");
+        error.append(QString(fileNameStr.c_str()));
+        error.append("\n");
+        error.append(__FILE__);
+        error.append(": ");
+        error.append(__LINE__);
+        throw runtime_error(error.toStdString());
     }
     QJsonDocument saveDoc(jsonObj);
     saveFile.write(saveDoc.toJson());

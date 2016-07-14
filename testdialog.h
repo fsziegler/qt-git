@@ -36,7 +36,6 @@ struct CheckBoxItem
 typedef vector<CheckBoxItem> CheckBoxItemVect;
 typedef CheckBoxItemVect::const_iterator CheckBoxItemVectCItr;
 
-
 class TestDialog : public QDialog
 {
     Q_OBJECT
