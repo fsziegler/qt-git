@@ -879,6 +879,7 @@ QString TestDialog::GetXORChoiceDialog(string cmdStr, bool& ok, string& option)
 
     vector<QRadioButton*> btnVect;
     const QString NoOptionStr("(No Option)");
+    const QString octalStr("0xxx");
     if(optParam)
     {
         QRadioButton* rb = new QRadioButton(NoOptionStr, optDlg);
@@ -908,6 +909,12 @@ QString TestDialog::GetXORChoiceDialog(string cmdStr, bool& ok, string& option)
             if(rb->isChecked())
             {
                 bool b = (NoOptionStr == rb->text());
+                if(!b && (octalStr == rb->text()))
+                {
+                    string octalStr;
+                    MainWindow::ReadOctalVal(this, 3, octalStr);
+                    return QString(octalStr.c_str());
+                }
                 return (b ? " " : rb->text());
             }
             ++cnt;

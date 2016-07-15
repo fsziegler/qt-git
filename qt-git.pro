@@ -18,13 +18,15 @@ SOURCES += main.cpp\
     testdialog.cpp \
     gitcheckbox.cpp \
     optionparser.cpp \
-    gitjsontext.cpp
+    gitjsontext.cpp \
+    octaldialog.cpp
 
 HEADERS  += mainwindow.h \
     testdialog.h \
     gitcheckbox.h \
     optionparser.h \
-    gitjsontext.h
+    gitjsontext.h \
+    octaldialog.h
 
 FORMS    += mainwindow.ui \
-    testdialog.ui
+    octaldialog.ui

@@ -9,6 +9,7 @@
 #include <QMessageBox>
 
 #include "testdialog.h"
+#include "octaldialog.h"
 
 #include <iostream>
 #include <sstream>
@@ -472,6 +473,17 @@ bool MainWindow::ReadFile(QWidget *parent, string caption, string& pathStr)
     if(!file.isNull())
     {
         pathStr = file.toStdString();
+        return true;
+    }
+    return false;
+}
+
+bool MainWindow::ReadOctalVal(QWidget *parent, int sigDigits, string& octalStr)
+{
+    OctalDialog octalDlg;
+    if(1 == octalDlg.exec())
+    {
+        octalStr = octalDlg.getOctalValStr();
         return true;
     }
     return false;

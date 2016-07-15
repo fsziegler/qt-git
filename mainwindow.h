@@ -42,6 +42,7 @@ public:
     static bool ReadDirectory(QWidget *parent, string caption, string& pathStr);
     static bool ReadFile(QWidget *parent, string& pathStr);
     static bool ReadFile(QWidget *parent, string caption, string& pathStr);
+    static bool ReadOctalVal(QWidget *parent, int sigDigits, string& octalStr);
 
 private:
     void RunCmdDialog(const string& gitCmdStr);
