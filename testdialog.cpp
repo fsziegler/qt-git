@@ -751,12 +751,27 @@ const TStrVect multiDirsStrVect =
     "<paths>",
 };
 
+const TStrVect fileStrVect =
+{
+    "file",
+    "<file>",
+};
+
+// Paths may need to be prefixed with ‘`-- '’ to separate them from options or
+// the revision range, when confusion arises.
+const TStrVect multiFilesStrVect =
+{
+//    "files",
+    "<file>...",
+};
+
 bool TestDialog::SpecialParameter(string& param)
 {
     if(0 == param.length())
     {
         return false;
     }
+    // Check if parameter is for a single directory
     for(TStrVectCItr itr = dirStrVect.begin(); dirStrVect.end() != itr; ++itr)
     {
         const string& itrParam = (*itr);
@@ -765,6 +780,7 @@ bool TestDialog::SpecialParameter(string& param)
             return MainWindow::ReadDirectory(this, param);
         }
     }
+    // Check if parameter is for multiple directories
     for(TStrVectCItr itr = multiDirsStrVect.begin();
         multiDirsStrVect.end() != itr; ++itr)
     {
@@ -777,6 +793,36 @@ bool TestDialog::SpecialParameter(string& param)
             {
                 string multiParam(param);
                 while(MainWindow::ReadDirectory(this, dlgTitle, param))
+                {
+                    multiParam.append("\n").append(param);
+                }
+                param = multiParam;
+                return true;
+            }
+        }
+    }
+    // Check if parameter is for a single file
+    for(TStrVectCItr itr = fileStrVect.begin(); fileStrVect.end() != itr; ++itr)
+    {
+        const string& itrParam = (*itr);
+        if(0 == param.compare(itrParam))
+        {
+            return MainWindow::ReadFile(this, param);
+        }
+    }
+    // Check if parameter is for multiple files
+    for(TStrVectCItr itr = multiFilesStrVect.begin();
+        multiFilesStrVect.end() != itr; ++itr)
+    {
+        const string& itrParam = (*itr);
+        if(0 == param.compare(itrParam))
+        {
+            const string dlgTitle("Select File & Open, Cancel when all "
+                                  "have been added");
+            if(MainWindow::ReadFile(this, dlgTitle, param))
+            {
+                string multiParam(param);
+                while(MainWindow::ReadFile(this, dlgTitle, param))
                 {
                     multiParam.append("\n").append(param);
                 }

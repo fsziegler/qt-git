@@ -40,6 +40,9 @@ public:
                              const string& fileNameStr);
     static bool ReadDirectory(QWidget *parent, string& pathStr);
     static bool ReadDirectory(QWidget *parent, string caption, string& pathStr);
+    static bool ReadFile(QWidget *parent, string& pathStr);
+    static bool ReadFile(QWidget *parent, string caption, string& pathStr);
+
 private:
     void RunCmdDialog(const string& gitCmdStr);
 

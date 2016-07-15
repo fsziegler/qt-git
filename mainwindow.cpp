@@ -458,6 +458,25 @@ bool MainWindow::ReadDirectory(QWidget *parent, string caption, string& pathStr)
     return false;
 }
 
+bool MainWindow::ReadFile(QWidget *parent, string& pathStr)
+{
+    return ReadFile(parent, "Select File", pathStr);
+}
+
+bool MainWindow::ReadFile(QWidget *parent, string caption, string& pathStr)
+{
+    QString file =
+            QFileDialog::getOpenFileName(parent, tr(caption.c_str()),
+                                         ms_rootGitDir.filePath(),
+                                         tr("All Files (*.*)"));
+    if(!file.isNull())
+    {
+        pathStr = file.toStdString();
+        return true;
+    }
+    return false;
+}
+
 void MainWindow::RunCmdDialog(const string& gitCmdStr)
 {
     TestDialog dlg;
