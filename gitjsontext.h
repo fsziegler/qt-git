@@ -9,6 +9,7 @@ using namespace std;
 typedef vector<string> TStrVect;
 typedef TStrVect::const_iterator TStrVectCItr;
 
+typedef pair<string, TStrVect> TStrStrVectPair;
 typedef map<string, TStrVect> TStrStrVectMap;
 typedef TStrStrVectMap::const_iterator TStrStrVectMapCItr;
 
