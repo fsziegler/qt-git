@@ -331,11 +331,6 @@ void MainWindow::OnGitStatus()
    }
 }
 
-const QFileInfo& MainWindow::getRootGitDir()
-{
-    return ms_rootGitDir;
-}
-
 void MainWindow::SetButtonFormattedToolTip(QAbstractButton *pCB,
                                         const QString& tooltip, int width)
 {
@@ -442,6 +437,25 @@ void MainWindow::SaveSettings(const QJsonObject& jsonObj,
     }
     QJsonDocument saveDoc(jsonObj);
     saveFile.write(saveDoc.toJson());
+}
+
+bool MainWindow::ReadDirectory(QWidget *parent, string& pathStr)
+{
+    return ReadDirectory(parent, "Select Directory", pathStr);
+}
+
+bool MainWindow::ReadDirectory(QWidget *parent, string caption, string& pathStr)
+{
+    QString dir =
+            QFileDialog::getExistingDirectory(
+                parent, tr(caption.c_str()), ms_rootGitDir.filePath(),
+                QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
+    if(!dir.isNull())
+    {
+        pathStr = dir.toStdString();
+        return true;
+    }
+    return false;
 }
 
 void MainWindow::RunCmdDialog(const string& gitCmdStr)

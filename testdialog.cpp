@@ -169,8 +169,8 @@ bool TestDialog::HandleSpecialOptionLine(string& optionStr, string& tooltipStr,
             {
                 OptionParser op(parameters);
                 const TStrVect& optnVect = op.getOptnVect();
-                for(TStrVectCItr itr2 = optnVect.begin(); optnVect.end() != itr2;
-                    ++itr2)
+                for(TStrVectCItr itr2 = optnVect.begin();
+                    optnVect.end() != itr2; ++itr2)
                 {
                     string chkBoxStr(itr);
                     if(' ' == optionStr[chkBoxStr.length()])
@@ -598,6 +598,8 @@ void TestDialog::CBStateChanged(int i)
             ChangeEnabledState(cb);
             if(cb->isChecked())
             {
+                // Iterate through the different paramSpec-s that pull out
+                // the option parameters
                 for(auto itr: paramSpecs)
                 {
                     const QRegularExpressionMatch match =
@@ -605,61 +607,84 @@ void TestDialog::CBStateChanged(int i)
                     if(match.hasMatch())
                     {
                         QString newText(match.captured(1));
-                        bool eqPrmSpc(optionalEqualsParamSpec == itr);
-                        const QString userValue(eqPrmSpc ? "=[USER VALUES]"
-                                                         : "[USER VALUES]");
-                        bool ok;
-                        QString text =
-                                QInputDialog::getText(this,
-                                                      tr("Input:"),
-                                                      newText,
-                                                      QLineEdit::Normal,
-                                                      userValue, &ok);
-                        if ((onlyparamSpec == itr)
-                                || (multipleParamSpec == itr))
+                        string titleParam(title);
+                        string newParam(match.captured(2).toStdString());
+                        if((0 == newParam.length())
+                                && SpecialParameter(titleParam))
                         {
-                            newText.clear();
+                            newText = titleParam.c_str();
+                            cb->setText(newText);
                         }
-
-                        if(ok && (0 != text.compare(userValue)))
+                        else if(SpecialParameter(newParam))
                         {
-                            if (!text.isEmpty())
+                            if(((string::npos != titleParam.find('=')))
+                                && ((string::npos ==
+                                     newText.toStdString().find('='))))
                             {
-                                if(eqPrmSpc)
-                                {
-                                    if(!HasPrefix('=', text.toStdString()))
-                                    {
-                                        newText.append("=");
-                                    }
-                                }
-                                newText.append(text);
+                                newText.append("=");
                             }
-                            else
-                            {
-                                if((optionalParamSpec != itr)
-                                        && (optionalSlashParamSpec != itr)
-                                        && (optionalEqualsParamSpec != itr))
-                                {
-                                    cb->setCheckState(Qt::Unchecked);
-                                    (*boolItr).second = false;
-                                    cb->clearParamText();
-                                    cb->setText(cb->getOrigText());
-                                    break;
-                                }
-                            }
+                            newText.append(newParam.c_str());
                             cb->setText(newText);
                         }
                         else
                         {
-                            cb->setCheckState(Qt::Unchecked);
-                            (*boolItr).second = false;
-                            cb->clearParamText();
-                            cb->setText(cb->getOrigText());
+                            bool eqPrmSpc(optionalEqualsParamSpec == itr);
+                            const QString userValue(eqPrmSpc ? "=[USER VALUES]"
+                                                             : "[USER VALUES]");
+                            bool ok;
+                            QString text =
+                                    QInputDialog::getText(this,
+                                                          tr("Input:"),
+                                                          newText,
+                                                          QLineEdit::Normal,
+                                                          userValue, &ok);
+                            if ((onlyparamSpec == itr)
+                                    || (multipleParamSpec == itr))
+                            {
+                                newText.clear();
+                            }
+
+                            if(ok && (0 != text.compare(userValue)))
+                            {
+                                if (!text.isEmpty())
+                                {
+                                    if(eqPrmSpc)
+                                    {
+                                        if(!HasPrefix('=', text.toStdString()))
+                                        {
+                                            newText.append("=");
+                                        }
+                                    }
+                                    newText.append(text);
+                                }
+                                else
+                                {
+                                    if((optionalParamSpec != itr)
+                                            && (optionalSlashParamSpec != itr)
+                                            && (optionalEqualsParamSpec != itr))
+                                    {
+                                        cb->setCheckState(Qt::Unchecked);
+                                        (*boolItr).second = false;
+                                        cb->clearParamText();
+                                        cb->setText(cb->getOrigText());
+                                        break;
+                                    }
+                                }
+                                cb->setText(newText);
+                            }
+                            else
+                            {
+                                cb->setCheckState(Qt::Unchecked);
+                                (*boolItr).second = false;
+                                cb->clearParamText();
+                                cb->setText(cb->getOrigText());
+                            }
                         }
                         break;
                     }
                     else
                     {
+                        // Case of OR delimited parameters
                         if(QRegularExpression(choiceSpec).match(
                                     QString(title)).hasMatch())
                         {
@@ -697,6 +722,70 @@ void TestDialog::CBStateChanged(int i)
             }
         }   // if(match)
     }   //  for(TStrCBMapCItr itr ...
+}
+
+//QString& AssembleCBText(const string& option, const string& param,
+//                        QString& result)
+//{
+
+//}
+
+const TStrVect dirStrVect =
+{
+    "directory",
+    "gitdir",
+    "template_directory",
+    "path",
+    "<directory>",
+    "<gitdir>",
+    "<template_directory>",
+    "<path>",
+};
+
+// Paths may need to be prefixed with ‘`-- '’ to separate them from options or
+// the revision range, when confusion arises.
+const TStrVect multiDirsStrVect =
+{
+    "paths",
+    "<path>...",
+    "<paths>",
+};
+
+bool TestDialog::SpecialParameter(string& param)
+{
+    if(0 == param.length())
+    {
+        return false;
+    }
+    for(TStrVectCItr itr = dirStrVect.begin(); dirStrVect.end() != itr; ++itr)
+    {
+        const string& itrParam = (*itr);
+        if(0 == param.compare(itrParam))
+        {
+            return MainWindow::ReadDirectory(this, param);
+        }
+    }
+    for(TStrVectCItr itr = multiDirsStrVect.begin();
+        multiDirsStrVect.end() != itr; ++itr)
+    {
+        const string& itrParam = (*itr);
+        if(0 == param.compare(itrParam))
+        {
+            const string dlgTitle("Select Directory & Open, Cancel when all "
+                                  "have been added");
+            if(MainWindow::ReadDirectory(this, dlgTitle, param))
+            {
+                string multiParam(param);
+                while(MainWindow::ReadDirectory(this, dlgTitle, param))
+                {
+                    multiParam.append("\n").append(param);
+                }
+                param = multiParam;
+                return true;
+            }
+        }
+    }
+    return false;
 }
 
 void TestDialog::StripChar(char c, string& text)

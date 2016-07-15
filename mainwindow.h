@@ -31,7 +31,6 @@ public:
                                     const TStrVect& args, TStrVect& resultVect);
 
     void OnGitStatus();
-    static const QFileInfo& getRootGitDir();
     static void SetButtonFormattedToolTip(QAbstractButton *pCB,
                                             const QString& tooltip,
                                             int width=120);
@@ -39,6 +38,8 @@ public:
     static void SaveSettings();
     static void SaveSettings(const QJsonObject& jsonObj,
                              const string& fileNameStr);
+    static bool ReadDirectory(QWidget *parent, string& pathStr);
+    static bool ReadDirectory(QWidget *parent, string caption, string& pathStr);
 private:
     void RunCmdDialog(const string& gitCmdStr);
 
