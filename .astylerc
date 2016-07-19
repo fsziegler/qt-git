@@ -1,0 +1,25 @@
+# Created 2016-07-19 by Fred Ziegler
+
+--style=allman
+--indent=spaces=3
+--min-conditional-indent=0
+--unpad-paren
+
+# Align all references and pointers with the type declaration, not the variable name
+--align-pointer=type
+--align-reference=type
+
+# Insist on brackets for one line statements
+--add-one-line-brackets
+
+# Convert tabs to spaces
+--convert-tabs
+
+# Remove '*' in /* ... */ where each lin in between starts with '*'
+--remove-comment-prefix
+
+--max-code-length=80
+--mode=c
+--verbose
+--formatted
+--lineend=linux

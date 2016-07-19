@@ -18,24 +18,24 @@
 class OptionParser
 {
 public:
-    OptionParser(const string& paramStr);
-    ~OptionParser(){}
-    const TStrVect& getOptnVect() const;
+   OptionParser(const string& paramStr);
+   ~OptionParser() {}
+   const TStrVect& getOptnVect() const;
 
 private:
-    bool RemoveChar(char c, string& str) const;
-    void ParseNextOption(string& optionStr, string& nextOptionStr);
-    void ParseNextDelimOption(char delimL, char delimR, const string& prefix,
-                              string& optionStr, string& nextOptionStr);
-    void StripWS(string& str);
+   bool RemoveChar(char c, string& str) const;
+   void ParseNextOption(string& optionStr, string& nextOptionStr);
+   void ParseNextDelimOption(char delimL, char delimR, const string& prefix,
+                             string& optionStr, string& nextOptionStr);
+   void StripWS(string& str);
 
-    OptionParser();
-    OptionParser(const OptionParser&);
-    OptionParser& operator=(const OptionParser&);
-    bool operator==(const OptionParser&);
-    bool operator!=(const OptionParser&);
+   OptionParser();
+   OptionParser(const OptionParser&);
+   OptionParser& operator=(const OptionParser&);
+   bool operator==(const OptionParser&);
+   bool operator!=(const OptionParser&);
 
-    TStrVect m_optnVect;
+   TStrVect m_optnVect;
 };
 
 #endif // OPTIONPARSER_H

@@ -7,17 +7,17 @@
 
 using namespace std;
 
-int main(int argc, char *argv[])
+int main(int argc, char* argv[])
 {
-    QApplication a(argc, argv);
+   QApplication a(argc, argv);
 
-    cout << "argv[0] = " << argv[0] << endl;
-    QString cmdStr(argv[0]);
-    QFileInfo fi(cmdStr);
-    cout << "QFileInfo = " << fi.path().toStdString() << endl;
+   cout << "argv[0] = " << argv[0] << endl;
+   QString cmdStr(argv[0]);
+   QFileInfo fi(cmdStr);
+   cout << "QFileInfo = " << fi.path().toStdString() << endl;
 
-    MainWindow w(cmdStr);
-    w.show();
+   MainWindow w(cmdStr);
+   w.show();
 
-    return a.exec();
+   return a.exec();
 }
