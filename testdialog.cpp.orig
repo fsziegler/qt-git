@@ -901,12 +901,12 @@ bool TestDialog::ReadRemoteRepo(string& param)
       QUrl url(param.c_str());
       if(!url.isValid())
       {
-         const string title("The URL " + param + " is not valid!");
-         const string msg("Would you like to try again?");
-         if(MainWindow::YesNoDialog(this, title, msg))
-         {
-            return ReadRemoteRepo(param);
-         }
+          const string title("The URL " + param + " is not valid!");
+          const string msg("Would you like to try again?");
+          if(MainWindow::YesNoDialog(this, title, msg))
+          {
+              return ReadRemoteRepo(param);
+          }
       }
       return true;
    }

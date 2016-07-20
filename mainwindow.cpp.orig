@@ -481,10 +481,14 @@ bool MainWindow::ReadFile(QWidget* parent, string caption, string& pathStr)
 bool MainWindow::ReadTextInput(QWidget* parent, string title, string label,
                                string& textStr)
 {
+   QString text;
    bool ok;
-   QString text = QInputDialog::getText(parent, tr(title.c_str()),
-                                        tr(label.c_str()), QLineEdit::Normal,
-                                        textStr.c_str(), &ok);
+//    static QString getText(QWidget *parent, const QString &title, const QString &label,
+//                           QLineEdit::EchoMode echo = QLineEdit::Normal,
+//                           const QString &text = QString(), bool *ok = 0, Qt::WindowFlags flags = 0,
+//                           Qt::InputMethodHints inputMethodHints = Qt::ImhNone);
+   QInputDialog::getText(parent, tr(title.c_str()), tr(label.c_str()),
+                         QLineEdit::Normal, text, &ok);
    if(ok && !text.isEmpty())
    {
       textStr = text.toStdString();
@@ -513,13 +517,12 @@ void MainWindow::RunCmdDialog(const string& gitCmdStr)
    dlg.exec();
 }
 
-bool MainWindow::YesNoDialog(QWidget* parent, const string& title,
-                             const string& msg)
+bool MainWindow::YesNoDialog(const string& title, const string& msg)
 {
-   QMessageBox::StandardButton reply;
-   reply = QMessageBox::question(parent, title.c_str(), msg.c_str(),
-                                 QMessageBox::Yes|QMessageBox::No);
-   return (reply == QMessageBox::Yes);
+    QMessageBox::StandardButton reply;
+    reply = QMessageBox::question(this, title.c_str(), msg.c_str(),
+                                  QMessageBox::Yes|QMessageBox::No);
+    return (reply == QMessageBox::Yes);
 }
 
 void MainWindow::on_btn_choose_git_root_clicked()

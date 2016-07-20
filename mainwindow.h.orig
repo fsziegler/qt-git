@@ -24,30 +24,28 @@ private:
    static void ClearStaticMembers();
 
 public:
-   explicit MainWindow(const QString& cmdStr, QWidget* parent = 0);
-   ~MainWindow();
+    explicit MainWindow(const QString& cmdStr, QWidget *parent = 0);
+    ~MainWindow();
 
-   void ClearStash();
-   static size_t GetProcessResults(const string& cmd, const string& execDir,
-                                   const TStrVect& args, TStrVect& resultVect);
+    void ClearStash();
+    static size_t GetProcessResults(const string& cmd, const string& execDir,
+                                    const TStrVect& args, TStrVect& resultVect);
 
-   void OnGitStatus();
-   static void SetButtonFormattedToolTip(QAbstractButton* pCB,
-                                         const QString& tooltip,
-                                         int width=120);
-   static void ReadSettings();
-   static void SaveSettings();
-   static void SaveSettings(const QJsonObject& jsonObj,
-                            const string& fileNameStr);
-   static bool ReadDirectory(QWidget* parent, string& pathStr);
-   static bool ReadDirectory(QWidget* parent, string caption, string& pathStr);
-   static bool ReadFile(QWidget* parent, string& pathStr);
-   static bool ReadFile(QWidget* parent, string caption, string& pathStr);
-   static bool ReadTextInput(QWidget* parent, string title, string label,
-                             string& textStr);
-   static bool ReadOctalVal(string& octalStr);
-   static bool YesNoDialog(QWidget* parent, const string& title,
-                           const string& msg);
+    void OnGitStatus();
+    static void SetButtonFormattedToolTip(QAbstractButton *pCB,
+                                            const QString& tooltip,
+                                            int width=120);
+    static void ReadSettings();
+    static void SaveSettings();
+    static void SaveSettings(const QJsonObject& jsonObj,
+                             const string& fileNameStr);
+    static bool ReadDirectory(QWidget *parent, string& pathStr);
+    static bool ReadDirectory(QWidget *parent, string caption, string& pathStr);
+    static bool ReadFile(QWidget *parent, string& pathStr);
+    static bool ReadFile(QWidget *parent, string caption, string& pathStr);
+    static bool ReadTextInput(QWidget *parent, string title, string label,
+                       string& textStr);
+    static bool ReadOctalVal(QWidget *parent, int sigDigits, string& octalStr);
 
 private:
    void RunCmdDialog(const string& gitCmdStr);

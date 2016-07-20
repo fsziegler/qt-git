@@ -39,10 +39,9 @@ typedef CheckBoxItemVect::const_iterator CheckBoxItemVectCItr;
 
 enum RepoType
 {
-   local,
-   remote,
-   unknown,
-   n_a,
+    local,
+    remote,
+    n_a,
 };
 
 class TestDialog : public QDialog
@@ -93,12 +92,10 @@ private slots:
 //    QString& AssembleCBText(const string& option, const string& param,
 //                            QString& result);
 
-   bool SpecialParameter(string& param, RepoType type = unknown);
-   bool ReadLocalRepo(string& param);
-   bool ReadRemoteRepo(string& param);
-   void StripChar(char c, string& text);
-   QString GetXORChoiceDialog(string title, bool& ok, string& option);
-   void ChangeEnabledState(const GitCheckBox* cb);
+    bool SpecialParameter(string& param, RepoType type = n_a);
+    void StripChar(char c, string& text);
+    QString GetXORChoiceDialog(string title, bool& ok, string& option);
+    void ChangeEnabledState(const GitCheckBox* cb);
 
 private:
    Ui::TestDialog*     ui;
